@@ -25,14 +25,6 @@ public class Address {
     @Nullable
     private String vzwId;
 
-    public Address(String street, String houseNumber, @Nullable String box, String city, String postalCode) {
-        this.street = street;
-        this.houseNumber = houseNumber;
-        this.box = box;
-        this.city = city;
-        this.postalCode = postalCode;
-    }
-
     public Address(String street, String houseNumber, String box, String city, String postalCode, String userId, String vzwId) {
         this.street = street;
         this.houseNumber = houseNumber;
