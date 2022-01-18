@@ -1,4 +1,4 @@
-package com.example.p4backend.model;
+package com.example.p4backend.models;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
