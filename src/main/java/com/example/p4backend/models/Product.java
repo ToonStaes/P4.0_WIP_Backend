@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bson.types.Decimal128;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
@@ -11,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Document(collection = "products")
 public class Product {
+    @Id
     private String id;
     private String name;
     private Decimal128 cost;
