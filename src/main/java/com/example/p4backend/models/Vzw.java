@@ -1,5 +1,6 @@
 package com.example.p4backend.models;
 
+import com.mongodb.lang.Nullable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +18,9 @@ public class Vzw {
     private String email;
     private String rekeningNR;
     private String bio;
+    @Nullable
     private String youtubeLink;
+    @Nullable
     private String profilePicture;
     private String password;
 
