@@ -1,5 +1,6 @@
 package com.example.p4backend.models;
 
+import com.mongodb.lang.Nullable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,8 +14,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User {
     @Id
     private String id;
+    @Nullable
     private String name;
     private String email;
+    @Nullable
     private String password;
 
     public User(String name, String email, String password) {
