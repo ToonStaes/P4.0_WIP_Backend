@@ -1,0 +1,33 @@
+package com.example.p4backend.models;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@Document(collection = "vzws")
+public class Vzw {
+    @Id
+    private String id;
+    private String name;
+    private String email;
+    private String rekeningNR;
+    private String bio;
+    private String youtubeLink;
+    private String profilePicture;
+    private String password;
+
+    public Vzw(String name, String email, String rekeningNR, String bio, String youtubeLink, String profilePicture, String password) {
+        this.name = name;
+        this.email = email;
+        this.rekeningNR = rekeningNR;
+        this.bio = bio;
+        this.youtubeLink = youtubeLink;
+        this.profilePicture = profilePicture;
+        this.password = password;
+    }
+}
