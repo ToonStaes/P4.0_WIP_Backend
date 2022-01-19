@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.bson.types.Decimal128;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -21,13 +22,13 @@ public class ActionWithVzw {
     private Date endDate;
     private Vzw vzw;
 
-    public ActionWithVzw(Action action, Vzw vzw) {
+    public ActionWithVzw(Action action, Optional<Vzw> vzw) {
         this.id = action.getId();
         this.name = action.getName();
         this.goal = action.getGoal();
         this.description = action.getDescription();
         this.startDate = action.getStartDate();
         this.endDate = action.getEndDate();
-        this.vzw = vzw;
+        vzw.ifPresent(value -> this.vzw = value); // If vzw is present, the value of the optional is taken and placed into the vzw property of the object.
     }
 }

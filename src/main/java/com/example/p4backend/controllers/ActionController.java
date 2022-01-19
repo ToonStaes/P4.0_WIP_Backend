@@ -71,14 +71,12 @@ public class ActionController {
 
     @GetMapping("/actions")
     public List<ActionWithVzw> getAll() throws RelationNotFoundException {
-
         List<ActionWithVzw> returnList = new ArrayList<>();
-
         List<Action> actions = actionRepository.findAll();
 
         for (Action action : actions) {
-            ActionWithVzw actionToAdd = getActionWithVzwToAdd(action);
-            returnList.add(getActionWithVzwToAdd(action));
+            ActionWithVzw actionToAdd = getActionWithVzw(action);
+            returnList.add(getActionWithVzw(action));
         }
         return returnList;
     }
@@ -88,7 +86,7 @@ public class ActionController {
         Optional<Action> action = actionRepository.findById(id);
 
         if (action.isPresent()) {
-            return getActionWithVzwToAdd(Objects.requireNonNull(action.get()));
+            return getActionWithVzw(Objects.requireNonNull(action.get()));
         }
 
         throw new ResponseStatusException(
@@ -97,15 +95,8 @@ public class ActionController {
     }
 
     // Get the filled ActionWithVzw for the given action
-    private ActionWithVzw getActionWithVzwToAdd(Action action) throws RelationNotFoundException {
+    private ActionWithVzw getActionWithVzw(Action action) {
         Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
-
-        if(vzw.isPresent()) {
-            return new ActionWithVzw(action, Objects.requireNonNull(vzw.get()));
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "The VZW with ID " + action.getVzwID() + " for Action " + action.getName() + " doesn't exist"
-            );
-        }
+        return new ActionWithVzw(action, vzw);
     }
 }
