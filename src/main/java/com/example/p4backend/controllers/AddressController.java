@@ -49,6 +49,10 @@ public class AddressController {
             addressRepository.save(address4);
             addressRepository.save(address5);
             addressRepository.save(address6);
+            addressRepository.save(address7);
+            addressRepository.save(address8);
+            addressRepository.save(address9);
+            addressRepository.save(address10);
         }
     }
 

@@ -27,7 +27,6 @@ public class UserController {
 
     @PostConstruct
     public void fillDB(){
-        userRepository.deleteAll();
         if (userRepository.count() == 0){
             User user1 = new User("Toon Staes", "r0784094@student.thomasmore.be", "password", "1");
             User user2 = new User("Rutger Mols", "r0698466@student.thomasmore.be", "password", "4");
