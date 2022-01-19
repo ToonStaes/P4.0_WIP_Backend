@@ -19,10 +19,12 @@ public class User {
     private String email;
     @Nullable
     private String password;
+    private String addressID;
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, String addressID) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.addressID = addressID;
     }
 }
