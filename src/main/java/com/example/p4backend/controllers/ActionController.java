@@ -2,7 +2,7 @@ package com.example.p4backend.controllers;
 
 import com.example.p4backend.models.Action;
 import com.example.p4backend.models.Vzw;
-import com.example.p4backend.models.complete.ActionWithVzw;
+import com.example.p4backend.models.complete.CompleteAction;
 import com.example.p4backend.repositories.ActionRepository;
 import com.example.p4backend.repositories.VzwRepository;
 import org.bson.types.Decimal128;
@@ -70,33 +70,32 @@ public class ActionController {
     }
 
     @GetMapping("/actions")
-    public List<ActionWithVzw> getAll() throws RelationNotFoundException {
-        List<ActionWithVzw> returnList = new ArrayList<>();
+    public List<CompleteAction> getAll() throws RelationNotFoundException {
+        List<CompleteAction> returnList = new ArrayList<>();
         List<Action> actions = actionRepository.findAll();
 
         for (Action action : actions) {
-            ActionWithVzw actionToAdd = getActionWithVzw(action);
-            returnList.add(getActionWithVzw(action));
+            returnList.add(getCompleteAction(action));
         }
         return returnList;
     }
 
     @GetMapping("/actions/{id}")
-    public ActionWithVzw getActionById(@PathVariable String id) throws RelationNotFoundException {
+    public CompleteAction getActionById(@PathVariable String id) throws RelationNotFoundException {
         Optional<Action> action = actionRepository.findById(id);
 
         if (action.isPresent()) {
-            return getActionWithVzw(Objects.requireNonNull(action.get()));
+            return getCompleteAction(Objects.requireNonNull(action.get()));
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"
+            );
         }
-
-        throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"
-        );
     }
 
-    // Get the filled ActionWithVzw for the given action
-    private ActionWithVzw getActionWithVzw(Action action) {
+    // Get the filled CompleteAction for the given action
+    private CompleteAction getCompleteAction(Action action) {
         Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
-        return new ActionWithVzw(action, vzw);
+        return new CompleteAction(action, vzw);
     }
 }

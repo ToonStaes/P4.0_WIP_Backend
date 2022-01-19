@@ -13,7 +13,7 @@ import java.util.Optional;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ActionWithVzw {
+public class CompleteAction {
     private String id;
     private String name;
     private Decimal128 goal;
@@ -22,7 +22,7 @@ public class ActionWithVzw {
     private Date endDate;
     private Vzw vzw;
 
-    public ActionWithVzw(Action action, Optional<Vzw> vzw) {
+    public CompleteAction(Action action, Optional<Vzw> vzw) {
         this.id = action.getId();
         this.name = action.getName();
         this.goal = action.getGoal();
