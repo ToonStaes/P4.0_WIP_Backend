@@ -27,6 +27,11 @@ public class VzwController {
         return vzwRepository.findById(id);
     }
 
+    @GetMapping(value="/vzws/name")
+    public List<Vzw> searchVzwsByNameEmpty(){
+        return vzwRepository.findAll();
+    }
+
     @GetMapping(value="/vzws/name/{name}")
     public List<Vzw> searchVzwsByNameContaining(@PathVariable String name){
         return vzwRepository.searchByNameContaining(name);
