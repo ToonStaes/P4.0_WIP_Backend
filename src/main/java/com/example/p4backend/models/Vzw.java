@@ -23,8 +23,9 @@ public class Vzw {
     @Nullable
     private String profilePicture;
     private String password;
+    private String addressID;
 
-    public Vzw(String name, String email, String rekeningNR, String bio, String youtubeLink, String profilePicture, String password) {
+    public Vzw(String name, String email, String rekeningNR, String bio, String youtubeLink, String profilePicture, String password, String addressID) {
         this.name = name;
         this.email = email;
         this.rekeningNR = rekeningNR;
@@ -32,5 +33,6 @@ public class Vzw {
         this.youtubeLink = youtubeLink;
         this.profilePicture = profilePicture;
         this.password = password;
+        this.addressID = addressID;
     }
 }
