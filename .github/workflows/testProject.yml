@@ -24,3 +24,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR info
         run: mvn -B verify
+      
+      - name: Show contents of the current working directory
+        run: ls -la
