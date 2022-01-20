@@ -124,9 +124,7 @@ public class ActionController {
     @GetMapping("/actions/random")
     public List<CompleteAction> getRandomActions(){
         List<Action> actions = actionRepository.findAll();
-        System.out.println(actions.toString());
         Collections.shuffle(actions);
-        System.out.println(actions.toString());
         List<Action> selectedActions = actions.stream().limit(6).collect(Collectors.toList()); // Take first n (number in limit(n)) items and return them.;
 
         List<CompleteAction> completeActions = new ArrayList<>();
