@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.annotation.PostConstruct;
 import javax.management.relation.RelationNotFoundException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "", allowedHeaders = "")
 @RestController
@@ -32,7 +33,8 @@ public class ActionController {
     private ActionImageRepository actionImageRepository;
 
     @PostConstruct
-    public void fillDB() {
+    public void fillDB() throws InterruptedException {
+        actionRepository.deleteAll();
         if (actionRepository.count() == 0) {
             Action action1 = new Action(
                     "action1",
@@ -41,6 +43,9 @@ public class ActionController {
                     "vzw1",
                     new GregorianCalendar(2022, Calendar.FEBRUARY, 18).getTime());
             action1.setId("action1");
+            action1.setStartDate(new GregorianCalendar(2022, Calendar.JANUARY, 18).getTime());
+
+            Thread.sleep(2000);
 
             Action action2 = new Action(
                     "action2",
@@ -49,6 +54,9 @@ public class ActionController {
                     "vzw2",
                     new GregorianCalendar(2022, Calendar.MARCH, 18).getTime());
             action2.setId("action2");
+            action2.setStartDate(new GregorianCalendar(2022, Calendar.JANUARY, 16).getTime());
+
+            Thread.sleep(2000);
 
             Action action3 = new Action(
                     "action3",
@@ -57,6 +65,9 @@ public class ActionController {
                     "vzw3",
                     new GregorianCalendar(2022, Calendar.APRIL, 28).getTime());
             action3.setId("action3");
+            action3.setStartDate(new GregorianCalendar(2022, Calendar.JANUARY, 17).getTime());
+
+            Thread.sleep(2000);
 
             Action action4 = new Action(
                     "action4",
@@ -65,6 +76,7 @@ public class ActionController {
                     "vzw4",
                     new GregorianCalendar(2022, Calendar.FEBRUARY, 28).getTime());
             action4.setId("action4");
+            action4.setStartDate(new GregorianCalendar(2021, Calendar.DECEMBER, 2).getTime());
 
             actionRepository.save(action1);
             actionRepository.save(action2);
@@ -95,6 +107,18 @@ public class ActionController {
                     HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"
             );
         }
+    }
+
+    @GetMapping("/actions/newest")
+    public List<CompleteAction> getNewestActions() {
+        List<Action> newestActions = actionRepository.findByEndDateAfterOrderByStartDateDesc(new Date());
+        List<CompleteAction> completeActions = new ArrayList<>();
+
+        for (Action action : newestActions) {
+            completeActions.add(getCompleteAction(action));
+        }
+
+        return completeActions.stream().limit(4).collect(Collectors.toList()); // Take first n (number in limit(n)) items and return them.;
     }
 
     // Get the filled CompleteAction for the given action
