@@ -1,12 +1,11 @@
 package com.example.p4backend.controllers;
 
-import com.example.p4backend.models.*;
+import com.example.p4backend.models.Product;
+import com.example.p4backend.models.Purchase;
+import com.example.p4backend.models.User;
 import com.example.p4backend.models.complete.CompletePurchase;
 import com.example.p4backend.repositories.PurchaseRepository;
-import com.example.p4backend.repositories.PurchaseRepository;
 import com.example.p4backend.repositories.UserRepository;
-import com.example.p4backend.repositories.VzwRepository;
-import org.bson.types.Decimal128;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
