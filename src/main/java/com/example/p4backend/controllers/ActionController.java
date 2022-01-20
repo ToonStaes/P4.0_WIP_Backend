@@ -1,8 +1,10 @@
 package com.example.p4backend.controllers;
 
 import com.example.p4backend.models.Action;
+import com.example.p4backend.models.ActionImage;
 import com.example.p4backend.models.Vzw;
 import com.example.p4backend.models.complete.CompleteAction;
+import com.example.p4backend.repositories.ActionImageRepository;
 import com.example.p4backend.repositories.ActionRepository;
 import com.example.p4backend.repositories.VzwRepository;
 import org.bson.types.Decimal128;
@@ -26,6 +28,8 @@ public class ActionController {
     private ActionRepository actionRepository;
     @Autowired
     private VzwRepository vzwRepository;
+    @Autowired
+    private ActionImageRepository actionImageRepository;
 
     @PostConstruct
     public void fillDB() {
@@ -96,6 +100,7 @@ public class ActionController {
     // Get the filled CompleteAction for the given action
     private CompleteAction getCompleteAction(Action action) {
         Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
-        return new CompleteAction(action, vzw);
+        List<ActionImage> actionImages = actionImageRepository.findActionImagesByActionId(action.getId());
+        return new CompleteAction(action, vzw, actionImages);
     }
 }
