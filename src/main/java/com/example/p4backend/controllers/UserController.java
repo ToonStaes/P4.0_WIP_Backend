@@ -29,11 +29,17 @@ public class UserController {
     public void fillDB(){
         if (userRepository.count() == 0){
             User user1 = new User("Toon Staes", "r0784094@student.thomasmore.be", "password", "1");
+            user1.setId("user1");
             User user2 = new User("Rutger Mols", "r0698466@student.thomasmore.be", "password", "4");
+            user2.setId("user2");
             User user3 = new User("Axel Van Gestel", "r0784084@student.thomasmore.be", "password", "2");
+            user3.setId("user3");
             User user4 = new User("Britt Ooms", "r0802207@student.thomasmore.be", "password", "3");
+            user4.setId("user4");
             User user5 = new User("Sebastiaan Hensels", "r0698052@student.thomasmore.be", "password", "5");
+            user5.setId("user5");
             User user6 = new User("Gerd Janssens", "r0370181@student.thomasmore.be", "password", "6");
+            user6.setId("user6");
 
             userRepository.save(user1);
             userRepository.save(user2);
