@@ -4,6 +4,7 @@ import com.example.p4backend.models.Product;
 import com.example.p4backend.models.Purchase;
 import com.example.p4backend.models.User;
 import com.example.p4backend.models.complete.CompletePurchase;
+import com.example.p4backend.repositories.ProductRepository;
 import com.example.p4backend.repositories.PurchaseRepository;
 import com.example.p4backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
