@@ -138,11 +138,15 @@ public class ActionController {
 
     @GetMapping("/actions/deadline")
     public List<CompleteAction> getDeadlineActions() {
-        // Generate the date a month in the future from the current date
-        GregorianCalendar futureCalender = new GregorianCalendar();
-        futureCalender.add(Calendar.MONTH, 1);
+        // Generate the current date
+        GregorianCalendar currentCallender = new GregorianCalendar();
+        Date currentDate = currentCallender.getTime();
 
-        List<Action> deadlineActions = actionRepository.findActionsByEndDateBetweenOrderByStartDateDesc(new Date(), futureCalender.getTime());
+        // Generate the date a month in the future from the current date
+        currentCallender.add(Calendar.MONTH, 1);
+        Date futureDate = currentCallender.getTime();
+
+        List<Action> deadlineActions = actionRepository.findActionsByEndDateBetweenAndStartDateBeforeOrderByEndDateDesc(currentDate, futureDate, currentDate);
         List<CompleteAction> completeActions = new ArrayList<>();
 
         for (Action action : deadlineActions) {

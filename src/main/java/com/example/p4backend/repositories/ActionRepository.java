@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ActionRepository  extends MongoRepository<Action, String> {
     List<Action> findByEndDateAfterOrderByStartDateDesc(Date endDate);
-    List<Action> findActionsByEndDateBetweenOrderByStartDateDesc(Date currentDate, Date endDate);
+    List<Action> findActionsByEndDateBetweenAndStartDateBeforeOrderByEndDateDesc(Date currentDate, Date endDate, Date startDate);
 }
