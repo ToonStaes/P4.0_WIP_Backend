@@ -113,6 +113,104 @@ public class UserUnitTests {
                 .andExpect(jsonPath("$[0].address.houseNumber",is("7")))
                 .andExpect(jsonPath("$[0].address.box").isEmpty())
                 .andExpect(jsonPath("$[0].address.city",is("Kasterlee")))
-                .andExpect(jsonPath("$[0].address.postalCode",is("2460")));
+                .andExpect(jsonPath("$[0].address.postalCode",is("2460")))
+                // user2 is correct
+                .andExpect(jsonPath("$[1].id",is("user2")))
+                .andExpect(jsonPath("$[1].name",is("Rutger Mols")))
+                .andExpect(jsonPath("$[1].email",is("r0698466@student.thomasmore.be")))
+                .andExpect(jsonPath("$[1].address.id",is("4")))
+                .andExpect(jsonPath("$[1].address.street",is("Zielestraat")))
+                .andExpect(jsonPath("$[1].address.houseNumber",is("6")))
+                .andExpect(jsonPath("$[1].address.box").isEmpty())
+                .andExpect(jsonPath("$[1].address.city",is("Poederlee")))
+                .andExpect(jsonPath("$[1].address.postalCode",is("2275")))
+                // user3 is correct
+                .andExpect(jsonPath("$[2].id",is("user3")))
+                .andExpect(jsonPath("$[2].name",is("Axel Van Gestel")))
+                .andExpect(jsonPath("$[2].email",is("r0784084@student.thomasmore.be")))
+                .andExpect(jsonPath("$[2].address.id",is("2")))
+                .andExpect(jsonPath("$[2].address.street",is("Parklaan")))
+                .andExpect(jsonPath("$[2].address.houseNumber",is("35")))
+                .andExpect(jsonPath("$[2].address.box").isEmpty())
+                .andExpect(jsonPath("$[2].address.city",is("Turnhout")))
+                .andExpect(jsonPath("$[2].address.postalCode",is("2300")))
+                // user4 is correct
+                .andExpect(jsonPath("$[3].id",is("user4")))
+                .andExpect(jsonPath("$[3].name",is("Britt Ooms")))
+                .andExpect(jsonPath("$[3].email",is("r0802207@student.thomasmore.be")))
+                .andExpect(jsonPath("$[3].address.id",is("3")))
+                .andExpect(jsonPath("$[3].address.street",is("Kerkeveld")))
+                .andExpect(jsonPath("$[3].address.houseNumber",is("7")))
+                .andExpect(jsonPath("$[3].address.box").isEmpty())
+                .andExpect(jsonPath("$[3].address.city",is("Herselt")))
+                .andExpect(jsonPath("$[3].address.postalCode",is("2230")))
+                // user5 is correct
+                .andExpect(jsonPath("$[4].id",is("user5")))
+                .andExpect(jsonPath("$[4].name",is("Sebastiaan Hensels")))
+                .andExpect(jsonPath("$[4].email",is("r0698052@student.thomasmore.be")))
+                .andExpect(jsonPath("$[4].address.id",is("5")))
+                .andExpect(jsonPath("$[4].address.street",is("Hoogland")))
+                .andExpect(jsonPath("$[4].address.houseNumber",is("2")))
+                .andExpect(jsonPath("$[4].address.box").isEmpty())
+                .andExpect(jsonPath("$[4].address.city",is("Kasterlee")))
+                .andExpect(jsonPath("$[4].address.postalCode",is("2460")))
+                // user6 is correct
+                .andExpect(jsonPath("$[5].id",is("user6")))
+                .andExpect(jsonPath("$[5].name",is("Gerd Janssens")))
+                .andExpect(jsonPath("$[5].email",is("r0370181@student.thomasmore.be")))
+                .andExpect(jsonPath("$[5].address.id",is("6")))
+                .andExpect(jsonPath("$[5].address.street",is("Slachthuisstraat")))
+                .andExpect(jsonPath("$[5].address.houseNumber",is("87")))
+                .andExpect(jsonPath("$[5].address.box").isEmpty())
+                .andExpect(jsonPath("$[5].address.city",is("Turnhout")))
+                .andExpect(jsonPath("$[5].address.postalCode",is("2300")))
+                // userToBeDeleted is correct
+                .andExpect(jsonPath("$[6].id",is("userToBeDeleted")))
+                .andExpect(jsonPath("$[6].name",is("To Delete")))
+                .andExpect(jsonPath("$[6].email",is("to@delete.be")))
+                .andExpect(jsonPath("$[6].address.id",is("6")))
+                .andExpect(jsonPath("$[6].address.street",is("Slachthuisstraat")))
+                .andExpect(jsonPath("$[6].address.houseNumber",is("87")))
+                .andExpect(jsonPath("$[6].address.box").isEmpty())
+                .andExpect(jsonPath("$[6].address.city",is("Turnhout")))
+                .andExpect(jsonPath("$[6].address.postalCode",is("2300")));
+    }
+
+
+    // Gives 1 user back, searched on userId (user1)
+    @Test
+    void givenUser_whenGetUserById_thenReturnJsonUser1() throws Exception {
+        mockMvc.perform(get("/users/{id}","user1")) // command
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                // user1 is correct
+                .andExpect(jsonPath("$.id",is("user1")))
+                .andExpect(jsonPath("$.name",is("Toon Staes")))
+                .andExpect(jsonPath("$.email",is("r0784094@student.thomasmore.be")))
+                .andExpect(jsonPath("$.address.id",is("1")))
+                .andExpect(jsonPath("$.address.street",is("Polderken")))
+                .andExpect(jsonPath("$.address.houseNumber",is("7")))
+                .andExpect(jsonPath("$.address.box").isEmpty())
+                .andExpect(jsonPath("$.address.city",is("Kasterlee")))
+                .andExpect(jsonPath("$.address.postalCode",is("2460")));
+    }
+
+
+    // Gives 2 user back, searched on userId (user2)
+    @Test
+    void givenUser_whenGetUserById_thenReturnJsonUser2() throws Exception {
+        mockMvc.perform(get("/users/{id}","user2")) // command
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                // user2 is correct
+                .andExpect(jsonPath("$.id",is("user2")))
+                .andExpect(jsonPath("$.name",is("Rutger Mols")))
+                .andExpect(jsonPath("$.email",is("r0698466@student.thomasmore.be")))
+                .andExpect(jsonPath("$.address.id",is("4")))
+                .andExpect(jsonPath("$.address.street",is("Zielestraat")))
+                .andExpect(jsonPath("$.address.houseNumber",is("6")))
+                .andExpect(jsonPath("$.address.box").isEmpty())
+                .andExpect(jsonPath("$.address.city",is("Poederlee")))
+                .andExpect(jsonPath("$.address.postalCode",is("2275")));
     }
 }
