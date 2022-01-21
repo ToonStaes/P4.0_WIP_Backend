@@ -155,6 +155,22 @@ public class ActionController {
         return completeActions;
     }
 
+    @GetMapping("/actions/vzw/{vzwId}")
+    public List<CompleteAction> getActionsByVzwId(@PathVariable String vzwId, @RequestParam(defaultValue = "false") boolean progress) {
+        List<CompleteAction> returnList = new ArrayList<>();
+        List<Action> actions = actionRepository.findActionsByVzwID(vzwId);
+
+        for (Action action : actions) {
+            if (progress) {
+                double actionProgress = getProgress(action);
+                returnList.add(getCompleteActionWithProgress(action, actionProgress));
+            } else {
+                returnList.add(getCompleteAction(action));
+            }
+        }
+        return returnList;
+    }
+
     // Get the filled CompleteAction for the given action
     private CompleteAction getCompleteAction(Action action) {
         Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
