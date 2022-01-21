@@ -1,23 +1,17 @@
 package com.example.p4backend.controllers;
 
-import com.example.p4backend.models.Action;
-import com.example.p4backend.models.ActionImage;
-import com.example.p4backend.models.Vzw;
+import com.example.p4backend.models.*;
 import com.example.p4backend.models.complete.CompleteAction;
-import com.example.p4backend.repositories.ActionImageRepository;
-import com.example.p4backend.repositories.ActionRepository;
-import com.example.p4backend.repositories.VzwRepository;
+import com.example.p4backend.models.complete.CompleteActionWithProgress;
+import com.example.p4backend.repositories.*;
 import org.bson.types.Decimal128;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
-import javax.management.relation.RelationNotFoundException;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,6 +25,10 @@ public class ActionController {
     private VzwRepository vzwRepository;
     @Autowired
     private ActionImageRepository actionImageRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private PurchaseRepository purchaseRepository;
 
     @PostConstruct
     public void fillDB() throws InterruptedException {
@@ -86,22 +84,33 @@ public class ActionController {
     }
 
     @GetMapping("/actions")
-    public List<CompleteAction> getAll() throws RelationNotFoundException {
+    public List<CompleteAction> getAll(@RequestParam(defaultValue = "false") boolean progress) {
         List<CompleteAction> returnList = new ArrayList<>();
         List<Action> actions = actionRepository.findAll();
 
         for (Action action : actions) {
-            returnList.add(getCompleteAction(action));
+            if (progress) {
+                double actionProgress = getProgress(action);
+                returnList.add(getCompleteActionWithProgress(action, actionProgress));
+            } else {
+                returnList.add(getCompleteAction(action));
+            }
         }
         return returnList;
     }
 
     @GetMapping("/actions/{id}")
-    public CompleteAction getActionById(@PathVariable String id) throws RelationNotFoundException {
+    public CompleteAction getActionById(@PathVariable String id, @RequestParam(defaultValue = "false") boolean progress) {
         Optional<Action> action = actionRepository.findById(id);
 
         if (action.isPresent()) {
-            return getCompleteAction(Objects.requireNonNull(action.get()));
+            Action actionValue = Objects.requireNonNull(action.get());
+            if (progress) {
+                double progressValue = getProgress(Objects.requireNonNull(action.get()));
+                return getCompleteActionWithProgress(Objects.requireNonNull(action.get()), progressValue);
+            } else {
+                return getCompleteAction(actionValue);
+            }
         } else {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"
@@ -110,19 +119,24 @@ public class ActionController {
     }
 
     @GetMapping("/actions/newest")
-    public List<CompleteAction> getNewestActions() {
+    public List<CompleteAction> getNewestActions(@RequestParam(defaultValue = "false") boolean progress) {
         List<Action> newestActions = actionRepository.findByEndDateAfterOrderByStartDateDesc(new Date());
         List<CompleteAction> completeActions = new ArrayList<>();
 
         for (Action action : newestActions) {
-            completeActions.add(getCompleteAction(action));
+            if (progress) {
+                double actionProgress = getProgress(action);
+                completeActions.add(getCompleteActionWithProgress(action, actionProgress));
+            } else {
+                completeActions.add(getCompleteAction(action));
+            }
         }
 
         return completeActions.stream().limit(4).collect(Collectors.toList()); // Take first n (number in limit(n)) items and return them.
     }
 
     @GetMapping("/actions/random")
-    public List<CompleteAction> getRandomActions(){
+    public List<CompleteAction> getRandomActions(@RequestParam(defaultValue = "false") boolean progress){
         List<Action> actions = actionRepository.findAll();
         Collections.shuffle(actions);
         List<Action> selectedActions = actions.stream().limit(6).collect(Collectors.toList()); // Take first n (number in limit(n)) items and return them.;
@@ -130,7 +144,12 @@ public class ActionController {
         List<CompleteAction> completeActions = new ArrayList<>();
 
         for (Action action : selectedActions) {
-            completeActions.add(getCompleteAction(action));
+            if (progress) {
+                double actionProgress = getProgress(action);
+                completeActions.add(getCompleteActionWithProgress(action, actionProgress));
+            } else {
+                completeActions.add(getCompleteAction(action));
+            }
         }
 
         return completeActions;
@@ -141,5 +160,27 @@ public class ActionController {
         Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
         List<ActionImage> actionImages = actionImageRepository.findActionImagesByActionId(action.getId());
         return new CompleteAction(action, vzw, actionImages);
+    }
+
+    // Get the filled CompleteActionWithProgress for the given action and progress
+    private CompleteActionWithProgress getCompleteActionWithProgress(Action action, double progress) {
+        Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
+        List<ActionImage> actionImages = actionImageRepository.findActionImagesByActionId(action.getId());
+        return new CompleteActionWithProgress(action, vzw, actionImages, progress);
+    }
+
+    // Calculate the progress percentage of a given action
+    private double getProgress(Action action) {
+        Decimal128 actionGoal = action.getGoal();
+        List<Product> products = productRepository.findProductsByActionId(action.getId());
+
+        BigDecimal actionPurchased = new BigDecimal(0);
+        for (Product product : products) {
+            List<Purchase> purchases = purchaseRepository.findPurchasesByProductId(product.getId());
+            int sum = purchases.stream().mapToInt(Purchase::getAmount).sum(); // Sum of all the amounts a product has been purchased
+            actionPurchased = actionPurchased.add(BigDecimal.valueOf(sum * product.getCost().doubleValue())); // Add the total value of this product purchased to the total value action purchased
+        }
+
+        return actionPurchased.doubleValue() / Objects.requireNonNull(actionGoal).doubleValue() * 100; // calculate progress percentage (total value purchased / goal * 100)
     }
 }
