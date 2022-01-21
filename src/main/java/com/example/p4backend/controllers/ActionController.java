@@ -76,10 +76,20 @@ public class ActionController {
             action4.setId("action4");
             action4.setStartDate(new GregorianCalendar(2021, Calendar.DECEMBER, 2).getTime());
 
+            Action action5 = new Action(
+                    "action5",
+                    new Decimal128(500),
+                    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
+                    "vzw1",
+                    new GregorianCalendar(2022, Calendar.FEBRUARY, 1).getTime());
+            action1.setId("action1");
+            action1.setStartDate(new GregorianCalendar(2022, Calendar.JANUARY, 18).getTime());
+
             actionRepository.save(action1);
             actionRepository.save(action2);
             actionRepository.save(action3);
             actionRepository.save(action4);
+            actionRepository.save(action5);
         }
     }
 
@@ -162,7 +172,7 @@ public class ActionController {
         Date currentDate = currentCallender.getTime();
 
         // Generate the date a month in the future from the current date
-        currentCallender.add(Calendar.MONTH, 1);
+        currentCallender.add(Calendar.WEEK_OF_YEAR, 2);
         Date futureDate = currentCallender.getTime();
 
         List<Action> deadlineActions = actionRepository.findActionsByEndDateBetweenAndStartDateBeforeOrderByEndDateDesc(currentDate, futureDate, currentDate);
