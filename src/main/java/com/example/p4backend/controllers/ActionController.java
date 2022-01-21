@@ -156,7 +156,7 @@ public class ActionController {
     }
 
     @GetMapping("/actions/deadline")
-    public List<CompleteAction> getDeadlineActions() {
+    public List<CompleteAction> getDeadlineActions(@RequestParam(defaultValue = "false") boolean progress) {
         // Generate the current date
         GregorianCalendar currentCallender = new GregorianCalendar();
         Date currentDate = currentCallender.getTime();
@@ -169,7 +169,12 @@ public class ActionController {
         List<CompleteAction> completeActions = new ArrayList<>();
 
         for (Action action : deadlineActions) {
-            completeActions.add(getCompleteAction(action));
+            if (progress) {
+                double actionProgress = getProgress(action);
+                completeActions.add(getCompleteActionWithProgress(action, actionProgress));
+            } else {
+                completeActions.add(getCompleteAction(action));
+            }
         }
 
         return completeActions.stream().limit(5).collect(Collectors.toList()); // Take first n (number in limit(n)) items and return them.
