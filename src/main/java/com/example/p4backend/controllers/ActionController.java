@@ -82,8 +82,8 @@ public class ActionController {
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
                     "vzw1",
                     new GregorianCalendar(2022, Calendar.FEBRUARY, 1).getTime());
-            action1.setId("action1");
-            action1.setStartDate(new GregorianCalendar(2022, Calendar.JANUARY, 18).getTime());
+            action5.setId("action5");
+            action5.setStartDate(new GregorianCalendar(2022, Calendar.JANUARY, 18).getTime());
 
             actionRepository.save(action1);
             actionRepository.save(action2);
