@@ -36,3 +36,8 @@ jobs:
 
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/p4_backend:latest
+        
+      - name: Deployment hook for jenkins
+        uses: distributhor/workflow-webhook@v2
+        env:
+          webhook_url: ${{ secrets.JENKINS }}
