@@ -136,6 +136,22 @@ public class ActionController {
         return completeActions;
     }
 
+    @GetMapping("/actions/deadline")
+    public List<CompleteAction> getDeadlineActions() {
+        // Generate the date a month in the future from the current date
+        GregorianCalendar futureCalender = new GregorianCalendar();
+        futureCalender.add(Calendar.MONTH, 1);
+
+        List<Action> deadlineActions = actionRepository.findActionsByEndDateBetweenOrderByStartDateDesc(new Date(), futureCalender.getTime());
+        List<CompleteAction> completeActions = new ArrayList<>();
+
+        for (Action action : deadlineActions) {
+            completeActions.add(getCompleteAction(action));
+        }
+
+        return completeActions.stream().limit(5).collect(Collectors.toList()); // Take first n (number in limit(n)) items and return them.
+    }
+
     // Get the filled CompleteAction for the given action
     private CompleteAction getCompleteAction(Action action) {
         Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
