@@ -156,12 +156,17 @@ public class ActionController {
     }
 
     @GetMapping("/actions/vzw/{vzwId}")
-    public List<CompleteAction> getActionsByVzwId(@PathVariable String vzwId) {
+    public List<CompleteAction> getActionsByVzwId(@PathVariable String vzwId, @RequestParam(defaultValue = "false") boolean progress) {
         List<CompleteAction> returnList = new ArrayList<>();
         List<Action> actions = actionRepository.findActionsByVzwID(vzwId);
 
         for (Action action : actions) {
-            returnList.add(getCompleteAction(action));
+            if (progress) {
+                double actionProgress = getProgress(action);
+                returnList.add(getCompleteActionWithProgress(action, actionProgress));
+            } else {
+                returnList.add(getCompleteAction(action));
+            }
         }
         return returnList;
     }
