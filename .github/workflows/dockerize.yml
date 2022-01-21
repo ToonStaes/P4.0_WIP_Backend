@@ -41,3 +41,4 @@ jobs:
         uses: distributhor/workflow-webhook@v2
         env:
           webhook_url: ${{ secrets.JENKINS }}
+          webhook_secret: ${{ secrets.JENKINS_TOKEN }}
