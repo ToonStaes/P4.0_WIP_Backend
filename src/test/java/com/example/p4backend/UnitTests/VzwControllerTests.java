@@ -1,6 +1,5 @@
-package com.example.p4backend;
+package com.example.p4backend.UnitTests;
 
-import com.example.p4backend.models.Address;
 import com.example.p4backend.models.Vzw;
 import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.VzwRepository;
@@ -27,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class VzwUnitTests {
+public class VzwControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
