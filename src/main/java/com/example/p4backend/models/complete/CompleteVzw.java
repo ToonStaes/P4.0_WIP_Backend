@@ -2,6 +2,7 @@ package com.example.p4backend.models.complete;
 
 import com.example.p4backend.models.Address;
 import com.example.p4backend.models.Vzw;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class CompleteVzw {
     private String bio;
     private String youtubeLink;
     private String profilePicture;
+    @JsonIgnore
     private String password;
     private Address address;
 

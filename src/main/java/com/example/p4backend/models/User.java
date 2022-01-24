@@ -1,5 +1,6 @@
 package com.example.p4backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mongodb.lang.Nullable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class User {
     private String name;
     private String email;
     @Nullable
+    @JsonIgnore
     private String password;
     private String addressID;
 

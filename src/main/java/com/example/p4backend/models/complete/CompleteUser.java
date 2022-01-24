@@ -2,6 +2,7 @@ package com.example.p4backend.models.complete;
 
 import com.example.p4backend.models.Address;
 import com.example.p4backend.models.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import java.util.Optional;
@@ -13,6 +14,7 @@ public class CompleteUser {
     private String id;
     private String name;
     private String email;
+    @JsonIgnore
     private String password;
     private Address address;
 
