@@ -106,6 +106,7 @@ public class UserUnitTests {
                 .andExpect(jsonPath("$[0].id", is("user1")))
                 .andExpect(jsonPath("$[0].name", is("Toon Staes")))
                 .andExpect(jsonPath("$[0].email", is("r0784094@student.thomasmore.be")))
+                .andExpect(jsonPath("$[0].password").doesNotExist())
                 .andExpect(jsonPath("$[0].address.id", is("1")))
                 .andExpect(jsonPath("$[0].address.street", is("Polderken")))
                 .andExpect(jsonPath("$[0].address.houseNumber", is("7")))
@@ -116,6 +117,7 @@ public class UserUnitTests {
                 .andExpect(jsonPath("$[1].id", is("user2")))
                 .andExpect(jsonPath("$[1].name", is("Rutger Mols")))
                 .andExpect(jsonPath("$[1].email", is("r0698466@student.thomasmore.be")))
+                .andExpect(jsonPath("$[1].password").doesNotExist())
                 .andExpect(jsonPath("$[1].address.id", is("4")))
                 .andExpect(jsonPath("$[1].address.street", is("Zielestraat")))
                 .andExpect(jsonPath("$[1].address.houseNumber", is("6")))
@@ -126,6 +128,7 @@ public class UserUnitTests {
                 .andExpect(jsonPath("$[2].id", is("user3")))
                 .andExpect(jsonPath("$[2].name", is("Axel Van Gestel")))
                 .andExpect(jsonPath("$[2].email", is("r0784084@student.thomasmore.be")))
+                .andExpect(jsonPath("$[2].password").doesNotExist())
                 .andExpect(jsonPath("$[2].address.id", is("2")))
                 .andExpect(jsonPath("$[2].address.street", is("Parklaan")))
                 .andExpect(jsonPath("$[2].address.houseNumber", is("35")))
@@ -136,6 +139,7 @@ public class UserUnitTests {
                 .andExpect(jsonPath("$[3].id", is("user4")))
                 .andExpect(jsonPath("$[3].name", is("Britt Ooms")))
                 .andExpect(jsonPath("$[3].email", is("r0802207@student.thomasmore.be")))
+                .andExpect(jsonPath("$[3].password").doesNotExist())
                 .andExpect(jsonPath("$[3].address.id", is("3")))
                 .andExpect(jsonPath("$[3].address.street", is("Kerkeveld")))
                 .andExpect(jsonPath("$[3].address.houseNumber", is("7")))
@@ -146,6 +150,7 @@ public class UserUnitTests {
                 .andExpect(jsonPath("$[4].id", is("user5")))
                 .andExpect(jsonPath("$[4].name", is("Sebastiaan Hensels")))
                 .andExpect(jsonPath("$[4].email", is("r0698052@student.thomasmore.be")))
+                .andExpect(jsonPath("$[4].password").doesNotExist())
                 .andExpect(jsonPath("$[4].address.id", is("5")))
                 .andExpect(jsonPath("$[4].address.street", is("Hoogland")))
                 .andExpect(jsonPath("$[4].address.houseNumber", is("2")))
@@ -156,6 +161,7 @@ public class UserUnitTests {
                 .andExpect(jsonPath("$[5].id", is("user6")))
                 .andExpect(jsonPath("$[5].name", is("Gerd Janssens")))
                 .andExpect(jsonPath("$[5].email", is("r0370181@student.thomasmore.be")))
+                .andExpect(jsonPath("$[5].password").doesNotExist())
                 .andExpect(jsonPath("$[5].address.id", is("6")))
                 .andExpect(jsonPath("$[5].address.street", is("Slachthuisstraat")))
                 .andExpect(jsonPath("$[5].address.houseNumber", is("87")))
@@ -166,6 +172,7 @@ public class UserUnitTests {
                 .andExpect(jsonPath("$[6].id", is("userToBeDeleted")))
                 .andExpect(jsonPath("$[6].name", is("To Delete")))
                 .andExpect(jsonPath("$[6].email", is("to@delete.be")))
+                .andExpect(jsonPath("$[6].password").doesNotExist())
                 .andExpect(jsonPath("$[6].address.id", is("6")))
                 .andExpect(jsonPath("$[6].address.street", is("Slachthuisstraat")))
                 .andExpect(jsonPath("$[6].address.houseNumber", is("87")))
@@ -175,7 +182,7 @@ public class UserUnitTests {
     }
 
 
-    // Gives 1 user back, searched on userId (user1)
+    // Gives one user back, searched on userId (user1)
     @Test
     void givenUser_whenGetUserById_thenReturnJsonUser1() throws Exception {
         mockMvc.perform(get("/users/{id}", "user1")) // command
@@ -185,6 +192,7 @@ public class UserUnitTests {
                 .andExpect(jsonPath("$.id", is("user1")))
                 .andExpect(jsonPath("$.name", is("Toon Staes")))
                 .andExpect(jsonPath("$.email", is("r0784094@student.thomasmore.be")))
+                .andExpect(jsonPath("$.password").doesNotExist())
                 .andExpect(jsonPath("$.address.id", is("1")))
                 .andExpect(jsonPath("$.address.street", is("Polderken")))
                 .andExpect(jsonPath("$.address.houseNumber", is("7")))
@@ -194,7 +202,7 @@ public class UserUnitTests {
     }
 
 
-    // Gives 2 user back, searched on userId (user2)
+    // Gives one user back, searched on userId (user2)
     @Test
     void givenUser_whenGetUserById_thenReturnJsonUser2() throws Exception {
         mockMvc.perform(get("/users/{id}", "user2")) // command
@@ -204,6 +212,7 @@ public class UserUnitTests {
                 .andExpect(jsonPath("$.id", is("user2")))
                 .andExpect(jsonPath("$.name", is("Rutger Mols")))
                 .andExpect(jsonPath("$.email", is("r0698466@student.thomasmore.be")))
+                .andExpect(jsonPath("$.password").doesNotExist())
                 .andExpect(jsonPath("$.address.id", is("4")))
                 .andExpect(jsonPath("$.address.street", is("Zielestraat")))
                 .andExpect(jsonPath("$.address.houseNumber", is("6")))
