@@ -1,4 +1,4 @@
-package com.example.p4backend;
+package com.example.p4backend.UnitTests;
 
 import com.example.p4backend.models.Address;
 import com.example.p4backend.repositories.AddressRepository;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AddressUnitTests {
+public class AddressControllerTests {
     private final ObjectMapper mapper = JsonMapper.builder()
             .addModule(new ParameterNamesModule())
             .addModule(new Jdk8Module())
