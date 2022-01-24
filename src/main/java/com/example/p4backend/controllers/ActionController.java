@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "", allowedHeaders = "")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class ActionController {
 
