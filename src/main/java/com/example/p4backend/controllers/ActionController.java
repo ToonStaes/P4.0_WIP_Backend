@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "", allowedHeaders = "")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class ActionController {
 
@@ -76,10 +76,20 @@ public class ActionController {
             action4.setId("action4");
             action4.setStartDate(new GregorianCalendar(2021, Calendar.DECEMBER, 2).getTime());
 
+            Action action5 = new Action(
+                    "action5",
+                    new Decimal128(500),
+                    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
+                    "vzw1",
+                    new GregorianCalendar(2022, Calendar.FEBRUARY, 1).getTime());
+            action5.setId("action5");
+            action5.setStartDate(new GregorianCalendar(2022, Calendar.JANUARY, 18).getTime());
+
             actionRepository.save(action1);
             actionRepository.save(action2);
             actionRepository.save(action3);
             actionRepository.save(action4);
+            actionRepository.save(action5);
         }
     }
 
@@ -155,6 +165,31 @@ public class ActionController {
         return completeActions;
     }
 
+    @GetMapping("/actions/deadline")
+    public List<CompleteAction> getDeadlineActions(@RequestParam(defaultValue = "false") boolean progress) {
+        // Generate the current date
+        GregorianCalendar currentCallender = new GregorianCalendar();
+        Date currentDate = currentCallender.getTime();
+
+        // Generate the date a month in the future from the current date
+        currentCallender.add(Calendar.WEEK_OF_YEAR, 2);
+        Date futureDate = currentCallender.getTime();
+
+        List<Action> deadlineActions = actionRepository.findActionsByEndDateBetweenAndStartDateBeforeOrderByEndDateDesc(currentDate, futureDate, currentDate);
+        List<CompleteAction> completeActions = new ArrayList<>();
+
+        for (Action action : deadlineActions) {
+            if (progress) {
+                double actionProgress = getProgress(action);
+                completeActions.add(getCompleteActionWithProgress(action, actionProgress));
+            } else {
+                completeActions.add(getCompleteAction(action));
+            }
+        }
+
+        return completeActions.stream().limit(5).collect(Collectors.toList()); // Take first n (number in limit(n)) items and return them.
+    }
+  
     @GetMapping("/actions/vzw/{vzwId}")
     public List<CompleteAction> getActionsByVzwId(@PathVariable String vzwId, @RequestParam(defaultValue = "false") boolean progress) {
         List<CompleteAction> returnList = new ArrayList<>();

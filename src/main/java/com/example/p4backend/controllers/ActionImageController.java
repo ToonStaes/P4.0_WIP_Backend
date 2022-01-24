@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@CrossOrigin(origins = "", allowedHeaders = "")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class ActionImageController {
     @Autowired
