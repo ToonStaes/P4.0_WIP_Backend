@@ -1,4 +1,4 @@
-package com.example.p4backend;
+package com.example.p4backend.UnitTests;
 
 import com.example.p4backend.models.Address;
 import com.example.p4backend.models.User;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserUnitTests {
+public class UserControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
