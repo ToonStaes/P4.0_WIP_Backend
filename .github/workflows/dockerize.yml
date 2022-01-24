@@ -37,8 +37,15 @@ jobs:
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/p4_backend:latest
         
-      - name: Deployment hook for jenkins
-        uses: distributhor/workflow-webhook@v2
-        env:
-          webhook_url: ${{ secrets.JENKINS }}
-          webhook_secret: ${{ secrets.JENKINS_TOKEN }}
+        
+  launch_jenkins_job:
+    name: trigger jenkins job
+    runs-on: ubuntu-latest
+    steps:  
+      - name: Trigger Jenkins Job
+        uses: sbitio/trigger-jenkins-job@master
+        with:
+          JENKINS_USER: ${{ secrets.JENKINS_USER }}
+          JENKINS_TOKEN: ${{ secrets.JENKINS_TOKEN }}
+          JENKINS_HOST: ${{ secrets.JENKINS_HOST }}
+          JENKINS_JOB: ${{ secrets.JENKINS_JOB }}
