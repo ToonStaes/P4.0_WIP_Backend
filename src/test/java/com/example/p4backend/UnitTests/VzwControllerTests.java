@@ -1,5 +1,6 @@
 package com.example.p4backend.UnitTests;
 
+import com.example.p4backend.models.Address;
 import com.example.p4backend.models.Vzw;
 import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.VzwRepository;
@@ -27,14 +28,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class VzwControllerTests {
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private VzwRepository vzwRepository;
-    @Autowired
-    private AddressRepository addressRepository;
-
+    private final ObjectMapper mapper = JsonMapper.builder()
+            .addModule(new ParameterNamesModule())
+            .addModule(new Jdk8Module())
+            .addModule(new JavaTimeModule())
+            .build();
+    // ----- ADDRESS -----
+    Address address7 = new Address("Kerstraat", "87", "Malle", "2390");
+    Address address8 = new Address("Markt", "22", "Kasterlee", "2460");
+    Address address9 = new Address("Sparrelaan", "17", "Malle", "2390");
+    Address address10 = new Address("Stationsstraat", "27", "Herselt", "2230");
+    // ----- VZW -----
     Vzw vzw1 = new Vzw(
             "vzw1",
             "vzw1.kasterlee@mail.com",
@@ -44,7 +48,6 @@ public class VzwControllerTests {
             "https://http.cat/200.jpg",
             "password",
             "8");
-
     Vzw vzw2 = new Vzw(
             "vzw2",
             "vzw2.malle@mail.com",
@@ -54,7 +57,6 @@ public class VzwControllerTests {
             "https://http.cat/201.jpg",
             "password",
             "7");
-
     Vzw vzw3 = new Vzw(
             "vzw3",
             "vzw3.herselt@mail.com",
@@ -64,7 +66,6 @@ public class VzwControllerTests {
             "https://http.cat/202.jpg",
             "password",
             "10");
-
     Vzw vzw4 = new Vzw(
             "vzw4",
             "vzw4.malle@mail.com",
@@ -74,19 +75,34 @@ public class VzwControllerTests {
             "https://http.cat/203.jpg",
             "password",
             "9");
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private VzwRepository vzwRepository;
+    @Autowired
+    private AddressRepository addressRepository;
 
     @BeforeEach
     public void beforeAllTests() {
-        vzwRepository.deleteAll();
+        // ----- ADDRESS -----
+        addressRepository.deleteAll();
+        // Set ID's
+        address7.setId("7");
+        address8.setId("8");
+        address9.setId("9");
+        address10.setId("10");
+        // Save to repo
+        addressRepository.saveAll(Arrays.asList(address7, address8, address9, address10));
 
+        // ----- VZW -----
+        vzwRepository.deleteAll();
         // Set ID's
         vzw1.setId("vzw1");
         vzw2.setId("vzw2");
         vzw3.setId("vzw3");
         vzw4.setId("vzw4");
-
+        // Save to repo
         vzwRepository.saveAll(Arrays.asList(vzw1, vzw2, vzw3, vzw4));
-
     }
 
     @AfterEach
@@ -95,13 +111,6 @@ public class VzwControllerTests {
         vzwRepository.deleteAll();
     }
 
-    private final ObjectMapper mapper = JsonMapper.builder()
-            .addModule(new ParameterNamesModule())
-            .addModule(new Jdk8Module())
-            .addModule(new JavaTimeModule())
-            .build();
-
-
     // Gives back a list of all Vzws
     @Test
     void givenVzws_whenGetAllVzws_thenReturnJsonVzws() throws Exception {
@@ -109,51 +118,67 @@ public class VzwControllerTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 // Array length is correct
-                .andExpect(jsonPath("$", hasSize(7)))
+                .andExpect(jsonPath("$", hasSize(4)))
                 // vzw1 is correct
                 .andExpect(jsonPath("$[0].id", is("vzw1")))
-                .andExpect(jsonPath("$[0].name", is("Toon Staes")))
-                .andExpect(jsonPath("$[0].email", is("r0784094@student.thomasmore.be")))
+                .andExpect(jsonPath("$[0].name", is("vzw1")))
+                .andExpect(jsonPath("$[0].email", is("vzw1.kasterlee@mail.com")))
+                .andExpect(jsonPath("$[0].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[0].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[0].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[0].profilePicture", is("https://http.cat/200.jpg")))
                 .andExpect(jsonPath("$[0].password").doesNotExist())
-                .andExpect(jsonPath("$[0].address.id", is("1")))
-                .andExpect(jsonPath("$[0].address.street", is("Polderken")))
-                .andExpect(jsonPath("$[0].address.houseNumber", is("7")))
+                .andExpect(jsonPath("$[0].address.id", is("8")))
+                .andExpect(jsonPath("$[0].address.street", is("Markt")))
+                .andExpect(jsonPath("$[0].address.houseNumber", is("22")))
                 .andExpect(jsonPath("$[0].address.box").isEmpty())
                 .andExpect(jsonPath("$[0].address.city", is("Kasterlee")))
                 .andExpect(jsonPath("$[0].address.postalCode", is("2460")))
                 // vzw2 is correct
                 .andExpect(jsonPath("$[1].id", is("vzw2")))
-                .andExpect(jsonPath("$[1].name", is("Rutger Mols")))
-                .andExpect(jsonPath("$[1].email", is("r0698466@student.thomasmore.be")))
+                .andExpect(jsonPath("$[1].name", is("vzw2")))
+                .andExpect(jsonPath("$[1].email", is("vzw2.malle@mail.com")))
+                .andExpect(jsonPath("$[1].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[1].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[1].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[1].profilePicture", is("https://http.cat/201.jpg")))
                 .andExpect(jsonPath("$[1].password").doesNotExist())
-                .andExpect(jsonPath("$[1].address.id", is("4")))
-                .andExpect(jsonPath("$[1].address.street", is("Zielestraat")))
-                .andExpect(jsonPath("$[1].address.houseNumber", is("6")))
+                .andExpect(jsonPath("$[1].address.id", is("7")))
+                .andExpect(jsonPath("$[1].address.street", is("Kerstraat")))
+                .andExpect(jsonPath("$[1].address.houseNumber", is("87")))
                 .andExpect(jsonPath("$[1].address.box").isEmpty())
-                .andExpect(jsonPath("$[1].address.city", is("Poederlee")))
-                .andExpect(jsonPath("$[1].address.postalCode", is("2275")))
+                .andExpect(jsonPath("$[1].address.city", is("Malle")))
+                .andExpect(jsonPath("$[1].address.postalCode", is("2390")))
                 // vzw3 is correct
                 .andExpect(jsonPath("$[2].id", is("vzw3")))
-                .andExpect(jsonPath("$[2].name", is("Axel Van Gestel")))
-                .andExpect(jsonPath("$[2].email", is("r0784084@student.thomasmore.be")))
+                .andExpect(jsonPath("$[2].name", is("vzw3")))
+                .andExpect(jsonPath("$[2].email", is("vzw3.herselt@mail.com")))
+                .andExpect(jsonPath("$[2].rekeningNR", is("be1234599798")))
+                .andExpect(jsonPath("$[2].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[2].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[2].profilePicture", is("https://http.cat/202.jpg")))
                 .andExpect(jsonPath("$[2].password").doesNotExist())
-                .andExpect(jsonPath("$[2].address.id", is("2")))
-                .andExpect(jsonPath("$[2].address.street", is("Parklaan")))
-                .andExpect(jsonPath("$[2].address.houseNumber", is("35")))
+                .andExpect(jsonPath("$[2].address.id", is("10")))
+                .andExpect(jsonPath("$[2].address.street", is("Stationsstraat")))
+                .andExpect(jsonPath("$[2].address.houseNumber", is("27")))
                 .andExpect(jsonPath("$[2].address.box").isEmpty())
-                .andExpect(jsonPath("$[2].address.city", is("Turnhout")))
-                .andExpect(jsonPath("$[2].address.postalCode", is("2300")))
+                .andExpect(jsonPath("$[2].address.city", is("Herselt")))
+                .andExpect(jsonPath("$[2].address.postalCode", is("2230")))
                 // vzw4 is correct
                 .andExpect(jsonPath("$[3].id", is("vzw4")))
-                .andExpect(jsonPath("$[3].name", is("Britt Ooms")))
-                .andExpect(jsonPath("$[3].email", is("r0802207@student.thomasmore.be")))
+                .andExpect(jsonPath("$[3].name", is("vzw4")))
+                .andExpect(jsonPath("$[3].email", is("vzw4.malle@mail.com")))
+                .andExpect(jsonPath("$[3].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[3].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[3].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[3].profilePicture", is("https://http.cat/203.jpg")))
                 .andExpect(jsonPath("$[3].password").doesNotExist())
-                .andExpect(jsonPath("$[3].address.id", is("3")))
-                .andExpect(jsonPath("$[3].address.street", is("Kerkeveld")))
-                .andExpect(jsonPath("$[3].address.houseNumber", is("7")))
+                .andExpect(jsonPath("$[3].address.id", is("9")))
+                .andExpect(jsonPath("$[3].address.street", is("Sparrelaan")))
+                .andExpect(jsonPath("$[3].address.houseNumber", is("17")))
                 .andExpect(jsonPath("$[3].address.box").isEmpty())
-                .andExpect(jsonPath("$[3].address.city", is("Herselt")))
-                .andExpect(jsonPath("$[3].address.postalCode", is("2230")));
+                .andExpect(jsonPath("$[3].address.city", is("Malle")))
+                .andExpect(jsonPath("$[3].address.postalCode", is("2390")));
     }
 
 
@@ -165,12 +190,16 @@ public class VzwControllerTests {
                 .andExpect(status().isOk())
                 // vzw1 is correct
                 .andExpect(jsonPath("$.id", is("vzw1")))
-                .andExpect(jsonPath("$.name", is("Toon Staes")))
-                .andExpect(jsonPath("$.email", is("r0784094@student.thomasmore.be")))
+                .andExpect(jsonPath("$.name", is("vzw1")))
+                .andExpect(jsonPath("$.email", is("vzw1.kasterlee@mail.com")))
+                .andExpect(jsonPath("$.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$.profilePicture", is("https://http.cat/200.jpg")))
                 .andExpect(jsonPath("$.password").doesNotExist())
-                .andExpect(jsonPath("$.address.id", is("1")))
-                .andExpect(jsonPath("$.address.street", is("Polderken")))
-                .andExpect(jsonPath("$.address.houseNumber", is("7")))
+                .andExpect(jsonPath("$.address.id", is("8")))
+                .andExpect(jsonPath("$.address.street", is("Markt")))
+                .andExpect(jsonPath("$.address.houseNumber", is("22")))
                 .andExpect(jsonPath("$.address.box").isEmpty())
                 .andExpect(jsonPath("$.address.city", is("Kasterlee")))
                 .andExpect(jsonPath("$.address.postalCode", is("2460")));
@@ -185,14 +214,115 @@ public class VzwControllerTests {
                 .andExpect(status().isOk())
                 // vzw2 is correct
                 .andExpect(jsonPath("$.id", is("vzw2")))
-                .andExpect(jsonPath("$.name", is("Rutger Mols")))
-                .andExpect(jsonPath("$.email", is("r0698466@student.thomasmore.be")))
+                .andExpect(jsonPath("$.name", is("vzw2")))
+                .andExpect(jsonPath("$.email", is("vzw2.malle@mail.com")))
+                .andExpect(jsonPath("$.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$.profilePicture", is("https://http.cat/201.jpg")))
                 .andExpect(jsonPath("$.password").doesNotExist())
-                .andExpect(jsonPath("$.address.id", is("4")))
-                .andExpect(jsonPath("$.address.street", is("Zielestraat")))
-                .andExpect(jsonPath("$.address.houseNumber", is("6")))
+                .andExpect(jsonPath("$.address.id", is("7")))
+                .andExpect(jsonPath("$.address.street", is("Kerstraat")))
+                .andExpect(jsonPath("$.address.houseNumber", is("87")))
                 .andExpect(jsonPath("$.address.box").isEmpty())
-                .andExpect(jsonPath("$.address.city", is("Poederlee")))
-                .andExpect(jsonPath("$.address.postalCode", is("2275")));
+                .andExpect(jsonPath("$.address.city", is("Malle")))
+                .andExpect(jsonPath("$.address.postalCode", is("2390")));
+    }
+
+
+    // When search by empty name, Gives back a list of all Vzws
+    @Test
+    void givenVzws_whenSearchVzwsByNameEmpty_thenReturnJsonVzws() throws Exception {
+        mockMvc.perform(get("/vzws/name"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                // Array length is correct
+                .andExpect(jsonPath("$", hasSize(4)))
+                // vzw1 is correct
+                .andExpect(jsonPath("$[0].id", is("vzw1")))
+                .andExpect(jsonPath("$[0].name", is("vzw1")))
+                .andExpect(jsonPath("$[0].email", is("vzw1.kasterlee@mail.com")))
+                .andExpect(jsonPath("$[0].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[0].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[0].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[0].profilePicture", is("https://http.cat/200.jpg")))
+                .andExpect(jsonPath("$[0].password").doesNotExist())
+                .andExpect(jsonPath("$[0].address.id", is("8")))
+                .andExpect(jsonPath("$[0].address.street", is("Markt")))
+                .andExpect(jsonPath("$[0].address.houseNumber", is("22")))
+                .andExpect(jsonPath("$[0].address.box").isEmpty())
+                .andExpect(jsonPath("$[0].address.city", is("Kasterlee")))
+                .andExpect(jsonPath("$[0].address.postalCode", is("2460")))
+                // vzw2 is correct
+                .andExpect(jsonPath("$[1].id", is("vzw2")))
+                .andExpect(jsonPath("$[1].name", is("vzw2")))
+                .andExpect(jsonPath("$[1].email", is("vzw2.malle@mail.com")))
+                .andExpect(jsonPath("$[1].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[1].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[1].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[1].profilePicture", is("https://http.cat/201.jpg")))
+                .andExpect(jsonPath("$[1].password").doesNotExist())
+                .andExpect(jsonPath("$[1].address.id", is("7")))
+                .andExpect(jsonPath("$[1].address.street", is("Kerstraat")))
+                .andExpect(jsonPath("$[1].address.houseNumber", is("87")))
+                .andExpect(jsonPath("$[1].address.box").isEmpty())
+                .andExpect(jsonPath("$[1].address.city", is("Malle")))
+                .andExpect(jsonPath("$[1].address.postalCode", is("2390")))
+                // vzw3 is correct
+                .andExpect(jsonPath("$[2].id", is("vzw3")))
+                .andExpect(jsonPath("$[2].name", is("vzw3")))
+                .andExpect(jsonPath("$[2].email", is("vzw3.herselt@mail.com")))
+                .andExpect(jsonPath("$[2].rekeningNR", is("be1234599798")))
+                .andExpect(jsonPath("$[2].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[2].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[2].profilePicture", is("https://http.cat/202.jpg")))
+                .andExpect(jsonPath("$[2].password").doesNotExist())
+                .andExpect(jsonPath("$[2].address.id", is("10")))
+                .andExpect(jsonPath("$[2].address.street", is("Stationsstraat")))
+                .andExpect(jsonPath("$[2].address.houseNumber", is("27")))
+                .andExpect(jsonPath("$[2].address.box").isEmpty())
+                .andExpect(jsonPath("$[2].address.city", is("Herselt")))
+                .andExpect(jsonPath("$[2].address.postalCode", is("2230")))
+                // vzw4 is correct
+                .andExpect(jsonPath("$[3].id", is("vzw4")))
+                .andExpect(jsonPath("$[3].name", is("vzw4")))
+                .andExpect(jsonPath("$[3].email", is("vzw4.malle@mail.com")))
+                .andExpect(jsonPath("$[3].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[3].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[3].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[3].profilePicture", is("https://http.cat/203.jpg")))
+                .andExpect(jsonPath("$[3].password").doesNotExist())
+                .andExpect(jsonPath("$[3].address.id", is("9")))
+                .andExpect(jsonPath("$[3].address.street", is("Sparrelaan")))
+                .andExpect(jsonPath("$[3].address.houseNumber", is("17")))
+                .andExpect(jsonPath("$[3].address.box").isEmpty())
+                .andExpect(jsonPath("$[3].address.city", is("Malle")))
+                .andExpect(jsonPath("$[3].address.postalCode", is("2390")));
+    }
+
+
+    // When search by empty name, Gives back a list of all Vzws
+    @Test
+    void givenVzws_whenSearchVzwsByName_2_thenReturnJsonVzws() throws Exception {
+        mockMvc.perform(get("/vzws/name/{name}", "2")) // command
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                // Array length is correct
+                .andExpect(jsonPath("$", hasSize(1)))
+                // vzw2 is correct
+                .andExpect(jsonPath("$[0].id", is("vzw2")))
+                .andExpect(jsonPath("$[0].name", is("vzw2")))
+                .andExpect(jsonPath("$[0].email", is("vzw2.malle@mail.com")))
+                .andExpect(jsonPath("$[0].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[0].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[0].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[0].profilePicture", is("https://http.cat/201.jpg")))
+                .andExpect(jsonPath("$[0].password").doesNotExist())
+                .andExpect(jsonPath("$[0].address.id", is("7")))
+                .andExpect(jsonPath("$[0].address.street", is("Kerstraat")))
+                .andExpect(jsonPath("$[0].address.houseNumber", is("87")))
+                .andExpect(jsonPath("$[0].address.box").isEmpty())
+                .andExpect(jsonPath("$[0].address.city", is("Malle")))
+                .andExpect(jsonPath("$[0].address.postalCode", is("2390")));
     }
 }
