@@ -3,6 +3,7 @@ package com.example.p4backend.controllers;
 import com.example.p4backend.models.*;
 import com.example.p4backend.models.complete.CompleteAction;
 import com.example.p4backend.models.complete.CompleteActionWithProgress;
+import com.example.p4backend.models.complete.CompleteVzw;
 import com.example.p4backend.repositories.*;
 import org.bson.types.Decimal128;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class ActionController {
     private ProductRepository productRepository;
     @Autowired
     private PurchaseRepository purchaseRepository;
+    @Autowired
+    private AddressRepository addressRepository;
 
     @PostConstruct
     public void fillDB() throws InterruptedException {
@@ -209,15 +212,17 @@ public class ActionController {
     // Get the filled CompleteAction for the given action
     private CompleteAction getCompleteAction(Action action) {
         Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
+        CompleteVzw completeVzw = getCompleteVzw(vzw);
         List<ActionImage> actionImages = actionImageRepository.findActionImagesByActionId(action.getId());
-        return new CompleteAction(action, vzw, actionImages);
+        return new CompleteAction(action, completeVzw, actionImages);
     }
 
     // Get the filled CompleteActionWithProgress for the given action and progress
     private CompleteActionWithProgress getCompleteActionWithProgress(Action action, double progress) {
         Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
+        CompleteVzw completeVzw = getCompleteVzw(vzw);
         List<ActionImage> actionImages = actionImageRepository.findActionImagesByActionId(action.getId());
-        return new CompleteActionWithProgress(action, vzw, actionImages, progress);
+        return new CompleteActionWithProgress(action, completeVzw, actionImages, progress);
     }
 
     // Calculate the progress percentage of a given action
@@ -233,5 +238,14 @@ public class ActionController {
         }
 
         return actionPurchased.doubleValue() / Objects.requireNonNull(actionGoal).doubleValue() * 100; // calculate progress percentage (total value purchased / goal * 100)
+    }
+
+    // Generate Complete vzw to include address
+    private CompleteVzw getCompleteVzw(Optional<Vzw> vzw){
+        if (vzw.isPresent()){
+            Optional<Address> address = addressRepository.findById(vzw.get().getAddressID());
+            return new CompleteVzw(vzw.get(), address);
+        }
+        return null;
     }
 }

@@ -23,17 +23,17 @@ public class CompleteAction {
     private String description;
     private Date startDate;
     private Date endDate;
-    private Vzw vzw;
+    private CompleteVzw vzw;
     private List<ActionImage> actionImages = new ArrayList<>();
 
-    public CompleteAction(Action action, Optional<Vzw> vzw, List<ActionImage> actionImages) {
+    public CompleteAction(Action action, CompleteVzw vzw, List<ActionImage> actionImages) {
         this.id = action.getId();
         this.name = action.getName();
         this.goal = action.getGoal();
         this.description = action.getDescription();
         this.startDate = action.getStartDate();
         this.endDate = action.getEndDate();
-        vzw.ifPresent(value -> this.vzw = value); // If vzw is present, the value of the optional is taken and placed into the vzw property of the object.
+        this.vzw = vzw;
         this.actionImages.addAll(actionImages); // Add all images from parameters to the list of action images
     }
 }
