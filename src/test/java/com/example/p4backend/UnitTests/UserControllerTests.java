@@ -9,33 +9,31 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 public class UserControllerTests {
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private AddressRepository addressRepository;
-
+    private final ObjectMapper mapper = JsonMapper.builder()
+            .addModule(new ParameterNamesModule())
+            .addModule(new Jdk8Module())
+            .addModule(new JavaTimeModule())
+            .build();
     User user1 = new User("Toon Staes", "r0784094@student.thomasmore.be", "password", "1");
     User user2 = new User("Rutger Mols", "r0698466@student.thomasmore.be", "password", "4");
     User user3 = new User("Axel Van Gestel", "r0784084@student.thomasmore.be", "password", "2");
@@ -43,19 +41,30 @@ public class UserControllerTests {
     User user5 = new User("Sebastiaan Hensels", "r0698052@student.thomasmore.be", "password", "5");
     User user6 = new User("Gerd Janssens", "r0370181@student.thomasmore.be", "password", "6");
     User userToBeDeleted = new User("To Delete", "to@delete.be", "password", "6");
-
     Address address1 = new Address("Polderken", "7", "Kasterlee", "2460");
     Address address2 = new Address("Parklaan", "35", "Turnhout", "2300");
     Address address3 = new Address("Kerkeveld", "7", "Herselt", "2230");
     Address address4 = new Address("Zielestraat", "6", "Poederlee", "2275");
     Address address5 = new Address("Hoogland", "2", "Kasterlee", "2460");
     Address address6 = new Address("Slachthuisstraat", "87", "Turnhout", "2300");
+    @Autowired
+    private MockMvc mockMvc;
+    @MockBean
+    private UserRepository userRepository;
+    @MockBean
+    private AddressRepository addressRepository;
 
-    @BeforeEach
-    public void beforeAllTests() {
-        // ----- Address -----
-        addressRepository.deleteAll();
+    private User generateUser1() {
+        user1.setId("user1");
+        return user1;
+    }
 
+    private User generateUser2() {
+        user2.setId("user2");
+        return user2;
+    }
+
+    private List<Address> generateAddressList() {
         address1.setId("1");
         address2.setId("2");
         address3.setId("3");
@@ -63,12 +72,10 @@ public class UserControllerTests {
         address5.setId("5");
         address6.setId("6");
 
-        addressRepository.saveAll(Arrays.asList(address1, address2, address3, address4, address5, address6));
+        return List.of(address1, address2, address3, address4, address5, address6);
+    }
 
-        userRepository.deleteAll();
-
-        // ----- User -----
-        // Set ID's
+    private List<User> generateUsersList() {
         user1.setId("user1");
         user2.setId("user2");
         user3.setId("user3");
@@ -77,26 +84,22 @@ public class UserControllerTests {
         user6.setId("user6");
         userToBeDeleted.setId("userToBeDeleted");
 
-        userRepository.saveAll(Arrays.asList(user1, user2, user3, user4, user5, user6, userToBeDeleted));
-
+        return List.of(user1, user2, user3, user4, user5, user6, userToBeDeleted);
     }
-
-    @AfterEach
-    public void afterAllTests() {
-        addressRepository.deleteAll();
-        userRepository.deleteAll();
-    }
-
-    private final ObjectMapper mapper = JsonMapper.builder()
-            .addModule(new ParameterNamesModule())
-            .addModule(new Jdk8Module())
-            .addModule(new JavaTimeModule())
-            .build();
-
 
     // Gives back a list of all Users
     @Test
     void givenUsers_whenGetAllUsers_thenReturnJsonUsers() throws Exception {
+        List<User> userList = generateUsersList();
+        List<Address> addressList = generateAddressList();
+        given(userRepository.findAll()).willReturn(userList);
+        given(addressRepository.findById("1")).willReturn(Optional.of(addressList.get(0)));
+        given(addressRepository.findById("2")).willReturn(Optional.of(addressList.get(1)));
+        given(addressRepository.findById("3")).willReturn(Optional.of(addressList.get(2)));
+        given(addressRepository.findById("4")).willReturn(Optional.of(addressList.get(3)));
+        given(addressRepository.findById("5")).willReturn(Optional.of(addressList.get(4)));
+        given(addressRepository.findById("6")).willReturn(Optional.of(addressList.get(5)));
+
         mockMvc.perform(get("/users"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -185,6 +188,11 @@ public class UserControllerTests {
     // Gives one user back, searched on userId (user1)
     @Test
     void givenUser_whenGetUserById_thenReturnJsonUser1() throws Exception {
+        User user1 = generateUser1();
+        List<Address> addressList = generateAddressList();
+        given(userRepository.findById("user1")).willReturn(Optional.of(user1));
+        given(addressRepository.findById("1")).willReturn(Optional.of(addressList.get(0)));
+
         mockMvc.perform(get("/users/{id}", "user1")) // command
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -205,6 +213,11 @@ public class UserControllerTests {
     // Gives one user back, searched on userId (user2)
     @Test
     void givenUser_whenGetUserById_thenReturnJsonUser2() throws Exception {
+        User user2 = generateUser2();
+        List<Address> addressList = generateAddressList();
+        given(userRepository.findById("user2")).willReturn(Optional.of(user2));
+        given(addressRepository.findById("4")).willReturn(Optional.of(addressList.get(3)));
+
         mockMvc.perform(get("/users/{id}", "user2")) // command
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
