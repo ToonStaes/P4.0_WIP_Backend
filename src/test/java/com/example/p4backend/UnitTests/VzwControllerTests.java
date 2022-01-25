@@ -9,19 +9,20 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -77,43 +78,51 @@ public class VzwControllerTests {
             "9");
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
+    @MockBean
     private VzwRepository vzwRepository;
-    @Autowired
+    @MockBean
     private AddressRepository addressRepository;
 
-    @BeforeEach
-    public void beforeAllTests() {
-        // ----- ADDRESS -----
-        addressRepository.deleteAll();
-        // Set ID's
+
+    private Vzw generateVzw1() {
+        vzw1.setId("vzw1");
+        return vzw1;
+    }
+
+    private Vzw generateVzw2() {
+        vzw2.setId("vzw2");
+        return vzw2;
+    }
+
+    private List<Address> generateAddressList() {
         address7.setId("7");
         address8.setId("8");
         address9.setId("9");
         address10.setId("10");
-        // Save to repo
-        addressRepository.saveAll(Arrays.asList(address7, address8, address9, address10));
 
-        // ----- VZW -----
-        vzwRepository.deleteAll();
-        // Set ID's
+        return List.of(address7, address8, address9, address10);
+    }
+
+    private List<Vzw> generateVzwsList() {
         vzw1.setId("vzw1");
         vzw2.setId("vzw2");
         vzw3.setId("vzw3");
         vzw4.setId("vzw4");
-        // Save to repo
-        vzwRepository.saveAll(Arrays.asList(vzw1, vzw2, vzw3, vzw4));
-    }
 
-    @AfterEach
-    public void afterAllTests() {
-        addressRepository.deleteAll();
-        vzwRepository.deleteAll();
+        return List.of(vzw1, vzw2, vzw3, vzw4);
     }
 
     // Gives back a list of all Vzws
     @Test
     void givenVzws_whenGetAllVzws_thenReturnJsonVzws() throws Exception {
+        List<Vzw> vzwList = generateVzwsList();
+        List<Address> addressList = generateAddressList();
+        given(vzwRepository.findAll()).willReturn(vzwList);
+        given(addressRepository.findById("7")).willReturn(Optional.of(addressList.get(0)));
+        given(addressRepository.findById("8")).willReturn(Optional.of(addressList.get(1)));
+        given(addressRepository.findById("9")).willReturn(Optional.of(addressList.get(2)));
+        given(addressRepository.findById("10")).willReturn(Optional.of(addressList.get(3)));
+
         mockMvc.perform(get("/vzws"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -185,6 +194,11 @@ public class VzwControllerTests {
     // Gives one vzw back, searched on vzwId (vzw1)
     @Test
     void givenVzw_whenGetVzwById_thenReturnJsonVzw1() throws Exception {
+        Vzw vzw1 = generateVzw1();
+        List<Address> addressList = generateAddressList();
+        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzw1));
+        given(addressRepository.findById("8")).willReturn(Optional.of(addressList.get(1)));
+
         mockMvc.perform(get("/vzws/{id}", "vzw1")) // command
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -209,6 +223,11 @@ public class VzwControllerTests {
     // Gives one vzw back, searched on vzwId (vzw2)
     @Test
     void givenVzw_whenGetVzwById_thenReturnJsonVzw2() throws Exception {
+        Vzw vzw2 = generateVzw2();
+        List<Address> addressList = generateAddressList();
+        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzw2));
+        given(addressRepository.findById("7")).willReturn(Optional.of(addressList.get(0)));
+
         mockMvc.perform(get("/vzws/{id}", "vzw2")) // command
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -233,6 +252,14 @@ public class VzwControllerTests {
     // When search by empty name, Gives back a list of all Vzws
     @Test
     void givenVzws_whenSearchVzwsByNameEmpty_thenReturnJsonVzws() throws Exception {
+        List<Vzw> vzwList = generateVzwsList();
+        List<Address> addressList = generateAddressList();
+        given(vzwRepository.findAll()).willReturn(vzwList);
+        given(addressRepository.findById("7")).willReturn(Optional.of(addressList.get(0)));
+        given(addressRepository.findById("8")).willReturn(Optional.of(addressList.get(1)));
+        given(addressRepository.findById("9")).willReturn(Optional.of(addressList.get(2)));
+        given(addressRepository.findById("10")).willReturn(Optional.of(addressList.get(3)));
+
         mockMvc.perform(get("/vzws/name"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -301,9 +328,14 @@ public class VzwControllerTests {
     }
 
 
-    // When search by empty name, Gives back a list of all Vzws
+    // When search by name '2', Gives back a list of all Vzws having '2' in their name
     @Test
     void givenVzws_whenSearchVzwsByName_2_thenReturnJsonVzws() throws Exception {
+        Vzw vzw2 = generateVzw2();
+        List<Address> addressList = generateAddressList();
+        given(vzwRepository.searchByNameContaining("2")).willReturn(List.of(vzw2));
+        given(addressRepository.findById("7")).willReturn(Optional.of(addressList.get(0)));
+
         mockMvc.perform(get("/vzws/name/{name}", "2")) // command
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
