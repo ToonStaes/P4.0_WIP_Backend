@@ -26,8 +26,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Opleidingen API")
-                .description("This page list all the rest apis for the opleidingen API.")
+                .title("Vzw API")
+                .description("This page list all the rest apis for the vzw API.")
                 .version("1.0-SNAPSHOT")
                 .build();
     }
