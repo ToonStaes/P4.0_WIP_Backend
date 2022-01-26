@@ -35,7 +35,6 @@ public class ActionController {
 
     @PostConstruct
     public void fillDB() throws InterruptedException {
-        actionRepository.deleteAll();
         if (actionRepository.count() == 0) {
             Action action1 = new Action(
                     "action1",
