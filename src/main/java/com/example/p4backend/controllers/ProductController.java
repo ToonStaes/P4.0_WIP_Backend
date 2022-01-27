@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
@@ -28,15 +29,15 @@ public class ProductController {
     @PostConstruct
     public void fillDB(){
         if (productRepository.count() == 0) {
-            Product product1 = new Product("product1", new Decimal128(5), "action1");
+            Product product1 = new Product("product1", new Decimal128(new BigDecimal(5)), "action1");
             product1.setId("product1");
-            Product product2 = new Product("product2", new Decimal128(15), "action1");
+            Product product2 = new Product("product2", new Decimal128(new BigDecimal(15)), "action1");
             product2.setId("product2");
-            Product product3 = new Product("product3", new Decimal128(12), "action1");
+            Product product3 = new Product("product3", new Decimal128(new BigDecimal(12)), "action1");
             product3.setId("product3");
-            Product product4 = new Product("product4", new Decimal128(2), "action2");
+            Product product4 = new Product("product4", new Decimal128(new BigDecimal(2.5)), "action2");
             product4.setId("product4");
-            Product product5 = new Product("product5", new Decimal128(6), "action3");
+            Product product5 = new Product("product5", new Decimal128(new BigDecimal(6.5)), "action3");
             product5.setId("product5");
 
             productRepository.saveAll(Arrays.asList(product1, product2, product3, product4, product5));
