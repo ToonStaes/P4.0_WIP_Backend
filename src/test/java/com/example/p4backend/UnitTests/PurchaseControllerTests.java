@@ -15,14 +15,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -169,5 +173,15 @@ public class PurchaseControllerTests {
                 .andExpect(jsonPath("$.product.cost", is(completePurchase.getProduct().getCost().doubleValue())))
                 .andExpect(jsonPath("$.product.actionId", is(completePurchase.getProduct().getActionId())))
                 .andExpect(jsonPath("$.product.name", is(completePurchase.getProduct().getName())));
+    }
+
+    @Test
+    void givenPurchase_whenGetPurchaseByIdNotExist_thenReturn404() throws Exception {
+        given(purchaseRepository.findById("purchase999")).willReturn(Optional.empty());
+
+        mockMvc.perform(get("/purchases/{id}", "purchase999"))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("404 NOT_FOUND \"The Purchase with ID purchase999 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
 }
