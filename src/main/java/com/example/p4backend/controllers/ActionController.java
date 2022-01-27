@@ -247,8 +247,14 @@ public class ActionController {
 
     @GetMapping(value="/actions/search/{terms}")
     public List<CompleteAction> searchActionsByNameContaining(@PathVariable String terms, @RequestParam(defaultValue = "false") boolean progress){
-        List<Action> actions = actionRepository.findActionsByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(terms, terms);
+        Set<Action> actions = new HashSet<>(actionRepository.findActionsByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(terms, terms)); // HashSet to prevent duplicate actions
+        List<Vzw> vzws = vzwRepository.findVzwsByNameContainingIgnoreCase(terms);
         List<CompleteAction> returnList = new ArrayList<>();
+
+        // Add the actions from the vzw whose name also matched the search terms
+        for (Vzw vzw : vzws) {
+            actions.addAll(actionRepository.findActionsByVzwID(vzw.getId()));
+        }
 
         for (Action action : actions) {
             if (progress) {
