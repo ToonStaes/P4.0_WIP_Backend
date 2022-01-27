@@ -13,12 +13,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.*;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -144,5 +147,15 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$.action.goal", is(completeProduct.getAction().getGoal().intValue())))
                 .andExpect(jsonPath("$.action.vzwID", is(completeProduct.getAction().getVzwID())));
 
+    }
+
+    @Test
+    void givenProduct_whenGetProductByIdNotExist_thenReturn404() throws Exception {
+        given(productRepository.findById("product999")).willReturn(Optional.empty());
+
+        mockMvc.perform(get("/products/{id}", "product999"))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("404 NOT_FOUND \"The Product with ID product999 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
 }
