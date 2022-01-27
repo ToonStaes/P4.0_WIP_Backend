@@ -16,12 +16,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -232,5 +235,41 @@ public class UserControllerTests {
                 .andExpect(jsonPath("$.address.box").isEmpty())
                 .andExpect(jsonPath("$.address.city", is("Poederlee")))
                 .andExpect(jsonPath("$.address.postalCode", is("2275")));
+    }
+
+
+    // Gives one user back, searched on email (user1)
+    @Test
+    void givenUser_whenGetUserByEmail_thenReturnJsonUser1() throws Exception {
+        User user1 = generateUser1();
+        List<Address> addressList = generateAddressList();
+        given(userRepository.findFirstByEmail("r0784094@student.thomasmore.be")).willReturn(Optional.of(user1));
+        given(addressRepository.findById("1")).willReturn(Optional.of(addressList.get(0)));
+
+        mockMvc.perform(get("/users/email/{email}", "r0784094@student.thomasmore.be")) // command
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                // user1 is correct
+                .andExpect(jsonPath("$.id", is("user1")))
+                .andExpect(jsonPath("$.name", is("Toon Staes")))
+                .andExpect(jsonPath("$.email", is("r0784094@student.thomasmore.be")))
+                .andExpect(jsonPath("$.password").doesNotExist())
+                .andExpect(jsonPath("$.address.id", is("1")))
+                .andExpect(jsonPath("$.address.street", is("Polderken")))
+                .andExpect(jsonPath("$.address.houseNumber", is("7")))
+                .andExpect(jsonPath("$.address.box").isEmpty())
+                .andExpect(jsonPath("$.address.city", is("Kasterlee")))
+                .andExpect(jsonPath("$.address.postalCode", is("2460")));
+    }
+
+
+    // Gives one "false" back, searched on email if user with email doesn't exist
+    @Test
+    void givenUser_whenGetUserByEmailNotExist_thenReturnFalse() throws Exception {
+        mockMvc.perform(get("/users/email/{email}", "email@doesnt.exist")) // command
+                .andExpect(content().contentType(MediaType.valueOf("text/plain;charset=UTF-8")))
+                .andExpect(status().isOk())
+                // result is correct
+                .andExpect(result -> assertEquals("false", result.getResponse().getContentAsString()));
     }
 }

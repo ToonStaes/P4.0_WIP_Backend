@@ -1,19 +1,25 @@
 package com.example.p4backend.controllers;
 
+import com.example.p4backend.models.Action;
 import com.example.p4backend.models.Address;
+import com.example.p4backend.models.Product;
 import com.example.p4backend.models.User;
+import com.example.p4backend.models.complete.CompleteProduct;
 import com.example.p4backend.models.complete.CompleteUser;
 import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -78,5 +84,21 @@ public class UserController {
         }
 
         return completeUser;
+    }
+
+    @GetMapping("/users/email/{email}")
+    public Object getUserByEmail(@PathVariable String email){
+        Optional<User> user = userRepository.findFirstByEmail(email);
+        if (user.isPresent()) {
+            return getCompleteUser(Objects.requireNonNull(user.get()));
+        } else {
+            return "false";
+        }
+    }
+
+    // Get the filled CompleteUser for the given user
+    private CompleteUser getCompleteUser(User user) {
+        Optional<Address> address = addressRepository.findById(user.getAddressID());
+        return new CompleteUser(user, address);
     }
 }
