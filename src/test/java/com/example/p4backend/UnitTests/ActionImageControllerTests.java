@@ -10,12 +10,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -102,5 +107,15 @@ public class ActionImageControllerTests {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].fileLocation", is("https://http.cat/404.jpg")))
                 .andExpect(jsonPath("$[0].actionId", is("action5")));
+    }
+
+    @Test
+    void givenActionImage_whenGetActionImageByIdNotExist_thenReturn404() throws Exception {
+        given(actionImageRepository.findById("actionimage585245")).willReturn(Optional.empty());
+
+        mockMvc.perform(get("/actionimages/{id}", "actionimage585245"))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("404 NOT_FOUND \"The ActionImage with ID actionimage585245 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
 }
