@@ -68,6 +68,20 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/products/action/{id}")
+    public List<CompleteProduct> getProductByActionId(@PathVariable String id) {
+        List<Product> products = productRepository.findProductsByActionId(id);
+        List<CompleteProduct> completeProducts = new ArrayList<>();
+
+        for (Product product: products){
+            Optional<Action> action = actionRepository.findById(product.getActionId());
+            CompleteProduct completeProduct = new CompleteProduct(product, action);
+            completeProducts.add(completeProduct);
+        }
+
+        return completeProducts;
+    }
+
     // Get the filled CompleteProduct for the given product
     private CompleteProduct getCompleteProduct(Product product) {
         Optional<Action> action = actionRepository.findById(product.getActionId());
