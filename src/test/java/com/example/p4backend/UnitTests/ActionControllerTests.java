@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
+import static org.hamcrest.Matchers.either;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -101,31 +102,31 @@ public class ActionControllerTests {
     Action action1 = new Action(
             "action1",
             new Decimal128(500),
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed mi quis elit vulputate porttitor. Integer ex diam, maximus in mi ac, vulputate varius lacus. Ut aliquam eros ac est sagittis pellentesque. Suspendisse feugiat nibh nec lectus consectetur facilisis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vulputate nisi lacus, quis tincidunt diam pharetra ac. Ut dictum magna vel sem sollicitudin efficitur. Sed accumsan, lacus sit amet tempus commodo, metus quam faucibus tortor,",
             "vzw1",
             new GregorianCalendar(2022, Calendar.FEBRUARY, 18).getTime());
     Action action2 = new Action(
             "action2",
             new Decimal128(200),
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
+            "quis dictum dui odio sed odio. Sed sed mattis enim. Curabitur fringilla lorem at mauris tempor, sit amet tincidunt odio scelerisque. Morbi ac leo sed nisi hendrerit vulputate. Vivamus id blandit libero, sit amet aliquet diam. Morbi sit amet nibh a turpis ultricies accumsan quis eu massa. Suspendisse potenti. Integer dapibus, nibh quis sollicitudin vestibulum, urna nulla dignissim sem, eget semper nisl neque non nisi.",
             "vzw2",
             new GregorianCalendar(2022, Calendar.MARCH, 18).getTime());
     Action action3 = new Action(
             "action3",
             new Decimal128(400),
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
+            "Sed ante elit, scelerisque in egestas facilisis, eleifend at eros. Morbi congue ornare orci, a pharetra urna. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent sed lorem sit amet enim ornare scelerisque. Nam sit amet eleifend est. Proin a sagittis lorem, at tincidunt metus.",
             "vzw3",
             new GregorianCalendar(2022, Calendar.APRIL, 28).getTime());
     Action action4 = new Action(
             "action4",
             new Decimal128(450),
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
+            "Duis at posuere felis. Etiam pellentesque euismod purus. Fusce turpis lorem, rhoncus sed nulla sagittis, finibus venenatis dui. Ut ut scelerisque nulla. Quisque eu orci pharetra, dictum turpis vel, suscipit sem. Vivamus quis rutrum est. Phasellus ut magna vitae tellus pharetra eleifend et quis nulla. Integer eu erat erat. Vivamus non sapien augue. Morbi consequat ante ac nibh feugiat fringilla.",
             "vzw4",
             new GregorianCalendar(2022, Calendar.FEBRUARY, 28).getTime());
     Action action5 = new Action(
             "action5",
             new Decimal128(500),
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
+            "Mauris vitae risus ut nulla vestibulum scelerisque at eu nulla.\n" + "\n" + "Sed tincidunt massa sed mattis porttitor. Fusce at euismod dui. Aliquam sed lorem accumsan, porta orci nec, efficitur leo. Curabitur iaculis lorem tincidunt risus vestibulum, eget posuere urna vehicula. Morbi et felis posuere, blandit massa quis, sagittis nisl. Fusce eu metus nunc. Phasellus id dui sit amet augue tincidunt gravida in in orci.",
             "vzw1",
             new GregorianCalendar(2022, Calendar.FEBRUARY, 1).getTime());
     @Autowired
@@ -256,7 +257,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[0].id", is("action1")))
                 .andExpect(jsonPath("$[0].name", is("action1")))
                 .andExpect(jsonPath("$[0].goal", is(500)))
-                .andExpect(jsonPath("$[0].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[0].description", is("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed mi quis elit vulputate porttitor. Integer ex diam, maximus in mi ac, vulputate varius lacus. Ut aliquam eros ac est sagittis pellentesque. Suspendisse feugiat nibh nec lectus consectetur facilisis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vulputate nisi lacus, quis tincidunt diam pharetra ac. Ut dictum magna vel sem sollicitudin efficitur. Sed accumsan, lacus sit amet tempus commodo, metus quam faucibus tortor,")))
                 .andExpect(jsonPath("$[0].startDate").exists())
                 .andExpect(jsonPath("$[0].endDate").exists())
                 .andExpect(jsonPath("$[0].vzw.id", is("vzw1")))
@@ -281,7 +282,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[1].id", is("action2")))
                 .andExpect(jsonPath("$[1].name", is("action2")))
                 .andExpect(jsonPath("$[1].goal", is(200)))
-                .andExpect(jsonPath("$[1].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[1].description", is("quis dictum dui odio sed odio. Sed sed mattis enim. Curabitur fringilla lorem at mauris tempor, sit amet tincidunt odio scelerisque. Morbi ac leo sed nisi hendrerit vulputate. Vivamus id blandit libero, sit amet aliquet diam. Morbi sit amet nibh a turpis ultricies accumsan quis eu massa. Suspendisse potenti. Integer dapibus, nibh quis sollicitudin vestibulum, urna nulla dignissim sem, eget semper nisl neque non nisi.")))
                 .andExpect(jsonPath("$[1].startDate").exists())
                 .andExpect(jsonPath("$[1].endDate").exists())
                 .andExpect(jsonPath("$[1].vzw.id", is("vzw2")))
@@ -308,7 +309,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[2].id", is("action3")))
                 .andExpect(jsonPath("$[2].name", is("action3")))
                 .andExpect(jsonPath("$[2].goal", is(400)))
-                .andExpect(jsonPath("$[2].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[2].description", is("Sed ante elit, scelerisque in egestas facilisis, eleifend at eros. Morbi congue ornare orci, a pharetra urna. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent sed lorem sit amet enim ornare scelerisque. Nam sit amet eleifend est. Proin a sagittis lorem, at tincidunt metus.")))
                 .andExpect(jsonPath("$[2].startDate").exists())
                 .andExpect(jsonPath("$[2].endDate").exists())
                 .andExpect(jsonPath("$[2].vzw.id", is("vzw3")))
@@ -331,7 +332,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[3].id", is("action4")))
                 .andExpect(jsonPath("$[3].name", is("action4")))
                 .andExpect(jsonPath("$[3].goal", is(450)))
-                .andExpect(jsonPath("$[3].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[3].description", is("Duis at posuere felis. Etiam pellentesque euismod purus. Fusce turpis lorem, rhoncus sed nulla sagittis, finibus venenatis dui. Ut ut scelerisque nulla. Quisque eu orci pharetra, dictum turpis vel, suscipit sem. Vivamus quis rutrum est. Phasellus ut magna vitae tellus pharetra eleifend et quis nulla. Integer eu erat erat. Vivamus non sapien augue. Morbi consequat ante ac nibh feugiat fringilla.")))
                 .andExpect(jsonPath("$[3].startDate").exists())
                 .andExpect(jsonPath("$[3].endDate").exists())
                 .andExpect(jsonPath("$[3].vzw.id", is("vzw4")))
@@ -354,7 +355,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[4].id", is("action5")))
                 .andExpect(jsonPath("$[4].name", is("action5")))
                 .andExpect(jsonPath("$[4].goal", is(500)))
-                .andExpect(jsonPath("$[4].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[4].description", is("Mauris vitae risus ut nulla vestibulum scelerisque at eu nulla.\n" + "\n" + "Sed tincidunt massa sed mattis porttitor. Fusce at euismod dui. Aliquam sed lorem accumsan, porta orci nec, efficitur leo. Curabitur iaculis lorem tincidunt risus vestibulum, eget posuere urna vehicula. Morbi et felis posuere, blandit massa quis, sagittis nisl. Fusce eu metus nunc. Phasellus id dui sit amet augue tincidunt gravida in in orci.")))
                 .andExpect(jsonPath("$[4].startDate").exists())
                 .andExpect(jsonPath("$[4].endDate").exists())
                 .andExpect(jsonPath("$[4].vzw.id", is("vzw1")))
@@ -418,7 +419,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[0].id", is("action1")))
                 .andExpect(jsonPath("$[0].name", is("action1")))
                 .andExpect(jsonPath("$[0].goal", is(500)))
-                .andExpect(jsonPath("$[0].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[0].description", is("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed mi quis elit vulputate porttitor. Integer ex diam, maximus in mi ac, vulputate varius lacus. Ut aliquam eros ac est sagittis pellentesque. Suspendisse feugiat nibh nec lectus consectetur facilisis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vulputate nisi lacus, quis tincidunt diam pharetra ac. Ut dictum magna vel sem sollicitudin efficitur. Sed accumsan, lacus sit amet tempus commodo, metus quam faucibus tortor,")))
                 .andExpect(jsonPath("$[0].startDate").exists())
                 .andExpect(jsonPath("$[0].endDate").exists())
                 .andExpect(jsonPath("$[0].vzw.id", is("vzw1")))
@@ -444,7 +445,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[1].id", is("action2")))
                 .andExpect(jsonPath("$[1].name", is("action2")))
                 .andExpect(jsonPath("$[1].goal", is(200)))
-                .andExpect(jsonPath("$[1].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[1].description", is("quis dictum dui odio sed odio. Sed sed mattis enim. Curabitur fringilla lorem at mauris tempor, sit amet tincidunt odio scelerisque. Morbi ac leo sed nisi hendrerit vulputate. Vivamus id blandit libero, sit amet aliquet diam. Morbi sit amet nibh a turpis ultricies accumsan quis eu massa. Suspendisse potenti. Integer dapibus, nibh quis sollicitudin vestibulum, urna nulla dignissim sem, eget semper nisl neque non nisi.")))
                 .andExpect(jsonPath("$[1].startDate").exists())
                 .andExpect(jsonPath("$[1].endDate").exists())
                 .andExpect(jsonPath("$[1].vzw.id", is("vzw2")))
@@ -472,7 +473,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[2].id", is("action3")))
                 .andExpect(jsonPath("$[2].name", is("action3")))
                 .andExpect(jsonPath("$[2].goal", is(400)))
-                .andExpect(jsonPath("$[2].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[2].description", is("Sed ante elit, scelerisque in egestas facilisis, eleifend at eros. Morbi congue ornare orci, a pharetra urna. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent sed lorem sit amet enim ornare scelerisque. Nam sit amet eleifend est. Proin a sagittis lorem, at tincidunt metus.")))
                 .andExpect(jsonPath("$[2].startDate").exists())
                 .andExpect(jsonPath("$[2].endDate").exists())
                 .andExpect(jsonPath("$[2].vzw.id", is("vzw3")))
@@ -496,7 +497,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[3].id", is("action4")))
                 .andExpect(jsonPath("$[3].name", is("action4")))
                 .andExpect(jsonPath("$[3].goal", is(450)))
-                .andExpect(jsonPath("$[3].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[3].description", is("Duis at posuere felis. Etiam pellentesque euismod purus. Fusce turpis lorem, rhoncus sed nulla sagittis, finibus venenatis dui. Ut ut scelerisque nulla. Quisque eu orci pharetra, dictum turpis vel, suscipit sem. Vivamus quis rutrum est. Phasellus ut magna vitae tellus pharetra eleifend et quis nulla. Integer eu erat erat. Vivamus non sapien augue. Morbi consequat ante ac nibh feugiat fringilla.")))
                 .andExpect(jsonPath("$[3].startDate").exists())
                 .andExpect(jsonPath("$[3].endDate").exists())
                 .andExpect(jsonPath("$[3].vzw.id", is("vzw4")))
@@ -520,7 +521,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[4].id", is("action5")))
                 .andExpect(jsonPath("$[4].name", is("action5")))
                 .andExpect(jsonPath("$[4].goal", is(500)))
-                .andExpect(jsonPath("$[4].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[4].description", is("Mauris vitae risus ut nulla vestibulum scelerisque at eu nulla.\n" + "\n" + "Sed tincidunt massa sed mattis porttitor. Fusce at euismod dui. Aliquam sed lorem accumsan, porta orci nec, efficitur leo. Curabitur iaculis lorem tincidunt risus vestibulum, eget posuere urna vehicula. Morbi et felis posuere, blandit massa quis, sagittis nisl. Fusce eu metus nunc. Phasellus id dui sit amet augue tincidunt gravida in in orci.")))
                 .andExpect(jsonPath("$[4].startDate").exists())
                 .andExpect(jsonPath("$[4].endDate").exists())
                 .andExpect(jsonPath("$[4].vzw.id", is("vzw1")))
@@ -573,7 +574,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[0].id", is("action4")))
                 .andExpect(jsonPath("$[0].name", is("action4")))
                 .andExpect(jsonPath("$[0].goal", is(450)))
-                .andExpect(jsonPath("$[0].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[0].description", is("Duis at posuere felis. Etiam pellentesque euismod purus. Fusce turpis lorem, rhoncus sed nulla sagittis, finibus venenatis dui. Ut ut scelerisque nulla. Quisque eu orci pharetra, dictum turpis vel, suscipit sem. Vivamus quis rutrum est. Phasellus ut magna vitae tellus pharetra eleifend et quis nulla. Integer eu erat erat. Vivamus non sapien augue. Morbi consequat ante ac nibh feugiat fringilla.")))
                 .andExpect(jsonPath("$[0].startDate").exists())
                 .andExpect(jsonPath("$[0].endDate").exists())
                 .andExpect(jsonPath("$[0].vzw.id", is("vzw4")))
@@ -614,7 +615,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$.id", is("action4")))
                 .andExpect(jsonPath("$.name", is("action4")))
                 .andExpect(jsonPath("$.goal", is(450)))
-                .andExpect(jsonPath("$.description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$.description", is("Duis at posuere felis. Etiam pellentesque euismod purus. Fusce turpis lorem, rhoncus sed nulla sagittis, finibus venenatis dui. Ut ut scelerisque nulla. Quisque eu orci pharetra, dictum turpis vel, suscipit sem. Vivamus quis rutrum est. Phasellus ut magna vitae tellus pharetra eleifend et quis nulla. Integer eu erat erat. Vivamus non sapien augue. Morbi consequat ante ac nibh feugiat fringilla.")))
                 .andExpect(jsonPath("$.startDate").exists())
                 .andExpect(jsonPath("$.endDate").exists())
                 .andExpect(jsonPath("$.vzw.id", is("vzw4")))
@@ -656,7 +657,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$.id", is("action4")))
                 .andExpect(jsonPath("$.name", is("action4")))
                 .andExpect(jsonPath("$.goal", is(450)))
-                .andExpect(jsonPath("$.description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$.description", is("Duis at posuere felis. Etiam pellentesque euismod purus. Fusce turpis lorem, rhoncus sed nulla sagittis, finibus venenatis dui. Ut ut scelerisque nulla. Quisque eu orci pharetra, dictum turpis vel, suscipit sem. Vivamus quis rutrum est. Phasellus ut magna vitae tellus pharetra eleifend et quis nulla. Integer eu erat erat. Vivamus non sapien augue. Morbi consequat ante ac nibh feugiat fringilla.")))
                 .andExpect(jsonPath("$.startDate").exists())
                 .andExpect(jsonPath("$.endDate").exists())
                 .andExpect(jsonPath("$.vzw.id", is("vzw4")))
@@ -1009,7 +1010,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[0].id", is("action1")))
                 .andExpect(jsonPath("$[0].name", is("action1")))
                 .andExpect(jsonPath("$[0].goal", is(500)))
-                .andExpect(jsonPath("$[0].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[0].description", is("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed mi quis elit vulputate porttitor. Integer ex diam, maximus in mi ac, vulputate varius lacus. Ut aliquam eros ac est sagittis pellentesque. Suspendisse feugiat nibh nec lectus consectetur facilisis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vulputate nisi lacus, quis tincidunt diam pharetra ac. Ut dictum magna vel sem sollicitudin efficitur. Sed accumsan, lacus sit amet tempus commodo, metus quam faucibus tortor,")))
                 .andExpect(jsonPath("$[0].startDate").exists())
                 .andExpect(jsonPath("$[0].endDate").exists())
                 .andExpect(jsonPath("$[0].vzw.id", is("vzw1")))
@@ -1034,7 +1035,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[1].id", is("action5")))
                 .andExpect(jsonPath("$[1].name", is("action5")))
                 .andExpect(jsonPath("$[1].goal", is(500)))
-                .andExpect(jsonPath("$[1].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[1].description", is("Mauris vitae risus ut nulla vestibulum scelerisque at eu nulla.\n" + "\n" + "Sed tincidunt massa sed mattis porttitor. Fusce at euismod dui. Aliquam sed lorem accumsan, porta orci nec, efficitur leo. Curabitur iaculis lorem tincidunt risus vestibulum, eget posuere urna vehicula. Morbi et felis posuere, blandit massa quis, sagittis nisl. Fusce eu metus nunc. Phasellus id dui sit amet augue tincidunt gravida in in orci.")))
                 .andExpect(jsonPath("$[1].startDate").exists())
                 .andExpect(jsonPath("$[1].endDate").exists())
                 .andExpect(jsonPath("$[1].vzw.id", is("vzw1")))
@@ -1084,7 +1085,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[0].id", is("action1")))
                 .andExpect(jsonPath("$[0].name", is("action1")))
                 .andExpect(jsonPath("$[0].goal", is(500)))
-                .andExpect(jsonPath("$[0].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[0].description", is("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed mi quis elit vulputate porttitor. Integer ex diam, maximus in mi ac, vulputate varius lacus. Ut aliquam eros ac est sagittis pellentesque. Suspendisse feugiat nibh nec lectus consectetur facilisis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vulputate nisi lacus, quis tincidunt diam pharetra ac. Ut dictum magna vel sem sollicitudin efficitur. Sed accumsan, lacus sit amet tempus commodo, metus quam faucibus tortor,")))
                 .andExpect(jsonPath("$[0].startDate").exists())
                 .andExpect(jsonPath("$[0].endDate").exists())
                 .andExpect(jsonPath("$[0].vzw.id", is("vzw1")))
@@ -1110,7 +1111,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[1].id", is("action5")))
                 .andExpect(jsonPath("$[1].name", is("action5")))
                 .andExpect(jsonPath("$[1].goal", is(500)))
-                .andExpect(jsonPath("$[1].description", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[1].description", is("Mauris vitae risus ut nulla vestibulum scelerisque at eu nulla.\n" + "\n" + "Sed tincidunt massa sed mattis porttitor. Fusce at euismod dui. Aliquam sed lorem accumsan, porta orci nec, efficitur leo. Curabitur iaculis lorem tincidunt risus vestibulum, eget posuere urna vehicula. Morbi et felis posuere, blandit massa quis, sagittis nisl. Fusce eu metus nunc. Phasellus id dui sit amet augue tincidunt gravida in in orci.")))
                 .andExpect(jsonPath("$[1].startDate").exists())
                 .andExpect(jsonPath("$[1].endDate").exists())
                 .andExpect(jsonPath("$[1].vzw.id", is("vzw1")))
@@ -1129,5 +1130,517 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[1].vzw.address.postalCode", is("2460")))
                 .andExpect(jsonPath("$[1].actionImages").isArray())
                 .andExpect(jsonPath("$[1].progress", is(0.0)));
+    }
+
+
+    // Gives back a list of all Actions when search terms are empty
+    @Test
+    void givenActions_whenSearchActionsEmpty_thenReturnJsonActions() throws Exception {
+        List<Action> actionList = generateActionsList();
+        List<Vzw> vzwList = generateVzwsList();
+        List<Address> addressList = generateAddressList();
+        List<ActionImage> actionImageList = generateActionImagesList();
+        given(actionRepository.findAll()).willReturn(actionList);
+        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
+        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzwList.get(1)));
+        given(vzwRepository.findById("vzw3")).willReturn(Optional.of(vzwList.get(2)));
+        given(vzwRepository.findById("vzw4")).willReturn(Optional.of(vzwList.get(3)));
+        given(addressRepository.findById("7")).willReturn(Optional.of(addressList.get(0)));
+        given(addressRepository.findById("8")).willReturn(Optional.of(addressList.get(1)));
+        given(addressRepository.findById("9")).willReturn(Optional.of(addressList.get(2)));
+        given(addressRepository.findById("10")).willReturn(Optional.of(addressList.get(3)));
+        given(actionImageRepository.findActionImagesByActionId("action1")).willReturn(List.of(actionImageList.get(0), actionImageList.get(1)));
+        given(actionImageRepository.findActionImagesByActionId("action2")).willReturn(List.of(actionImageList.get(2), actionImageList.get(3), actionImageList.get(4)));
+        given(actionImageRepository.findActionImagesByActionId("action3")).willReturn(List.of(actionImageList.get(5)));
+        given(actionImageRepository.findActionImagesByActionId("action4")).willReturn(List.of(actionImageList.get(6)));
+        given(actionImageRepository.findActionImagesByActionId("action5")).willReturn(new ArrayList<>());
+
+        mockMvc.perform(get("/actions/search"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                // Array length is correct
+                .andExpect(jsonPath("$", hasSize(5)))
+                // action1 is correct
+                .andExpect(jsonPath("$[0].id", is("action1")))
+                .andExpect(jsonPath("$[0].name", is("action1")))
+                .andExpect(jsonPath("$[0].goal", is(500)))
+                .andExpect(jsonPath("$[0].description", is("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed mi quis elit vulputate porttitor. Integer ex diam, maximus in mi ac, vulputate varius lacus. Ut aliquam eros ac est sagittis pellentesque. Suspendisse feugiat nibh nec lectus consectetur facilisis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vulputate nisi lacus, quis tincidunt diam pharetra ac. Ut dictum magna vel sem sollicitudin efficitur. Sed accumsan, lacus sit amet tempus commodo, metus quam faucibus tortor,")))
+                .andExpect(jsonPath("$[0].startDate").exists())
+                .andExpect(jsonPath("$[0].endDate").exists())
+                .andExpect(jsonPath("$[0].vzw.id", is("vzw1")))
+                .andExpect(jsonPath("$[0].vzw.name", is("vzw1")))
+                .andExpect(jsonPath("$[0].vzw.email", is("vzw1.kasterlee@mail.com")))
+                .andExpect(jsonPath("$[0].vzw.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[0].vzw.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[0].vzw.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[0].vzw.profilePicture", is("https://http.cat/200.jpg")))
+                .andExpect(jsonPath("$[0].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[0].vzw.address.id", is("8")))
+                .andExpect(jsonPath("$[0].vzw.address.street", is("Markt")))
+                .andExpect(jsonPath("$[0].vzw.address.houseNumber", is("22")))
+                .andExpect(jsonPath("$[0].vzw.address.box").isEmpty())
+                .andExpect(jsonPath("$[0].vzw.address.city", is("Kasterlee")))
+                .andExpect(jsonPath("$[0].vzw.address.postalCode", is("2460")))
+                .andExpect(jsonPath("$[0].actionImages[0].fileLocation", is("https://http.cat/400.jpg")))
+                .andExpect(jsonPath("$[0].actionImages[0].actionId", is("action1")))
+                .andExpect(jsonPath("$[0].actionImages[1].fileLocation", is("https://http.cat/401.jpg")))
+                .andExpect(jsonPath("$[0].actionImages[1].actionId", is("action1")))
+                // action2 is correct
+                .andExpect(jsonPath("$[1].id", is("action2")))
+                .andExpect(jsonPath("$[1].name", is("action2")))
+                .andExpect(jsonPath("$[1].goal", is(200)))
+                .andExpect(jsonPath("$[1].description", is("quis dictum dui odio sed odio. Sed sed mattis enim. Curabitur fringilla lorem at mauris tempor, sit amet tincidunt odio scelerisque. Morbi ac leo sed nisi hendrerit vulputate. Vivamus id blandit libero, sit amet aliquet diam. Morbi sit amet nibh a turpis ultricies accumsan quis eu massa. Suspendisse potenti. Integer dapibus, nibh quis sollicitudin vestibulum, urna nulla dignissim sem, eget semper nisl neque non nisi.")))
+                .andExpect(jsonPath("$[1].startDate").exists())
+                .andExpect(jsonPath("$[1].endDate").exists())
+                .andExpect(jsonPath("$[1].vzw.id", is("vzw2")))
+                .andExpect(jsonPath("$[1].vzw.name", is("vzw2")))
+                .andExpect(jsonPath("$[1].vzw.email", is("vzw2.malle@mail.com")))
+                .andExpect(jsonPath("$[1].vzw.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[1].vzw.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[1].vzw.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[1].vzw.profilePicture", is("https://http.cat/201.jpg")))
+                .andExpect(jsonPath("$[1].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[1].vzw.address.id", is("7")))
+                .andExpect(jsonPath("$[1].vzw.address.street", is("Kerstraat")))
+                .andExpect(jsonPath("$[1].vzw.address.houseNumber", is("87")))
+                .andExpect(jsonPath("$[1].vzw.address.box").isEmpty())
+                .andExpect(jsonPath("$[1].vzw.address.city", is("Malle")))
+                .andExpect(jsonPath("$[1].vzw.address.postalCode", is("2390")))
+                .andExpect(jsonPath("$[1].actionImages[0].fileLocation", is("https://http.cat/402.jpg")))
+                .andExpect(jsonPath("$[1].actionImages[0].actionId", is("action2")))
+                .andExpect(jsonPath("$[1].actionImages[1].fileLocation", is("https://http.cat/403.jpg")))
+                .andExpect(jsonPath("$[1].actionImages[1].actionId", is("action2")))
+                .andExpect(jsonPath("$[1].actionImages[2].fileLocation", is("https://http.cat/404.jpg")))
+                .andExpect(jsonPath("$[1].actionImages[2].actionId", is("action2")))
+                // action3 is correct
+                .andExpect(jsonPath("$[2].id", is("action3")))
+                .andExpect(jsonPath("$[2].name", is("action3")))
+                .andExpect(jsonPath("$[2].goal", is(400)))
+                .andExpect(jsonPath("$[2].description", is("Sed ante elit, scelerisque in egestas facilisis, eleifend at eros. Morbi congue ornare orci, a pharetra urna. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent sed lorem sit amet enim ornare scelerisque. Nam sit amet eleifend est. Proin a sagittis lorem, at tincidunt metus.")))
+                .andExpect(jsonPath("$[2].startDate").exists())
+                .andExpect(jsonPath("$[2].endDate").exists())
+                .andExpect(jsonPath("$[2].vzw.id", is("vzw3")))
+                .andExpect(jsonPath("$[2].vzw.name", is("vzw3")))
+                .andExpect(jsonPath("$[2].vzw.email", is("vzw3.herselt@mail.com")))
+                .andExpect(jsonPath("$[2].vzw.rekeningNR", is("be1234599798")))
+                .andExpect(jsonPath("$[2].vzw.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[2].vzw.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[2].vzw.profilePicture", is("https://http.cat/202.jpg")))
+                .andExpect(jsonPath("$[2].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[2].vzw.address.id", is("10")))
+                .andExpect(jsonPath("$[2].vzw.address.street", is("Stationsstraat")))
+                .andExpect(jsonPath("$[2].vzw.address.houseNumber", is("27")))
+                .andExpect(jsonPath("$[2].vzw.address.box").isEmpty())
+                .andExpect(jsonPath("$[2].vzw.address.city", is("Herselt")))
+                .andExpect(jsonPath("$[2].vzw.address.postalCode", is("2230")))
+                .andExpect(jsonPath("$[2].actionImages[0].fileLocation", is("https://http.cat/405.jpg")))
+                .andExpect(jsonPath("$[2].actionImages[0].actionId", is("action3")))
+                // action4 is correct
+                .andExpect(jsonPath("$[3].id", is("action4")))
+                .andExpect(jsonPath("$[3].name", is("action4")))
+                .andExpect(jsonPath("$[3].goal", is(450)))
+                .andExpect(jsonPath("$[3].description", is("Duis at posuere felis. Etiam pellentesque euismod purus. Fusce turpis lorem, rhoncus sed nulla sagittis, finibus venenatis dui. Ut ut scelerisque nulla. Quisque eu orci pharetra, dictum turpis vel, suscipit sem. Vivamus quis rutrum est. Phasellus ut magna vitae tellus pharetra eleifend et quis nulla. Integer eu erat erat. Vivamus non sapien augue. Morbi consequat ante ac nibh feugiat fringilla.")))
+                .andExpect(jsonPath("$[3].startDate").exists())
+                .andExpect(jsonPath("$[3].endDate").exists())
+                .andExpect(jsonPath("$[3].vzw.id", is("vzw4")))
+                .andExpect(jsonPath("$[3].vzw.name", is("vzw4")))
+                .andExpect(jsonPath("$[3].vzw.email", is("vzw4.malle@mail.com")))
+                .andExpect(jsonPath("$[3].vzw.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[3].vzw.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[3].vzw.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[3].vzw.profilePicture", is("https://http.cat/203.jpg")))
+                .andExpect(jsonPath("$[3].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[3].vzw.address.id", is("9")))
+                .andExpect(jsonPath("$[3].vzw.address.street", is("Sparrelaan")))
+                .andExpect(jsonPath("$[3].vzw.address.houseNumber", is("17")))
+                .andExpect(jsonPath("$[3].vzw.address.box").isEmpty())
+                .andExpect(jsonPath("$[3].vzw.address.city", is("Malle")))
+                .andExpect(jsonPath("$[3].vzw.address.postalCode", is("2390")))
+                .andExpect(jsonPath("$[3].actionImages[0].fileLocation", is("https://http.cat/406.jpg")))
+                .andExpect(jsonPath("$[3].actionImages[0].actionId", is("action4")))
+                // action5 is correct
+                .andExpect(jsonPath("$[4].id", is("action5")))
+                .andExpect(jsonPath("$[4].name", is("action5")))
+                .andExpect(jsonPath("$[4].goal", is(500)))
+                .andExpect(jsonPath("$[4].description", is("Mauris vitae risus ut nulla vestibulum scelerisque at eu nulla.\n" + "\n" + "Sed tincidunt massa sed mattis porttitor. Fusce at euismod dui. Aliquam sed lorem accumsan, porta orci nec, efficitur leo. Curabitur iaculis lorem tincidunt risus vestibulum, eget posuere urna vehicula. Morbi et felis posuere, blandit massa quis, sagittis nisl. Fusce eu metus nunc. Phasellus id dui sit amet augue tincidunt gravida in in orci.")))
+                .andExpect(jsonPath("$[4].startDate").exists())
+                .andExpect(jsonPath("$[4].endDate").exists())
+                .andExpect(jsonPath("$[4].vzw.id", is("vzw1")))
+                .andExpect(jsonPath("$[4].vzw.name", is("vzw1")))
+                .andExpect(jsonPath("$[4].vzw.email", is("vzw1.kasterlee@mail.com")))
+                .andExpect(jsonPath("$[4].vzw.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[4].vzw.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[4].vzw.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[4].vzw.profilePicture", is("https://http.cat/200.jpg")))
+                .andExpect(jsonPath("$[4].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[4].vzw.address.id", is("8")))
+                .andExpect(jsonPath("$[4].vzw.address.street", is("Markt")))
+                .andExpect(jsonPath("$[4].vzw.address.houseNumber", is("22")))
+                .andExpect(jsonPath("$[4].vzw.address.box").isEmpty())
+                .andExpect(jsonPath("$[4].vzw.address.city", is("Kasterlee")))
+                .andExpect(jsonPath("$[4].vzw.address.postalCode", is("2460")))
+                .andExpect(jsonPath("$[4].actionImages").isArray());
+    }
+
+
+    // Gives back a list of all Actions when search terms are empty with progress=true
+    @Test
+    void givenActions_givenActions_whenSearchActionsEmptyWithProgress_thenReturnJsonActions() throws Exception {
+        List<Action> actionList = generateActionsList();
+        List<Vzw> vzwList = generateVzwsList();
+        List<Address> addressList = generateAddressList();
+        List<ActionImage> actionImageList = generateActionImagesList();
+        given(actionRepository.findAll()).willReturn(actionList);
+        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
+        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzwList.get(1)));
+        given(vzwRepository.findById("vzw3")).willReturn(Optional.of(vzwList.get(2)));
+        given(vzwRepository.findById("vzw4")).willReturn(Optional.of(vzwList.get(3)));
+        given(addressRepository.findById("7")).willReturn(Optional.of(addressList.get(0)));
+        given(addressRepository.findById("8")).willReturn(Optional.of(addressList.get(1)));
+        given(addressRepository.findById("9")).willReturn(Optional.of(addressList.get(2)));
+        given(addressRepository.findById("10")).willReturn(Optional.of(addressList.get(3)));
+        given(actionImageRepository.findActionImagesByActionId("action1")).willReturn(List.of(actionImageList.get(0), actionImageList.get(1)));
+        given(actionImageRepository.findActionImagesByActionId("action2")).willReturn(List.of(actionImageList.get(2), actionImageList.get(3), actionImageList.get(4)));
+        given(actionImageRepository.findActionImagesByActionId("action3")).willReturn(List.of(actionImageList.get(5)));
+        given(actionImageRepository.findActionImagesByActionId("action4")).willReturn(List.of(actionImageList.get(6)));
+        given(actionImageRepository.findActionImagesByActionId("action5")).willReturn(new ArrayList<>());
+        List<Product> productList = generateProductsList();
+        given(productRepository.findProductsByActionId("action1")).willReturn(List.of(productList.get(0), productList.get(1), productList.get(2)));
+        given(productRepository.findProductsByActionId("action2")).willReturn(List.of(productList.get(3)));
+        given(productRepository.findProductsByActionId("action3")).willReturn(List.of(productList.get(4)));
+        given(productRepository.findProductsByActionId("action4")).willReturn(new ArrayList<>());
+        given(productRepository.findProductsByActionId("action5")).willReturn(new ArrayList<>());
+        List<Purchase> purchaseList = generatePurchasesList();
+        given(purchaseRepository.findPurchasesByProductId("product1")).willReturn(List.of(purchaseList.get(0)));
+        given(purchaseRepository.findPurchasesByProductId("product2")).willReturn(List.of(purchaseList.get(1)));
+        given(purchaseRepository.findPurchasesByProductId("product3")).willReturn(List.of(purchaseList.get(4)));
+        given(purchaseRepository.findPurchasesByProductId("product4")).willReturn(List.of(purchaseList.get(2)));
+        given(purchaseRepository.findPurchasesByProductId("product5")).willReturn(List.of(purchaseList.get(3)));
+
+        mockMvc.perform(get("/actions/search/?progress=true"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                // Array length is correct
+                .andExpect(jsonPath("$", hasSize(5)))
+                // action1 is correct
+                .andExpect(jsonPath("$[0].id", is("action1")))
+                .andExpect(jsonPath("$[0].name", is("action1")))
+                .andExpect(jsonPath("$[0].goal", is(500)))
+                .andExpect(jsonPath("$[0].description", is("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed mi quis elit vulputate porttitor. Integer ex diam, maximus in mi ac, vulputate varius lacus. Ut aliquam eros ac est sagittis pellentesque. Suspendisse feugiat nibh nec lectus consectetur facilisis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vulputate nisi lacus, quis tincidunt diam pharetra ac. Ut dictum magna vel sem sollicitudin efficitur. Sed accumsan, lacus sit amet tempus commodo, metus quam faucibus tortor,")))
+                .andExpect(jsonPath("$[0].startDate").exists())
+                .andExpect(jsonPath("$[0].endDate").exists())
+                .andExpect(jsonPath("$[0].vzw.id", is("vzw1")))
+                .andExpect(jsonPath("$[0].vzw.name", is("vzw1")))
+                .andExpect(jsonPath("$[0].vzw.email", is("vzw1.kasterlee@mail.com")))
+                .andExpect(jsonPath("$[0].vzw.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[0].vzw.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[0].vzw.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[0].vzw.profilePicture", is("https://http.cat/200.jpg")))
+                .andExpect(jsonPath("$[0].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[0].vzw.address.id", is("8")))
+                .andExpect(jsonPath("$[0].vzw.address.street", is("Markt")))
+                .andExpect(jsonPath("$[0].vzw.address.houseNumber", is("22")))
+                .andExpect(jsonPath("$[0].vzw.address.box").isEmpty())
+                .andExpect(jsonPath("$[0].vzw.address.city", is("Kasterlee")))
+                .andExpect(jsonPath("$[0].vzw.address.postalCode", is("2460")))
+                .andExpect(jsonPath("$[0].actionImages[0].fileLocation", is("https://http.cat/400.jpg")))
+                .andExpect(jsonPath("$[0].actionImages[0].actionId", is("action1")))
+                .andExpect(jsonPath("$[0].actionImages[1].fileLocation", is("https://http.cat/401.jpg")))
+                .andExpect(jsonPath("$[0].actionImages[1].actionId", is("action1")))
+                .andExpect(jsonPath("$[0].progress", is(14.2)))
+                // action2 is correct
+                .andExpect(jsonPath("$[1].id", is("action2")))
+                .andExpect(jsonPath("$[1].name", is("action2")))
+                .andExpect(jsonPath("$[1].goal", is(200)))
+                .andExpect(jsonPath("$[1].description", is("quis dictum dui odio sed odio. Sed sed mattis enim. Curabitur fringilla lorem at mauris tempor, sit amet tincidunt odio scelerisque. Morbi ac leo sed nisi hendrerit vulputate. Vivamus id blandit libero, sit amet aliquet diam. Morbi sit amet nibh a turpis ultricies accumsan quis eu massa. Suspendisse potenti. Integer dapibus, nibh quis sollicitudin vestibulum, urna nulla dignissim sem, eget semper nisl neque non nisi.")))
+                .andExpect(jsonPath("$[1].startDate").exists())
+                .andExpect(jsonPath("$[1].endDate").exists())
+                .andExpect(jsonPath("$[1].vzw.id", is("vzw2")))
+                .andExpect(jsonPath("$[1].vzw.name", is("vzw2")))
+                .andExpect(jsonPath("$[1].vzw.email", is("vzw2.malle@mail.com")))
+                .andExpect(jsonPath("$[1].vzw.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[1].vzw.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[1].vzw.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[1].vzw.profilePicture", is("https://http.cat/201.jpg")))
+                .andExpect(jsonPath("$[1].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[1].vzw.address.id", is("7")))
+                .andExpect(jsonPath("$[1].vzw.address.street", is("Kerstraat")))
+                .andExpect(jsonPath("$[1].vzw.address.houseNumber", is("87")))
+                .andExpect(jsonPath("$[1].vzw.address.box").isEmpty())
+                .andExpect(jsonPath("$[1].vzw.address.city", is("Malle")))
+                .andExpect(jsonPath("$[1].vzw.address.postalCode", is("2390")))
+                .andExpect(jsonPath("$[1].actionImages[0].fileLocation", is("https://http.cat/402.jpg")))
+                .andExpect(jsonPath("$[1].actionImages[0].actionId", is("action2")))
+                .andExpect(jsonPath("$[1].actionImages[1].fileLocation", is("https://http.cat/403.jpg")))
+                .andExpect(jsonPath("$[1].actionImages[1].actionId", is("action2")))
+                .andExpect(jsonPath("$[1].actionImages[2].fileLocation", is("https://http.cat/404.jpg")))
+                .andExpect(jsonPath("$[1].actionImages[2].actionId", is("action2")))
+                .andExpect(jsonPath("$[1].progress", is(5.0)))
+                // action3 is correct
+                .andExpect(jsonPath("$[2].id", is("action3")))
+                .andExpect(jsonPath("$[2].name", is("action3")))
+                .andExpect(jsonPath("$[2].goal", is(400)))
+                .andExpect(jsonPath("$[2].description", is("Sed ante elit, scelerisque in egestas facilisis, eleifend at eros. Morbi congue ornare orci, a pharetra urna. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent sed lorem sit amet enim ornare scelerisque. Nam sit amet eleifend est. Proin a sagittis lorem, at tincidunt metus.")))
+                .andExpect(jsonPath("$[2].startDate").exists())
+                .andExpect(jsonPath("$[2].endDate").exists())
+                .andExpect(jsonPath("$[2].vzw.id", is("vzw3")))
+                .andExpect(jsonPath("$[2].vzw.name", is("vzw3")))
+                .andExpect(jsonPath("$[2].vzw.email", is("vzw3.herselt@mail.com")))
+                .andExpect(jsonPath("$[2].vzw.rekeningNR", is("be1234599798")))
+                .andExpect(jsonPath("$[2].vzw.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[2].vzw.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[2].vzw.profilePicture", is("https://http.cat/202.jpg")))
+                .andExpect(jsonPath("$[2].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[2].vzw.address.id", is("10")))
+                .andExpect(jsonPath("$[2].vzw.address.street", is("Stationsstraat")))
+                .andExpect(jsonPath("$[2].vzw.address.houseNumber", is("27")))
+                .andExpect(jsonPath("$[2].vzw.address.box").isEmpty())
+                .andExpect(jsonPath("$[2].vzw.address.city", is("Herselt")))
+                .andExpect(jsonPath("$[2].vzw.address.postalCode", is("2230")))
+                .andExpect(jsonPath("$[2].actionImages[0].fileLocation", is("https://http.cat/405.jpg")))
+                .andExpect(jsonPath("$[2].actionImages[0].actionId", is("action3")))
+                .andExpect(jsonPath("$[2].progress", is(3.0)))
+                // action4 is correct
+                .andExpect(jsonPath("$[3].id", is("action4")))
+                .andExpect(jsonPath("$[3].name", is("action4")))
+                .andExpect(jsonPath("$[3].goal", is(450)))
+                .andExpect(jsonPath("$[3].description", is("Duis at posuere felis. Etiam pellentesque euismod purus. Fusce turpis lorem, rhoncus sed nulla sagittis, finibus venenatis dui. Ut ut scelerisque nulla. Quisque eu orci pharetra, dictum turpis vel, suscipit sem. Vivamus quis rutrum est. Phasellus ut magna vitae tellus pharetra eleifend et quis nulla. Integer eu erat erat. Vivamus non sapien augue. Morbi consequat ante ac nibh feugiat fringilla.")))
+                .andExpect(jsonPath("$[3].startDate").exists())
+                .andExpect(jsonPath("$[3].endDate").exists())
+                .andExpect(jsonPath("$[3].vzw.id", is("vzw4")))
+                .andExpect(jsonPath("$[3].vzw.name", is("vzw4")))
+                .andExpect(jsonPath("$[3].vzw.email", is("vzw4.malle@mail.com")))
+                .andExpect(jsonPath("$[3].vzw.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[3].vzw.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[3].vzw.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[3].vzw.profilePicture", is("https://http.cat/203.jpg")))
+                .andExpect(jsonPath("$[3].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[3].vzw.address.id", is("9")))
+                .andExpect(jsonPath("$[3].vzw.address.street", is("Sparrelaan")))
+                .andExpect(jsonPath("$[3].vzw.address.houseNumber", is("17")))
+                .andExpect(jsonPath("$[3].vzw.address.box").isEmpty())
+                .andExpect(jsonPath("$[3].vzw.address.city", is("Malle")))
+                .andExpect(jsonPath("$[3].vzw.address.postalCode", is("2390")))
+                .andExpect(jsonPath("$[3].actionImages[0].fileLocation", is("https://http.cat/406.jpg")))
+                .andExpect(jsonPath("$[3].actionImages[0].actionId", is("action4")))
+                .andExpect(jsonPath("$[3].progress", is(0.0)))
+                // action5 is correct
+                .andExpect(jsonPath("$[4].id", is("action5")))
+                .andExpect(jsonPath("$[4].name", is("action5")))
+                .andExpect(jsonPath("$[4].goal", is(500)))
+                .andExpect(jsonPath("$[4].description", is("Mauris vitae risus ut nulla vestibulum scelerisque at eu nulla.\n" + "\n" + "Sed tincidunt massa sed mattis porttitor. Fusce at euismod dui. Aliquam sed lorem accumsan, porta orci nec, efficitur leo. Curabitur iaculis lorem tincidunt risus vestibulum, eget posuere urna vehicula. Morbi et felis posuere, blandit massa quis, sagittis nisl. Fusce eu metus nunc. Phasellus id dui sit amet augue tincidunt gravida in in orci.")))
+                .andExpect(jsonPath("$[4].startDate").exists())
+                .andExpect(jsonPath("$[4].endDate").exists())
+                .andExpect(jsonPath("$[4].vzw.id", is("vzw1")))
+                .andExpect(jsonPath("$[4].vzw.name", is("vzw1")))
+                .andExpect(jsonPath("$[4].vzw.email", is("vzw1.kasterlee@mail.com")))
+                .andExpect(jsonPath("$[4].vzw.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[4].vzw.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[4].vzw.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[4].vzw.profilePicture", is("https://http.cat/200.jpg")))
+                .andExpect(jsonPath("$[4].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[4].vzw.address.id", is("8")))
+                .andExpect(jsonPath("$[4].vzw.address.street", is("Markt")))
+                .andExpect(jsonPath("$[4].vzw.address.houseNumber", is("22")))
+                .andExpect(jsonPath("$[4].vzw.address.box").isEmpty())
+                .andExpect(jsonPath("$[4].vzw.address.city", is("Kasterlee")))
+                .andExpect(jsonPath("$[4].vzw.address.postalCode", is("2460")))
+                .andExpect(jsonPath("$[4].actionImages").isArray())
+                .andExpect(jsonPath("$[4].progress", is(0.0)));
+    }
+
+
+    // Gives back a list of all Actions with 'vestibulum' in either name, description or vzw name
+    // TODO: Test if the values are correct, currently not possible because it the order isn't static.
+    @Test
+    void givenActions_givenActions_whenSearchActions_thenReturnJsonActions() throws Exception {
+        List<Action> actionList = generateActionsList();
+        List<Action> actionSearchList = List.of(actionList.get(4), actionList.get(1));
+        List<Vzw> vzwList = generateVzwsList();
+        List<Address> addressList = generateAddressList();
+        List<ActionImage> actionImageList = generateActionImagesList();
+        given(actionRepository.findActionsByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase("vestibulum", "vestibulum")).willReturn(actionSearchList);
+        given(vzwRepository.findVzwsByNameContainingIgnoreCase("vestibulum")).willReturn(new ArrayList<>());
+        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
+        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzwList.get(1)));
+        given(addressRepository.findById("8")).willReturn(Optional.of(addressList.get(1)));
+        given(addressRepository.findById("7")).willReturn(Optional.of(addressList.get(0)));
+        given(actionImageRepository.findActionImagesByActionId("action5")).willReturn(new ArrayList<>());
+        given(actionImageRepository.findActionImagesByActionId("action2")).willReturn(List.of(actionImageList.get(2), actionImageList.get(3), actionImageList.get(4)));
+
+        mockMvc.perform(get("/actions/search/{terms}", "vestibulum"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                // Array length is correct
+                .andExpect(jsonPath("$", hasSize(2)))
+                // action5 is correct
+                .andExpect(jsonPath("$[0].id").exists())
+                .andExpect(jsonPath("$[0].name").exists())
+                .andExpect(jsonPath("$[0].goal").exists())
+                .andExpect(jsonPath("$[0].description").exists())
+                .andExpect(jsonPath("$[0].startDate").exists())
+                .andExpect(jsonPath("$[0].endDate").exists())
+                .andExpect(jsonPath("$[0].vzw.id").exists())
+                .andExpect(jsonPath("$[0].vzw.name").exists())
+                .andExpect(jsonPath("$[0].vzw.email").exists())
+                .andExpect(jsonPath("$[0].vzw.rekeningNR").exists())
+                .andExpect(jsonPath("$[0].vzw.bio").exists())
+                .andExpect(jsonPath("$[0].vzw.youtubeLink").exists())
+                .andExpect(jsonPath("$[0].vzw.profilePicture").exists())
+                .andExpect(jsonPath("$[0].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[0].vzw.address.id").exists())
+                .andExpect(jsonPath("$[0].vzw.address.street").exists())
+                .andExpect(jsonPath("$[0].vzw.address.houseNumber").exists())
+                .andExpect(jsonPath("$[0].vzw.address.box").hasJsonPath())
+                .andExpect(jsonPath("$[0].vzw.address.city").exists())
+                .andExpect(jsonPath("$[0].vzw.address.postalCode").exists())
+                .andExpect(jsonPath("$[0].actionImages").isArray())
+                // action2 is correct
+                .andExpect(jsonPath("$[1].id").exists())
+                .andExpect(jsonPath("$[1].name").exists())
+                .andExpect(jsonPath("$[1].goal").exists())
+                .andExpect(jsonPath("$[1].description").exists())
+                .andExpect(jsonPath("$[1].startDate").exists())
+                .andExpect(jsonPath("$[1].endDate").exists())
+                .andExpect(jsonPath("$[1].vzw.id").exists())
+                .andExpect(jsonPath("$[1].vzw.name").exists())
+                .andExpect(jsonPath("$[1].vzw.email").exists())
+                .andExpect(jsonPath("$[1].vzw.rekeningNR").exists())
+                .andExpect(jsonPath("$[1].vzw.bio").exists())
+                .andExpect(jsonPath("$[1].vzw.youtubeLink").exists())
+                .andExpect(jsonPath("$[1].vzw.profilePicture").exists())
+                .andExpect(jsonPath("$[1].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[1].vzw.address.id").exists())
+                .andExpect(jsonPath("$[1].vzw.address.street").exists())
+                .andExpect(jsonPath("$[1].vzw.address.houseNumber").exists())
+                .andExpect(jsonPath("$[1].vzw.address.box").hasJsonPath())
+                .andExpect(jsonPath("$[1].vzw.address.city").exists())
+                .andExpect(jsonPath("$[1].vzw.address.postalCode").exists())
+                .andExpect(jsonPath("$[1].actionImages").isArray());
+    }
+
+
+    // Gives back a list of all Actions with 'vestibulum' in either name, description or vzw name
+    // TODO: Test if the values are correct, currently not possible because it the order isn't static.
+    @Test
+    void givenActions_givenActions_whenSearchActionsWithProgress_thenReturnJsonActions() throws Exception {
+        List<Action> actionList = generateActionsList();
+        List<Action> actionSearchList = List.of(actionList.get(4), actionList.get(1));
+        List<Vzw> vzwList = generateVzwsList();
+        List<Address> addressList = generateAddressList();
+        List<ActionImage> actionImageList = generateActionImagesList();
+        given(actionRepository.findActionsByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase("vestibulum", "vestibulum")).willReturn(actionSearchList);
+        given(vzwRepository.findVzwsByNameContainingIgnoreCase("vestibulum")).willReturn(new ArrayList<>());
+        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
+        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzwList.get(1)));
+        given(addressRepository.findById("8")).willReturn(Optional.of(addressList.get(1)));
+        given(addressRepository.findById("7")).willReturn(Optional.of(addressList.get(0)));
+        given(actionImageRepository.findActionImagesByActionId("action5")).willReturn(new ArrayList<>());
+        given(actionImageRepository.findActionImagesByActionId("action2")).willReturn(List.of(actionImageList.get(2), actionImageList.get(3), actionImageList.get(4)));
+        List<Product> productList = generateProductsList();
+        given(productRepository.findProductsByActionId("action5")).willReturn(new ArrayList<>());
+        given(productRepository.findProductsByActionId("action2")).willReturn(List.of(productList.get(3)));
+        List<Purchase> purchaseList = generatePurchasesList();
+        given(purchaseRepository.findPurchasesByProductId("product4")).willReturn(List.of(purchaseList.get(2)));
+
+        mockMvc.perform(get("/actions/search/{terms}?progress=true", "vestibulum"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                // Array length is correct
+                .andExpect(jsonPath("$", hasSize(2)))
+                // action5 is correct
+                .andExpect(jsonPath("$[0].id").exists())
+                .andExpect(jsonPath("$[0].name").exists())
+                .andExpect(jsonPath("$[0].goal").exists())
+                .andExpect(jsonPath("$[0].description").exists())
+                .andExpect(jsonPath("$[0].startDate").exists())
+                .andExpect(jsonPath("$[0].endDate").exists())
+                .andExpect(jsonPath("$[0].vzw.id").exists())
+                .andExpect(jsonPath("$[0].vzw.name").exists())
+                .andExpect(jsonPath("$[0].vzw.email").exists())
+                .andExpect(jsonPath("$[0].vzw.rekeningNR").exists())
+                .andExpect(jsonPath("$[0].vzw.bio").exists())
+                .andExpect(jsonPath("$[0].vzw.youtubeLink").exists())
+                .andExpect(jsonPath("$[0].vzw.profilePicture").exists())
+                .andExpect(jsonPath("$[0].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[0].vzw.address.id").exists())
+                .andExpect(jsonPath("$[0].vzw.address.street").exists())
+                .andExpect(jsonPath("$[0].vzw.address.houseNumber").exists())
+                .andExpect(jsonPath("$[0].vzw.address.box").hasJsonPath())
+                .andExpect(jsonPath("$[0].vzw.address.city").exists())
+                .andExpect(jsonPath("$[0].vzw.address.postalCode").exists())
+                .andExpect(jsonPath("$[0].actionImages").isArray())
+                .andExpect(jsonPath("$[0].progress").exists())
+                // action2 is correct
+                .andExpect(jsonPath("$[1].id").exists())
+                .andExpect(jsonPath("$[1].name").exists())
+                .andExpect(jsonPath("$[1].goal").exists())
+                .andExpect(jsonPath("$[1].description").exists())
+                .andExpect(jsonPath("$[1].startDate").exists())
+                .andExpect(jsonPath("$[1].endDate").exists())
+                .andExpect(jsonPath("$[1].vzw.id").exists())
+                .andExpect(jsonPath("$[1].vzw.name").exists())
+                .andExpect(jsonPath("$[1].vzw.email").exists())
+                .andExpect(jsonPath("$[1].vzw.rekeningNR").exists())
+                .andExpect(jsonPath("$[1].vzw.bio").exists())
+                .andExpect(jsonPath("$[1].vzw.youtubeLink").exists())
+                .andExpect(jsonPath("$[1].vzw.profilePicture").exists())
+                .andExpect(jsonPath("$[1].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[1].vzw.address.id").exists())
+                .andExpect(jsonPath("$[1].vzw.address.street").exists())
+                .andExpect(jsonPath("$[1].vzw.address.houseNumber").exists())
+                .andExpect(jsonPath("$[1].vzw.address.box").hasJsonPath())
+                .andExpect(jsonPath("$[1].vzw.address.city").exists())
+                .andExpect(jsonPath("$[1].vzw.address.postalCode").exists())
+                .andExpect(jsonPath("$[1].actionImages").isArray())
+                .andExpect(jsonPath("$[1].progress").exists());
+    }
+
+    // Gives back a list of all Actions with 'vzw2' in either name, description or vzw name
+    @Test
+    void givenActions_givenActions_whenSearchActionsVzw2_thenReturnJsonActions() throws Exception {
+        List<Action> actionList = generateActionsList();
+        List<Action> actionSearchList = List.of(actionList.get(1));
+        List<Vzw> vzwList = generateVzwsList();
+        List<Address> addressList = generateAddressList();
+        List<ActionImage> actionImageList = generateActionImagesList();
+        given(actionRepository.findActionsByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase("vzw2", "vzw2")).willReturn(actionSearchList);
+        given(vzwRepository.findVzwsByNameContainingIgnoreCase("vzw2")).willReturn(List.of(vzwList.get(1)));
+        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzwList.get(1)));
+        given(addressRepository.findById("7")).willReturn(Optional.of(addressList.get(0)));
+        given(actionImageRepository.findActionImagesByActionId("action2")).willReturn(List.of(actionImageList.get(2), actionImageList.get(3), actionImageList.get(4)));
+
+        mockMvc.perform(get("/actions/search/{terms}", "vzw2"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                // Array length is correct
+                .andExpect(jsonPath("$", hasSize(1)))
+                // action2 is correct
+                .andExpect(jsonPath("$[0].id", is("action2")))
+                .andExpect(jsonPath("$[0].name", is("action2")))
+                .andExpect(jsonPath("$[0].goal", is(200)))
+                .andExpect(jsonPath("$[0].description", is("quis dictum dui odio sed odio. Sed sed mattis enim. Curabitur fringilla lorem at mauris tempor, sit amet tincidunt odio scelerisque. Morbi ac leo sed nisi hendrerit vulputate. Vivamus id blandit libero, sit amet aliquet diam. Morbi sit amet nibh a turpis ultricies accumsan quis eu massa. Suspendisse potenti. Integer dapibus, nibh quis sollicitudin vestibulum, urna nulla dignissim sem, eget semper nisl neque non nisi.")))
+                .andExpect(jsonPath("$[0].startDate").exists())
+                .andExpect(jsonPath("$[0].endDate").exists())
+                .andExpect(jsonPath("$[0].vzw.id", is("vzw2")))
+                .andExpect(jsonPath("$[0].vzw.name", is("vzw2")))
+                .andExpect(jsonPath("$[0].vzw.email", is("vzw2.malle@mail.com")))
+                .andExpect(jsonPath("$[0].vzw.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[0].vzw.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$[0].vzw.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$[0].vzw.profilePicture", is("https://http.cat/201.jpg")))
+                .andExpect(jsonPath("$[0].vzw.password").doesNotExist())
+                .andExpect(jsonPath("$[0].vzw.address.id", is("7")))
+                .andExpect(jsonPath("$[0].vzw.address.street", is("Kerstraat")))
+                .andExpect(jsonPath("$[0].vzw.address.houseNumber", is("87")))
+                .andExpect(jsonPath("$[0].vzw.address.box").isEmpty())
+                .andExpect(jsonPath("$[0].vzw.address.city", is("Malle")))
+                .andExpect(jsonPath("$[0].vzw.address.postalCode", is("2390")))
+                .andExpect(jsonPath("$[0].actionImages[0].fileLocation", is("https://http.cat/402.jpg")))
+                .andExpect(jsonPath("$[0].actionImages[0].actionId", is("action2")))
+                .andExpect(jsonPath("$[0].actionImages[1].fileLocation", is("https://http.cat/403.jpg")))
+                .andExpect(jsonPath("$[0].actionImages[1].actionId", is("action2")))
+                .andExpect(jsonPath("$[0].actionImages[2].fileLocation", is("https://http.cat/404.jpg")))
+                .andExpect(jsonPath("$[0].actionImages[2].actionId", is("action2")));
     }
 }

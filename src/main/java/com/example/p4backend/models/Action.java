@@ -1,6 +1,7 @@
 package com.example.p4backend.models;
 
 import com.mongodb.lang.Nullable;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.Date;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 @Document(collection = "actions")
 public class Action {
@@ -34,3 +36,4 @@ public class Action {
         this.startDate = new Date();
     }
 }
+
