@@ -1,7 +1,10 @@
 package com.example.p4backend.controllers;
 
 import com.example.p4backend.models.Address;
+import com.example.p4backend.models.User;
 import com.example.p4backend.models.Vzw;
+import com.example.p4backend.models.auth.LoginRequest;
+import com.example.p4backend.models.complete.CompleteUser;
 import com.example.p4backend.models.complete.CompleteVzw;
 import com.example.p4backend.models.dto.AddressDTO;
 import com.example.p4backend.models.dto.VzwDTO;
@@ -15,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -132,6 +136,7 @@ public class VzwController {
         return completeVzws;
     }
 
+    // register vzw
     @PostMapping("/vzws")
     public Vzw addVzw(@RequestBody VzwDTO vzwDTO) {
         // Check to validate if the user input is valid
@@ -139,6 +144,10 @@ public class VzwController {
         ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input rekeningnummer doesn't match the pattern");}
         if (!vzwDTO.getEmail().matches(PATTERN_EMAIL)
         ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input email doesn't seem te be a valid email address");}
+
+        // Check if email not already taken
+        if (vzwRepository.existsByEmail(vzwDTO.getEmail())
+        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Vzw with email already exists");}
 
         // Address
         AddressDTO tempAddress = new AddressDTO(
@@ -157,6 +166,29 @@ public class VzwController {
         return persistentVzw;
     }
 
+    // Login as vzw
+    @PostMapping("/vzws/login")
+    public CompleteVzw authenticateVzw(@RequestBody LoginRequest loginRequest) {
+        // Check if email exists
+        if (vzwRepository.existsByEmail(loginRequest.getEmail())
+        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Vzw with email doesn't exists");}
+        
+        Optional<Vzw> vzw = vzwRepository.findFirstByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
+        if (vzw.isPresent()) {
+            return getCompleteVzw(Objects.requireNonNull(vzw.get()));
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "The password doesn't match for the vzw linked to the provided email"
+            );
+        }
+    }
+
+    // Get the filled CompleteVzw for the given vzw
+    private CompleteVzw getCompleteVzw(Vzw vzw) {
+        Optional<Address> address = addressRepository.findById(vzw.getAddressID());
+        return new CompleteVzw(vzw, address);
+    }
+    
     // Make a real Vzw from the VzwDTO
     private Vzw getVzwFromVzwDTO(Vzw vzw, VzwDTO vzwDTO, Address persistentAddress) {
         vzw.setName(vzwDTO.getName());
