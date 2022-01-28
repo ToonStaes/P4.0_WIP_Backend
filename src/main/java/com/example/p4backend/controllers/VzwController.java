@@ -3,10 +3,14 @@ package com.example.p4backend.controllers;
 import com.example.p4backend.models.Address;
 import com.example.p4backend.models.Vzw;
 import com.example.p4backend.models.complete.CompleteVzw;
+import com.example.p4backend.models.dto.AddressDTO;
+import com.example.p4backend.models.dto.VzwDTO;
 import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.VzwRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -21,6 +25,11 @@ public class VzwController {
     private VzwRepository vzwRepository;
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private AddressController addressController;
+
+    private static final String PATTERN_REKENINGNR = "^BE[0-9]{2}[- ]{0,1}[0-9]{4}[- ]{0,1}[0-9]{4}[- ]{0,1}[0-9]{4}$";
+    private static final String PATTERN_EMAIL = "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,6})+$";
 
     @PostConstruct
     public void fillDB() {
@@ -123,11 +132,41 @@ public class VzwController {
         return completeVzws;
     }
 
-    @PostMapping("/vzw")
-    public Vzw addVzw(@RequestBody VzwDTO vzw) {
+    @PostMapping("/vzws")
+    public Vzw addVzw(@RequestBody VzwDTO vzwDTO) {
+        // Check to validate if the user input is valid
+        if (!vzwDTO.getRekeningNR().matches(PATTERN_REKENINGNR)
+        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input rekeningnummer doesn't match the pattern");}
+        if (!vzwDTO.getEmail().matches(PATTERN_EMAIL)
+        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input email doesn't seem te be a valid email address");}
+
+        // Address
+        AddressDTO tempAddress = new AddressDTO(
+                vzwDTO.getStreet(),
+                vzwDTO.getHouseNumber(),
+                vzwDTO.getBox(),
+                vzwDTO.getCity(),
+                vzwDTO.getPostalCode());
+
+        Address persistentAddress = addressController.addAddress(tempAddress);
+
+        // Vzw
         Vzw tempVzw = new Vzw();
-        Vzw persistentVzw = getVzwFromVzwDTO(tempVzw, vzw);
+        Vzw persistentVzw = getVzwFromVzwDTO(tempVzw, vzwDTO, persistentAddress);
         vzwRepository.save(persistentVzw);
         return persistentVzw;
+    }
+
+    // Make a real Vzw from the VzwDTO
+    private Vzw getVzwFromVzwDTO(Vzw vzw, VzwDTO vzwDTO, Address persistentAddress) {
+        vzw.setName(vzwDTO.getName());
+        vzw.setEmail(vzwDTO.getEmail());
+        vzw.setRekeningNR(vzwDTO.getRekeningNR());
+        vzw.setBio(vzwDTO.getBio());
+        vzw.setYoutubeLink(vzwDTO.getYoutubeLink());
+        vzw.setProfilePicture(vzwDTO.getProfilePicture());
+        vzw.setPassword(vzwDTO.getPassword());
+        vzw.setAddressID(persistentAddress.getId());
+        return vzw;
     }
 }

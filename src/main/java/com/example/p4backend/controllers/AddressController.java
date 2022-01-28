@@ -1,12 +1,12 @@
 package com.example.p4backend.controllers;
 
 import com.example.p4backend.models.Address;
+import com.example.p4backend.models.Vzw;
+import com.example.p4backend.models.dto.AddressDTO;
+import com.example.p4backend.models.dto.VzwDTO;
 import com.example.p4backend.repositories.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -61,4 +61,22 @@ public class AddressController {
 
     @GetMapping("/addresses/{id}")
     public Optional<Address> getAddressById(@PathVariable String id) { return addressRepository.findById(id); }
+
+    // @PostMapping("/addresses")
+    public Address addAddress(@RequestBody AddressDTO addressDTO) {
+        Address tempAddress = new Address();
+        Address persistentAddress = getAddressFromAddressDTO(tempAddress, addressDTO);
+        addressRepository.save(persistentAddress);
+        return persistentAddress;
+    }
+
+    // Make a real Address from the AddressDTO
+    private Address getAddressFromAddressDTO(Address address, AddressDTO addressDTO) {
+        address.setStreet(addressDTO.getStreet());
+        address.setHouseNumber(addressDTO.getHouseNumber());
+        address.setBox(addressDTO.getBox());
+        address.setCity(addressDTO.getCity());
+        address.setPostalCode(addressDTO.getPostalCode());
+        return address;
+    }
 }
