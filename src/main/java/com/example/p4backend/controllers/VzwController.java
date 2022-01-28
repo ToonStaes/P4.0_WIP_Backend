@@ -6,10 +6,7 @@ import com.example.p4backend.models.complete.CompleteVzw;
 import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.VzwRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -124,5 +121,13 @@ public class VzwController {
             completeVzws.add(completeVzw);
         }
         return completeVzws;
+    }
+
+    @PostMapping("/vzw")
+    public Vzw addVzw(@RequestBody VzwDTO vzw) {
+        Vzw tempVzw = new Vzw();
+        Vzw persistentVzw = getVzwFromVzwDTO(tempVzw, vzw);
+        vzwRepository.save(persistentVzw);
+        return persistentVzw;
     }
 }
