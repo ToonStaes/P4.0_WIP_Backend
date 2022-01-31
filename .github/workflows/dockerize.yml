@@ -53,8 +53,6 @@ jobs:
         with:
         
           task-definition: task-definition.json
-          container-name: API-backend
-          image: p4_backend:latest
           service: API-service
           cluster: wip-cluster
           wait-for-service-stability: true
