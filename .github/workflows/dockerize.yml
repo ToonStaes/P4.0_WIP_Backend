@@ -54,6 +54,6 @@ jobs:
         
           task-definition: task-definition.json
           service: API-service
-          cluster: fargate
+          cluster: wip-cluster
           wait-for-service-stability: true
  
