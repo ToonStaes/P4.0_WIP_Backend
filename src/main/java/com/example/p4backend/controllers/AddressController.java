@@ -1,15 +1,16 @@
 package com.example.p4backend.controllers;
 
 import com.example.p4backend.models.Address;
+import com.example.p4backend.models.dto.AddressDTO;
 import com.example.p4backend.repositories.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -61,4 +62,36 @@ public class AddressController {
 
     @GetMapping("/addresses/{id}")
     public Optional<Address> getAddressById(@PathVariable String id) { return addressRepository.findById(id); }
+
+    // @PostMapping("/addresses")
+    public Address addAddress(@RequestBody AddressDTO addressDTO) {
+        Address persistentAddress = new Address();
+        persistentAddress.setStreet(addressDTO.getStreet());
+        persistentAddress.setHouseNumber(addressDTO.getHouseNumber());
+        persistentAddress.setBox(addressDTO.getBox());
+        persistentAddress.setCity(addressDTO.getCity());
+        persistentAddress.setPostalCode(addressDTO.getPostalCode());
+        addressRepository.save(persistentAddress);
+        return persistentAddress;
+    }
+
+    // @PutMapping("/addresses/{id}")
+    public Address updateAddress(@RequestBody AddressDTO updateAddress, @PathVariable String id) {
+        Optional<Address> tempAddress = addressRepository.findById(id);
+
+        if (tempAddress.isPresent()) {
+            Address address = Objects.requireNonNull(tempAddress.get());
+            address.setBox(updateAddress.getBox());
+            address.setCity(updateAddress.getCity());
+            address.setStreet(updateAddress.getStreet());
+            address.setHouseNumber(updateAddress.getHouseNumber());
+            address.setPostalCode(updateAddress.getPostalCode());
+            addressRepository.save(address);
+            return address;
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "The Address with ID " + id + " doesn't exist"
+            );
+        }
+    }
 }

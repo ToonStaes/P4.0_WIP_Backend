@@ -6,14 +6,13 @@ import com.example.p4backend.models.Product;
 import com.example.p4backend.models.User;
 import com.example.p4backend.models.complete.CompleteProduct;
 import com.example.p4backend.models.complete.CompleteUser;
+import com.example.p4backend.models.dto.AddressDTO;
+import com.example.p4backend.models.dto.UserDTO;
 import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
@@ -94,6 +93,17 @@ public class UserController {
         } else {
             return "false";
         }
+    }
+
+    // @PostMapping("/users")
+    public User addUser(@RequestBody UserDTO userDTO) {
+        User persistentUser = new User();
+        persistentUser.setName(userDTO.getName());
+        persistentUser.setEmail(userDTO.getEmail());
+        persistentUser.setPassword(userDTO.getPassword());
+        persistentUser.setAddressID(userDTO.getAddressID());
+        userRepository.save(persistentUser);
+        return persistentUser;
     }
 
     // Get the filled CompleteUser for the given user

@@ -1,21 +1,21 @@
 package com.example.p4backend.controllers;
 
-import com.example.p4backend.models.Product;
-import com.example.p4backend.models.Purchase;
-import com.example.p4backend.models.User;
+import com.example.p4backend.models.*;
 import com.example.p4backend.models.complete.CompletePurchase;
+import com.example.p4backend.models.dto.AddressDTO;
+import com.example.p4backend.models.dto.PurchaseDTO;
+import com.example.p4backend.models.dto.UserDTO;
+import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.ProductRepository;
 import com.example.p4backend.repositories.PurchaseRepository;
 import com.example.p4backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
+import javax.swing.text.html.Option;
 import java.util.*;
 
 @RestController
@@ -27,6 +27,14 @@ public class PurchaseController {
     private UserRepository userRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private AddressRepository addressRepository;
+    @Autowired
+    private AddressController addressController;
+    @Autowired
+    private UserController userController;
+
+    private static final String PATTERN_EMAIL = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,6})+$";
 
     @PostConstruct
     public void fillDB(){
@@ -63,6 +71,51 @@ public class PurchaseController {
                     HttpStatus.NOT_FOUND, "The Purchase with ID " + id + " doesn't exist"
             );
         }
+    }
+
+    @PostMapping("/purchases")
+    public Purchase addPurchase(@RequestBody PurchaseDTO purchaseDTO) {
+        // Check to validate if the user input is valid
+        if (!purchaseDTO.getEmail().matches(PATTERN_EMAIL) || purchaseDTO.getAmount() <= 0 || !productRepository.existsById(purchaseDTO.getProductId())
+        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input email, amount or productId aren't valid");}
+
+        User persistentUser;
+        AddressDTO addressDTO = new AddressDTO(
+                purchaseDTO.getStreet(),
+                purchaseDTO.getHouseNumber(),
+                purchaseDTO.getBox(),
+                purchaseDTO.getCity(),
+                purchaseDTO.getPostalCode());
+
+        // Check if user already exists
+        Optional<User> user = userRepository.findFirstByEmail(purchaseDTO.getEmail());
+        if (user.isPresent()) {
+            persistentUser = Objects.requireNonNull(user.get());
+            Optional<Address> oldAddressOptional = addressRepository.findById(persistentUser.getAddressID());
+            // Update old address if present
+            if (oldAddressOptional.isPresent()) {
+                Address oldAddress = Objects.requireNonNull(oldAddressOptional.get());
+                addressController.updateAddress(addressDTO, oldAddress.getId());
+            }
+        } else {
+            // Add new Address
+            Address persistentAddress;
+            persistentAddress = addressController.addAddress(addressDTO);
+            // Add new User
+            UserDTO userDTO = new UserDTO(
+                    purchaseDTO.getName(),
+                    purchaseDTO.getEmail(),
+                    persistentAddress.getId());
+            persistentUser = userController.addUser(userDTO);
+        }
+
+        // Create new Purchase
+        Purchase persistentPurchase = new Purchase();
+        persistentPurchase.setUserId(persistentUser.getId());
+        persistentPurchase.setProductId(purchaseDTO.getProductId());
+        persistentPurchase.setAmount(purchaseDTO.getAmount());
+        purchaseRepository.save(persistentPurchase);
+        return persistentPurchase;
     }
 
     // Get the filled CompletePurchase for the given purchase
