@@ -1130,4 +1130,11 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$[1].actionImages").isArray())
                 .andExpect(jsonPath("$[1].progress", is(0.0)));
     }
+
+
+    @Test
+    void testGetNewestActions() {
+
+
+    }
 }
