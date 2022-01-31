@@ -36,12 +36,24 @@ jobs:
 
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/p4_backend:latest
-        
-      - name: Trigger Jenkins Job
-        uses: sbitio/trigger-jenkins-job@master
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          JENKINS_USER: ${{ secrets.JENKINS_USER }}
-          JENKINS_TOKEN: ${{ secrets.JENKINS_TOKEN }}
-          JENKINS_HOST: ${{ secrets.JENKINS_HOST }}
-          JENKINS_JOB: ${{ secrets.JENKINS_JOB }}        
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition API-task > task-definition.json
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+        
+          task-definition: task-definition.json
+          service: API-service
+          cluster: fargate
+          wait-for-service-stability: true
  
