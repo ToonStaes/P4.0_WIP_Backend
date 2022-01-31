@@ -47,7 +47,14 @@ jobs:
       - name: Download task definition
         run: |
           aws ecs describe-task-definition --task-definition APITask --query taskDefinition > task-definition.json
-
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: API-backend
+          image: r0784094/p4_backend
+          
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
