@@ -66,7 +66,7 @@ public class DonationController {
 
     @PostMapping("/donation")
     public CompleteDonation addDonation(@RequestBody DonationDTO donationDTO){
-        Donation donation = new Donation(donationDTO.getVzwId(), donationDTO.getAmount());
+        Donation donation = new Donation(donationDTO);
         donationRepository.save(donation);
         return getCompleteDonation(donation);
     }

@@ -1,5 +1,6 @@
 package com.example.p4backend.models;
 
+import com.example.p4backend.models.DTOs.DonationDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,8 +27,9 @@ public class Donation {
         this.description = description;
     }
 
-    public Donation(String vzwId, Decimal128 amount) {
-        this.vzwId = vzwId;
-        this.amount = amount;
+    public Donation(DonationDTO donationDTO) {
+        this.vzwId = donationDTO.getVzwId();
+        this.amount = donationDTO.getAmount();
+        this.description = donationDTO.getDescription();
     }
 }

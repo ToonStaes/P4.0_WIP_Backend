@@ -289,8 +289,9 @@ public class DonationControllerTests {
     @Test
     void whenPostDonation_thenReturnDonation() throws Exception {
         List<Vzw> vzwList = generateVzwsList();
+        DonationDTO donationDTO = new DonationDTO("vzw4", new Decimal128(new BigDecimal("195.68")), "desc");
         given(vzwRepository.findById("vzw4")).willReturn(Optional.of(vzwList.get(3)));
-        Donation donation = new Donation("vzw4", new Decimal128(new BigDecimal("195.68")));
+        Donation donation = new Donation(donationDTO);
         Optional<Vzw> vzw = vzwRepository.findById(donation.getVzwId());
         CompleteDonation completeDonation = new CompleteDonation(donation, vzw);
 
