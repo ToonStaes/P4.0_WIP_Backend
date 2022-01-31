@@ -1,5 +1,6 @@
 package com.example.p4backend.models;
 
+import com.example.p4backend.models.DTOs.ActionDTO;
 import com.mongodb.lang.Nullable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -33,6 +34,15 @@ public class Action {
         this.description = description;
         this.vzwID = vzwID;
         this.endDate = endDate;
+        this.startDate = new Date();
+    }
+
+    public Action(ActionDTO actionDTO){
+        this.name = actionDTO.getName();
+        this.goal = actionDTO.getGoal();
+        this.description = actionDTO.getDescription();
+        this.vzwID = actionDTO.getVzwID();
+        this.endDate = actionDTO.getEndDate();
         this.startDate = new Date();
     }
 }

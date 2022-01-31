@@ -1,6 +1,7 @@
 package com.example.p4backend.controllers;
 
 import com.example.p4backend.models.*;
+import com.example.p4backend.models.DTOs.ActionDTO;
 import com.example.p4backend.models.complete.CompleteAction;
 import com.example.p4backend.models.complete.CompleteActionWithProgress;
 import com.example.p4backend.models.complete.CompleteVzw;
@@ -265,6 +266,13 @@ public class ActionController {
             }
         }
         return returnList;
+    }
+
+    @PostMapping("/action")
+    public CompleteAction postAction(@RequestBody ActionDTO actionDTO){
+        Action action = new Action(actionDTO);
+        actionRepository.save(action);
+        return getCompleteAction(action);
     }
 
     // Generate Complete vzw to include address
