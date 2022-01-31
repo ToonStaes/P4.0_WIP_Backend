@@ -1,7 +1,6 @@
 package com.example.p4backend.models.dto;
 
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
 public class PurchaseDTO {

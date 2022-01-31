@@ -1,6 +1,9 @@
 package com.example.p4backend.controllers;
 
-import com.example.p4backend.models.*;
+import com.example.p4backend.models.Address;
+import com.example.p4backend.models.Product;
+import com.example.p4backend.models.Purchase;
+import com.example.p4backend.models.User;
 import com.example.p4backend.models.complete.CompletePurchase;
 import com.example.p4backend.models.dto.AddressDTO;
 import com.example.p4backend.models.dto.PurchaseDTO;
@@ -15,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
-import javax.swing.text.html.Option;
 import java.util.*;
 
 @RestController
@@ -90,7 +92,8 @@ public class PurchaseController {
         // Check if user already exists
         Optional<User> user = userRepository.findFirstByEmail(purchaseDTO.getEmail());
         if (user.isPresent()) {
-            persistentUser = Objects.requireNonNull(user.get());
+            User oldUser = Objects.requireNonNull(user.get());
+            persistentUser = userController.updateUser(new UserDTO(purchaseDTO.getName()), oldUser.getId());
             Optional<Address> oldAddressOptional = addressRepository.findById(persistentUser.getAddressID());
             // Update old address if present
             if (oldAddressOptional.isPresent()) {

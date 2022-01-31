@@ -1,12 +1,8 @@
 package com.example.p4backend.controllers;
 
-import com.example.p4backend.models.Action;
 import com.example.p4backend.models.Address;
-import com.example.p4backend.models.Product;
 import com.example.p4backend.models.User;
-import com.example.p4backend.models.complete.CompleteProduct;
 import com.example.p4backend.models.complete.CompleteUser;
-import com.example.p4backend.models.dto.AddressDTO;
 import com.example.p4backend.models.dto.UserDTO;
 import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.UserRepository;
@@ -104,6 +100,22 @@ public class UserController {
         persistentUser.setAddressID(userDTO.getAddressID());
         userRepository.save(persistentUser);
         return persistentUser;
+    }
+
+    // @PutMapping("/users/{id}")
+    public User updateUser(@RequestBody UserDTO updateUser, @PathVariable String id) {
+        Optional<User> tempUser = userRepository.findById(id);
+
+        if (tempUser.isPresent()) {
+            User user = Objects.requireNonNull(tempUser.get());
+            user.setName(updateUser.getName());
+            userRepository.save(user);
+            return user;
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "The User with ID " + id + " doesn't exist"
+            );
+        }
     }
 
     // Get the filled CompleteUser for the given user

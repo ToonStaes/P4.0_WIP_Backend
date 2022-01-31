@@ -12,6 +12,10 @@ public class UserDTO {
     private String password;
     private String addressID;
 
+    public UserDTO(String name) {
+        this.name = name;
+    }
+
     public UserDTO(String name, String email, String addressID) {
         this.name = name;
         this.email = email;
