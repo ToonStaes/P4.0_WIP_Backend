@@ -90,11 +90,11 @@ public class DonationControllerTests {
             "password",
             "9");
     // ----- DONATION -----
-    Donation donation1 = new Donation("user1", "vzw1", new Decimal128(5));
-    Donation donation2 = new Donation("user2", "vzw2", new Decimal128(15));
-    Donation donation3 = new Donation("user3", "vzw3", new Decimal128(10));
-    Donation donation4 = new Donation("user4", "vzw4", new Decimal128(3));
-    Donation donation5 = new Donation("user1", "vzw2", new Decimal128(7));
+    Donation donation1 = new Donation("user1", "vzw1", new Decimal128(5), "desc");
+    Donation donation2 = new Donation("user2", "vzw2", new Decimal128(15), "desc");
+    Donation donation3 = new Donation("user3", "vzw3", new Decimal128(10), "desc");
+    Donation donation4 = new Donation("user4", "vzw4", new Decimal128(3), "desc");
+    Donation donation5 = new Donation("user1", "vzw2", new Decimal128(7), "desc");
 
     @Autowired
     private MockMvc mockMvc;

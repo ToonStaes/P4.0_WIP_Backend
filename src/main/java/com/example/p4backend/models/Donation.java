@@ -17,11 +17,13 @@ public class Donation {
     private String userId;
     private String vzwId;
     private Decimal128 amount;
+    private String description;
 
-    public Donation(String userId, String vzwId, Decimal128 amount) {
+    public Donation(String userId, String vzwId, Decimal128 amount, String description) {
         this.userId = userId;
         this.vzwId = vzwId;
         this.amount = amount;
+        this.description = description;
     }
 
     public Donation(String vzwId, Decimal128 amount) {
