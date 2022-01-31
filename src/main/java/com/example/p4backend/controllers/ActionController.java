@@ -98,7 +98,7 @@ public class ActionController {
     @GetMapping("/actions")
     public List<CompleteAction> getAll(@RequestParam(defaultValue = "false") boolean progress) {
         List<CompleteAction> returnList = new ArrayList<>();
-        List<Action> actions = actionRepository.findAll();
+        List<Action> actions = actionRepository.findByEndDateAfter(new Date());
 
         for (Action action : actions) {
             if (progress) {
@@ -195,7 +195,7 @@ public class ActionController {
     @GetMapping("/actions/vzw/{vzwId}")
     public List<CompleteAction> getActionsByVzwId(@PathVariable String vzwId, @RequestParam(defaultValue = "false") boolean progress) {
         List<CompleteAction> returnList = new ArrayList<>();
-        List<Action> actions = actionRepository.findActionsByVzwID(vzwId);
+        List<Action> actions = actionRepository.findActionsByVzwIDAndEndDateAfter(vzwId, new Date());
 
         for (Action action : actions) {
             if (progress) {
@@ -247,13 +247,13 @@ public class ActionController {
 
     @GetMapping(value="/actions/search/{terms}")
     public List<CompleteAction> searchActionsByNameContaining(@PathVariable String terms, @RequestParam(defaultValue = "false") boolean progress){
-        Set<Action> actions = new HashSet<>(actionRepository.findActionsByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(terms, terms)); // HashSet to prevent duplicate actions
+        Set<Action> actions = new HashSet<>(actionRepository.findActionsByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndEndDateAfter(terms, terms, new Date())); // HashSet to prevent duplicate actions
         List<Vzw> vzws = vzwRepository.findVzwsByNameContainingIgnoreCase(terms);
         List<CompleteAction> returnList = new ArrayList<>();
 
         // Add the actions from the vzw whose name also matched the search terms
         for (Vzw vzw : vzws) {
-            actions.addAll(actionRepository.findActionsByVzwID(vzw.getId()));
+            actions.addAll(actionRepository.findActionsByVzwIDAndEndDateAfter(vzw.getId(), new Date()));
         }
 
         for (Action action : actions) {
