@@ -46,13 +46,15 @@ jobs:
 
       - name: Download task definition
         run: |
-          aws ecs describe-task-definition --task-definition API-task > task-definition.json
+          aws ecs describe-task-definition --task-definition API-task --query API-task:1> task-definition.json
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
         
           task-definition: task-definition.json
+          container-name: API-backend
+          image: p4_backend:latest
           service: API-service
           cluster: wip-cluster
           wait-for-service-stability: true
