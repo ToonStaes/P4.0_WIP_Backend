@@ -93,11 +93,7 @@ public class UserController {
 
     // @PostMapping("/users")
     public User addUser(@RequestBody UserDTO userDTO) {
-        User persistentUser = new User();
-        persistentUser.setName(userDTO.getName());
-        persistentUser.setEmail(userDTO.getEmail());
-        persistentUser.setPassword(userDTO.getPassword());
-        persistentUser.setAddressID(userDTO.getAddressID());
+        User persistentUser = new User(userDTO);
         userRepository.save(persistentUser);
         return persistentUser;
     }

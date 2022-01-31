@@ -113,10 +113,7 @@ public class PurchaseController {
         }
 
         // Create new Purchase
-        Purchase persistentPurchase = new Purchase();
-        persistentPurchase.setUserId(persistentUser.getId());
-        persistentPurchase.setProductId(purchaseDTO.getProductId());
-        persistentPurchase.setAmount(purchaseDTO.getAmount());
+        Purchase persistentPurchase = new Purchase(purchaseDTO, persistentUser.getId());
         purchaseRepository.save(persistentPurchase);
         return persistentPurchase;
     }

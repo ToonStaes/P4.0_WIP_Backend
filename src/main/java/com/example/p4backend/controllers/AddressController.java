@@ -65,12 +65,7 @@ public class AddressController {
 
     // @PostMapping("/addresses")
     public Address addAddress(@RequestBody AddressDTO addressDTO) {
-        Address persistentAddress = new Address();
-        persistentAddress.setStreet(addressDTO.getStreet());
-        persistentAddress.setHouseNumber(addressDTO.getHouseNumber());
-        persistentAddress.setBox(addressDTO.getBox());
-        persistentAddress.setCity(addressDTO.getCity());
-        persistentAddress.setPostalCode(addressDTO.getPostalCode());
+        Address persistentAddress = new Address(addressDTO);
         addressRepository.save(persistentAddress);
         return persistentAddress;
     }
