@@ -56,7 +56,7 @@ jobs:
           image: r0784094/p4_backend
           
       - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
         
           task-definition: ${{ steps.task-def.outputs.task-definition }}
