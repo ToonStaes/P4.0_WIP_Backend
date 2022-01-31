@@ -23,4 +23,9 @@ public class Donation {
         this.vzwId = vzwId;
         this.amount = amount;
     }
+
+    public Donation(String vzwId, Decimal128 amount) {
+        this.vzwId = vzwId;
+        this.amount = amount;
+    }
 }

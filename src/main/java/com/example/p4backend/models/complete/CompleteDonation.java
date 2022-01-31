@@ -25,4 +25,10 @@ public class CompleteDonation {
         vzw.ifPresent(value -> this.vzw = value); // If vzw is present, the value of the optional is taken and placed into the vzw property of the object.
         this.amount = donation.getAmount();
     }
+
+    public CompleteDonation(Donation donation,  Optional<Vzw> vzw) {
+        this.id = donation.getId();
+        vzw.ifPresent(value -> this.vzw = value); // If vzw is present, the value of the optional is taken and placed into the vzw property of the object.
+        this.amount = donation.getAmount();
+    }
 }

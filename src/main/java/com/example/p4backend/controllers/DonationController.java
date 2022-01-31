@@ -1,5 +1,6 @@
 package com.example.p4backend.controllers;
 
+import com.example.p4backend.models.DTOs.DonationDTO;
 import com.example.p4backend.models.Donation;
 import com.example.p4backend.models.User;
 import com.example.p4backend.models.Vzw;
@@ -10,10 +11,7 @@ import com.example.p4backend.repositories.VzwRepository;
 import org.bson.types.Decimal128;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
@@ -66,10 +64,24 @@ public class DonationController {
         }
     }
 
+    @PostMapping("/donation")
+    public CompleteDonation addDonation(@RequestBody DonationDTO donationDTO){
+        Donation donation = new Donation(donationDTO.getVzwId(), donationDTO.getAmount());
+        donationRepository.save(donation);
+        return getCompleteDonation(donation);
+    }
+
     // Get the filled CompleteDonation for the given donation
     private CompleteDonation getCompleteDonation(Donation donation) {
         Optional<Vzw> vzw = vzwRepository.findById(donation.getVzwId());
-        Optional<User> user = userRepository.findById(donation.getUserId());
-        return new CompleteDonation(donation, user, vzw);
+        if (donation.getUserId() != null){
+            Optional<User> user = userRepository.findById(donation.getUserId());
+            return new CompleteDonation(donation, user, vzw);
+        }
+        else {
+            return new CompleteDonation(donation, vzw);
+        }
+
+
     }
 }
