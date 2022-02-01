@@ -104,7 +104,7 @@ public class ProductControllerTests {
         List<Product> products = generateProducts();
         List<CompleteProduct> completeProducts = generateCompleteProducts();
         Action action = generateAction();
-        given(productRepository.findAll()).willReturn(products);
+        given(productRepository.findAllByIsActiveTrue()).willReturn(products);
         given(actionRepository.findById("action1")).willReturn(Optional.of(action));
 
         mockMvc.perform(get("/products"))
@@ -192,7 +192,7 @@ public class ProductControllerTests {
             }
         }
 
-        given(productRepository.findProductsByActionId("action1")).willReturn(actionProducts);
+        given(productRepository.findProductsByActionIdAndIsActiveTrue("action1")).willReturn(actionProducts);
         given(actionRepository.findById("action1")).willReturn(Optional.of(action));
 
         mockMvc.perform(get("/products/action/{id}", "action1"))
