@@ -1,6 +1,7 @@
 package com.example.p4backend.controllers;
 
 import com.example.p4backend.models.Action;
+import com.example.p4backend.models.DTOs.ProductDTO;
 import com.example.p4backend.models.Product;
 import com.example.p4backend.models.complete.CompleteProduct;
 import com.example.p4backend.repositories.ActionRepository;
@@ -8,10 +9,7 @@ import com.example.p4backend.repositories.ProductRepository;
 import org.bson.types.Decimal128;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
@@ -27,7 +25,7 @@ public class ProductController {
     private ActionRepository actionRepository;
 
     @PostConstruct
-    public void fillDB(){
+    public void fillDB() {
         if (productRepository.count() == 0) {
             Product product1 = new Product("product1", new Decimal128(new BigDecimal(5)), "action1");
             product1.setId("product1");
@@ -73,7 +71,7 @@ public class ProductController {
         List<Product> products = productRepository.findProductsByActionId(id);
         List<CompleteProduct> completeProducts = new ArrayList<>();
 
-        for (Product product: products){
+        for (Product product : products) {
             Optional<Action> action = actionRepository.findById(product.getActionId());
             CompleteProduct completeProduct = new CompleteProduct(product, action);
             completeProducts.add(completeProduct);
@@ -81,6 +79,14 @@ public class ProductController {
 
         return completeProducts;
     }
+
+    @PostMapping("/product")
+    public CompleteProduct addProduct(@RequestBody ProductDTO productDTO) {
+        Product product = new Product(productDTO);
+        productRepository.save(product);
+        return getCompleteProduct(product);
+    }
+
 
     // Get the filled CompleteProduct for the given product
     private CompleteProduct getCompleteProduct(Product product) {
