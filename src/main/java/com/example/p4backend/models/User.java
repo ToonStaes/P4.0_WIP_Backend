@@ -1,5 +1,6 @@
 package com.example.p4backend.models;
 
+import com.example.p4backend.models.dto.UserDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mongodb.lang.Nullable;
 import lombok.Getter;
@@ -28,5 +29,12 @@ public class User {
         this.email = email;
         this.password = password;
         this.addressID = addressID;
+    }
+
+    public User(UserDTO userDTO) {
+        this.name = userDTO.getName();
+        this.email = userDTO.getEmail();
+        this.password = userDTO.getPassword();
+        this.addressID = userDTO.getAddressID();
     }
 }

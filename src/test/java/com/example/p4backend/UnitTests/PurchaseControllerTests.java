@@ -1,14 +1,29 @@
 package com.example.p4backend.UnitTests;
 
+import com.example.p4backend.controllers.AddressController;
+import com.example.p4backend.controllers.UserController;
+import com.example.p4backend.models.Address;
 import com.example.p4backend.models.Product;
 import com.example.p4backend.models.Purchase;
 import com.example.p4backend.models.User;
 import com.example.p4backend.models.complete.CompletePurchase;
+import com.example.p4backend.models.dto.AddressDTO;
+import com.example.p4backend.models.dto.PurchaseDTO;
+import com.example.p4backend.models.dto.UserDTO;
+import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.ProductRepository;
 import com.example.p4backend.repositories.PurchaseRepository;
 import com.example.p4backend.repositories.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.bson.types.Decimal128;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,22 +33,26 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 public class PurchaseControllerTests {
+    private final ObjectMapper mapper = JsonMapper.builder()
+            .addModule(new ParameterNamesModule())
+            .addModule(new Jdk8Module())
+            .addModule(new JavaTimeModule())
+            .build();
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -42,6 +61,12 @@ public class PurchaseControllerTests {
     private UserRepository userRepository;
     @MockBean
     private ProductRepository productRepository;
+    @MockBean
+    private AddressRepository addressRepository;
+    @Mock
+    private UserController userController;
+    @Mock
+    private AddressController addressController;
 
     private User generateUser() {
         User user = new User("user1", "user1@mail.be", "password", "address1");
@@ -97,6 +122,25 @@ public class PurchaseControllerTests {
 
         return completePurchases;
     }
+
+    private User generateUserPost(UserDTO userDTO) {
+        User user = new User(userDTO);
+        user.setId("user2");
+        return user;
+    }
+
+    private Address generateAddressPost(AddressDTO addressDTO) {
+        Address address = new Address(addressDTO);
+        address.setId("address2");
+        return address;
+    }
+
+    private Purchase generatePurchasePost(PurchaseDTO purchaseDTO, User user) {
+        Purchase purchase = new Purchase(purchaseDTO, user.getId());
+        purchase.setId("purchase2");
+        return purchase;
+    }
+
 
     @Test
     void givenPurchases_whenGetAll_thenReturnJsonPurchases() throws Exception {
@@ -183,5 +227,50 @@ public class PurchaseControllerTests {
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
                 .andExpect(result -> assertEquals("404 NOT_FOUND \"The Purchase with ID purchase999 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
+    }
+
+    @Test
+    @Disabled
+    // Test is disabled because even though I say that address & user controller should return a full address & user object including id it just doesn't and the id is null, breaking the test...
+    void whenPostPurchase_thenReturnPurchase() throws Exception {
+        // user
+        UserDTO userDTO = new UserDTO("User Name", "user.name@test.be", "address2");
+        User user = generateUserPost(userDTO);
+        // address
+        AddressDTO addressDTO = new AddressDTO("street", "123", "5a", "city", "2362");
+        Address address = generateAddressPost(addressDTO);
+        // product
+        Product product = generateProduct();
+        // Purchase
+        PurchaseDTO purchaseDTO = new PurchaseDTO(5, product.getId(),user.getName() , user.getEmail(), address.getStreet(), address.getHouseNumber(), address.getBox(), address.getCity(), address.getPostalCode());
+        Purchase purchase = generatePurchasePost(purchaseDTO, user);
+        CompletePurchase completePurchase = new CompletePurchase(purchase, Optional.of(user), Optional.of(product));
+
+        given(productRepository.existsById(product.getId())).willReturn(Boolean.TRUE);
+        doReturn(address).when(addressController).addAddress(addressDTO);
+//       when(addressController.addAddress(addressDTO)).thenReturn(address);
+        given(userRepository.findFirstByEmail(user.getEmail())).willReturn(Optional.empty());
+        doReturn(user).when(userController).addUser(userDTO);
+//       when(userController.addUser(userDTO)).thenReturn(user);
+        given(purchaseRepository.findById(purchase.getId())).willReturn(Optional.of(purchase));
+//        given(purchaseRepository.save(purchase)).willReturn(purchase);
+        given(userRepository.findById("user2")).willReturn(Optional.of(user));
+        given(productRepository.findById("product1")).willReturn(Optional.of(product));
+
+        mockMvc.perform(post("/purchases")
+                    .content(mapper.writeValueAsString(purchaseDTO))
+                    .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.amount", is(completePurchase.getAmount())))
+                .andExpect(jsonPath("$.user.id", is(completePurchase.getUser().getId())))
+                .andExpect(jsonPath("$.user.email", is(completePurchase.getUser().getEmail())))
+                .andExpect(jsonPath("$.user.addressID", is(completePurchase.getUser().getAddressID())))
+                .andExpect(jsonPath("$.user.name", is(completePurchase.getUser().getName())))
+                .andExpect(jsonPath("$.user.id", is(completePurchase.getUser().getId())))
+                .andExpect(jsonPath("$.product.id", is(completePurchase.getProduct().getId())))
+                .andExpect(jsonPath("$.product.cost", is(completePurchase.getProduct().getCost().doubleValue())))
+                .andExpect(jsonPath("$.product.actionId", is(completePurchase.getProduct().getActionId())))
+                .andExpect(jsonPath("$.product.name", is(completePurchase.getProduct().getName())));
     }
 }

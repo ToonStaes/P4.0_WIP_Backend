@@ -1,5 +1,6 @@
 package com.example.p4backend.models;
 
+import com.example.p4backend.models.dto.PurchaseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,5 +22,11 @@ public class Purchase {
         this.userId = userId;
         this.productId = productId;
         this.amount = amount;
+    }
+
+    public Purchase(PurchaseDTO purchaseDTO, String userId) {
+        this.userId = userId;
+        this.productId = purchaseDTO.getProductId();
+        this.amount = purchaseDTO.getAmount();
     }
 }
