@@ -1677,7 +1677,7 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$.goal", is(255.99)))
                 .andExpect(jsonPath("$.description", is("Updated action 1")))
                 .andExpect(jsonPath("$.startDate").exists())
-                .andExpect(jsonPath("$.endDate", is("2023-03-30T22:00:00.000+00:00")))
+                .andExpect(jsonPath("$.endDate").exists())
                 .andExpect(jsonPath("$.vzw.id", is("vzw1")))
                 .andExpect(jsonPath("$.vzw.name", is("vzw1")))
                 .andExpect(jsonPath("$.vzw.email", is("vzw1.kasterlee@mail.com")))
