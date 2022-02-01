@@ -1,5 +1,6 @@
 package com.example.p4backend.UnitTests;
 
+import com.example.p4backend.controllers.ProductController;
 import com.example.p4backend.models.Action;
 import com.example.p4backend.models.DTOs.ProductDTO;
 import com.example.p4backend.models.Product;
@@ -13,6 +14,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.bson.types.Decimal128;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +32,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,6 +50,8 @@ public class ProductControllerTests {
     private ProductRepository productRepository;
     @MockBean
     private ActionRepository actionRepository;
+    @Mock
+    private ProductController productController;
 
     private Product generateProduct() {
         Product product = new Product("product1", new Decimal128(new BigDecimal("25.99")), "action1");
@@ -247,5 +253,44 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$.action.description", is(completeProduct.getAction().getDescription())))
                 .andExpect(jsonPath("$.action.vzwID", is(completeProduct.getAction().getVzwID())));
 
+    }
+
+    @Test
+    void givenProduct_whenPutProduct_thenReturnJsonProduct() throws Exception {
+        Action action = generateAction();
+        ProductDTO productDTO = new ProductDTO("Product Put", new Decimal128(new BigDecimal("3.55")), "action1");
+        Product product = new Product(productDTO);
+        CompleteProduct completeProduct = new CompleteProduct(product, Optional.of(action));
+
+        given(actionRepository.findById("action1")).willReturn(Optional.of(action));
+        given(productRepository.findById("product1")).willReturn(Optional.of(product));
+        doReturn(completeProduct).when(productController).addProduct(productDTO);
+
+        mockMvc.perform(put("/product/{id}", "product1")
+                        .content(mapper.writeValueAsString(productDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(completeProduct.getName())))
+                .andExpect(jsonPath("$.cost", is(completeProduct.getCost().doubleValue())))
+                .andExpect(jsonPath("$.action.id", is(completeProduct.getAction().getId())))
+                .andExpect(jsonPath("$.action.name", is(completeProduct.getAction().getName())))
+                .andExpect(jsonPath("$.action.description", is(completeProduct.getAction().getDescription())))
+                .andExpect(jsonPath("$.action.goal", is(completeProduct.getAction().getGoal().intValue())))
+                .andExpect(jsonPath("$.action.vzwID", is(completeProduct.getAction().getVzwID())))
+                .andExpect(jsonPath("$.active", is(completeProduct.isActive())));
+    }
+
+    @Test
+    void givenProduct_whenPutProductIdNotExist_thenReturn404() throws Exception {
+        ProductDTO productDTO = new ProductDTO("Product Put", new Decimal128(new BigDecimal("3.55")), "action1");
+        given(productRepository.findById("product999")).willReturn(Optional.empty());
+
+        mockMvc.perform(put("/product/{id}", "product999")
+                        .content(mapper.writeValueAsString(productDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("404 NOT_FOUND \"The Product with ID product999 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
 }
