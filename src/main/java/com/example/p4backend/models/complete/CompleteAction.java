@@ -24,9 +24,8 @@ public class CompleteAction {
     private Date startDate;
     private Date endDate;
     private CompleteVzw vzw;
-    private List<ActionImage> actionImages = new ArrayList<>();
 
-    public CompleteAction(Action action, CompleteVzw vzw, List<ActionImage> actionImages) {
+    public CompleteAction(Action action, CompleteVzw vzw) {
         this.id = action.getId();
         this.name = action.getName();
         this.goal = action.getGoal();
@@ -34,6 +33,5 @@ public class CompleteAction {
         this.startDate = action.getStartDate();
         this.endDate = action.getEndDate();
         this.vzw = vzw;
-        this.actionImages.addAll(actionImages); // Add all images from parameters to the list of action images
     }
 }

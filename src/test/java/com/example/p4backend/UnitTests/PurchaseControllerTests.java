@@ -50,7 +50,7 @@ public class PurchaseControllerTests {
     }
 
     private Product generateProduct() {
-        Product product = new Product("product1", new Decimal128(new BigDecimal("25.99")), "action1");
+        Product product = new Product("product1", new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
         product.setId("product1");
         return product;
     }

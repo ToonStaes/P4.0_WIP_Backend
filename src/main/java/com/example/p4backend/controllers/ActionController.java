@@ -26,8 +26,6 @@ public class ActionController {
     @Autowired
     private VzwRepository vzwRepository;
     @Autowired
-    private ActionImageRepository actionImageRepository;
-    @Autowired
     private ProductRepository productRepository;
     @Autowired
     private PurchaseRepository purchaseRepository;
@@ -213,16 +211,14 @@ public class ActionController {
     private CompleteAction getCompleteAction(Action action) {
         Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
         CompleteVzw completeVzw = getCompleteVzw(vzw);
-        List<ActionImage> actionImages = actionImageRepository.findActionImagesByActionId(action.getId());
-        return new CompleteAction(action, completeVzw, actionImages);
+        return new CompleteAction(action, completeVzw);
     }
 
     // Get the filled CompleteActionWithProgress for the given action and progress
     private CompleteActionWithProgress getCompleteActionWithProgress(Action action, double progress) {
         Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
         CompleteVzw completeVzw = getCompleteVzw(vzw);
-        List<ActionImage> actionImages = actionImageRepository.findActionImagesByActionId(action.getId());
-        return new CompleteActionWithProgress(action, completeVzw, actionImages, progress);
+        return new CompleteActionWithProgress(action, completeVzw, progress);
     }
 
     // Calculate the progress percentage of a given action
