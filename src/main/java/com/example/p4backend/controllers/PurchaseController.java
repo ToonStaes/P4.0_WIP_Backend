@@ -102,8 +102,7 @@ public class PurchaseController {
             }
         } else {
             // Add new Address
-            Address persistentAddress;
-            persistentAddress = addressController.addAddress(addressDTO);
+            Address persistentAddress = addressController.addAddress(addressDTO);
             // Add new User
             UserDTO userDTO = new UserDTO(
                     purchaseDTO.getName(),

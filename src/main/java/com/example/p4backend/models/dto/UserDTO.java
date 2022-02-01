@@ -1,6 +1,5 @@
 package com.example.p4backend.models.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
