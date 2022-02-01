@@ -76,7 +76,7 @@ public class PurchaseController {
     }
 
     @PostMapping("/purchases")
-    public Purchase addPurchase(@RequestBody PurchaseDTO purchaseDTO) {
+    public CompletePurchase addPurchase(@RequestBody PurchaseDTO purchaseDTO) {
         // Check to validate if the user input is valid
         if (!purchaseDTO.getEmail().matches(PATTERN_EMAIL) || purchaseDTO.getAmount() <= 0 || !productRepository.existsById(purchaseDTO.getProductId())
         ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input email, amount or productId aren't valid");}
@@ -114,7 +114,7 @@ public class PurchaseController {
         // Create new Purchase
         Purchase persistentPurchase = new Purchase(purchaseDTO, persistentUser.getId());
         purchaseRepository.save(persistentPurchase);
-        return persistentPurchase;
+        return getCompletePurchase(persistentPurchase);
     }
 
     // Get the filled CompletePurchase for the given purchase

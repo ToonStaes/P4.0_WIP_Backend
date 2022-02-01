@@ -254,15 +254,23 @@ public class PurchaseControllerTests {
 //       when(userController.addUser(userDTO)).thenReturn(user);
         given(purchaseRepository.findById(purchase.getId())).willReturn(Optional.of(purchase));
 //        given(purchaseRepository.save(purchase)).willReturn(purchase);
+        given(userRepository.findById("user2")).willReturn(Optional.of(user));
+        given(productRepository.findById("product1")).willReturn(Optional.of(product));
 
         mockMvc.perform(post("/purchases")
                     .content(mapper.writeValueAsString(purchaseDTO))
                     .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(purchase.getId())))
-                .andExpect(jsonPath("$.userId", is(purchase.getUserId())))
-                .andExpect(jsonPath("$.productId", is(purchase.getProductId())))
-                .andExpect(jsonPath("$.amount", is(purchase.getAmount())));
+                .andExpect(jsonPath("$.amount", is(completePurchase.getAmount())))
+                .andExpect(jsonPath("$.user.id", is(completePurchase.getUser().getId())))
+                .andExpect(jsonPath("$.user.email", is(completePurchase.getUser().getEmail())))
+                .andExpect(jsonPath("$.user.addressID", is(completePurchase.getUser().getAddressID())))
+                .andExpect(jsonPath("$.user.name", is(completePurchase.getUser().getName())))
+                .andExpect(jsonPath("$.user.id", is(completePurchase.getUser().getId())))
+                .andExpect(jsonPath("$.product.id", is(completePurchase.getProduct().getId())))
+                .andExpect(jsonPath("$.product.cost", is(completePurchase.getProduct().getCost().doubleValue())))
+                .andExpect(jsonPath("$.product.actionId", is(completePurchase.getProduct().getActionId())))
+                .andExpect(jsonPath("$.product.name", is(completePurchase.getProduct().getName())));
     }
 }
