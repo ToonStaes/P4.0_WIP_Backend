@@ -18,10 +18,19 @@ public class CompleteDonation {
     private User user;
     private Vzw vzw;
     private Decimal128 amount;
+    private String description;
 
     public CompleteDonation(Donation donation, Optional<User> user, Optional<Vzw> vzw) {
         this.id = donation.getId();
+        this.description = donation.getDescription();
         user.ifPresent(value -> this.user = value); // If user is present, the value of the optional is taken and placed into the user property of the object.
+        vzw.ifPresent(value -> this.vzw = value); // If vzw is present, the value of the optional is taken and placed into the vzw property of the object.
+        this.amount = donation.getAmount();
+    }
+
+    public CompleteDonation(Donation donation,  Optional<Vzw> vzw) {
+        this.id = donation.getId();
+        this.description = donation.getDescription();
         vzw.ifPresent(value -> this.vzw = value); // If vzw is present, the value of the optional is taken and placed into the vzw property of the object.
         this.amount = donation.getAmount();
     }

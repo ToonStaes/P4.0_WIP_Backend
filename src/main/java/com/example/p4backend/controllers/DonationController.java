@@ -1,5 +1,6 @@
 package com.example.p4backend.controllers;
 
+import com.example.p4backend.models.DTOs.DonationDTO;
 import com.example.p4backend.models.Donation;
 import com.example.p4backend.models.User;
 import com.example.p4backend.models.Vzw;
@@ -10,10 +11,7 @@ import com.example.p4backend.repositories.VzwRepository;
 import org.bson.types.Decimal128;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
@@ -32,11 +30,11 @@ public class DonationController {
     @PostConstruct
     public void fillDB(){
         if (donationRepository.count() == 0) {
-            Donation donation1 = new Donation("user1", "vzw1", new Decimal128(5));
-            Donation donation2 = new Donation("user2", "vzw2", new Decimal128(15));
-            Donation donation3 = new Donation("user3", "vzw3", new Decimal128(10));
-            Donation donation4 = new Donation("user4", "vzw4", new Decimal128(3));
-            Donation donation5 = new Donation("user1", "vzw2", new Decimal128(7));
+            Donation donation1 = new Donation("user1", "vzw1", new Decimal128(5), "desc");
+            Donation donation2 = new Donation("user2", "vzw2", new Decimal128(15), "desc");
+            Donation donation3 = new Donation("user3", "vzw3", new Decimal128(10), "desc");
+            Donation donation4 = new Donation("user4", "vzw4", new Decimal128(3), "desc");
+            Donation donation5 = new Donation("user1", "vzw2", new Decimal128(7), "desc");
 
             donationRepository.saveAll(Arrays.asList(donation1, donation2, donation3, donation4, donation5));
         }
@@ -66,10 +64,24 @@ public class DonationController {
         }
     }
 
+    @PostMapping("/donation")
+    public CompleteDonation addDonation(@RequestBody DonationDTO donationDTO){
+        Donation donation = new Donation(donationDTO);
+        donationRepository.save(donation);
+        return getCompleteDonation(donation);
+    }
+
     // Get the filled CompleteDonation for the given donation
     private CompleteDonation getCompleteDonation(Donation donation) {
         Optional<Vzw> vzw = vzwRepository.findById(donation.getVzwId());
-        Optional<User> user = userRepository.findById(donation.getUserId());
-        return new CompleteDonation(donation, user, vzw);
+        if (donation.getUserId() != null){
+            Optional<User> user = userRepository.findById(donation.getUserId());
+            return new CompleteDonation(donation, user, vzw);
+        }
+        else {
+            return new CompleteDonation(donation, vzw);
+        }
+
+
     }
 }
