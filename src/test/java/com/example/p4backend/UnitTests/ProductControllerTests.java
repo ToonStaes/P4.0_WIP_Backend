@@ -48,13 +48,13 @@ public class ProductControllerTests {
     private ActionRepository actionRepository;
 
     private Product generateProduct() {
-        Product product = new Product("product1", new Decimal128(new BigDecimal("25.99")), "action1");
+        Product product = new Product("product1", new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
         product.setId("product1");
         return product;
     }
 
     private CompleteProduct generateCompleteProduct() {
-        Product product = new Product("product1", new Decimal128(new BigDecimal("25.99")), "action1");
+        Product product = new Product("product1", new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
         product.setId("product1");
         Action action = new Action("action1", new Decimal128(new BigDecimal("200")), "new action", "vzw1", new Date());
         action.setId("action1");
@@ -67,7 +67,7 @@ public class ProductControllerTests {
         int i = 1;
         List<Product> products = new ArrayList<>();
         while (i < 6) {
-            Product product = new Product("product" + String.valueOf(i), new Decimal128(new BigDecimal("25.99")), "action1");
+            Product product = new Product("product" + String.valueOf(i), new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
             product.setId("product" + String.valueOf(i));
             products.add(product);
             i++;
@@ -81,7 +81,7 @@ public class ProductControllerTests {
         List<CompleteProduct> products = new ArrayList<>();
         Action action = generateAction();
         while (i < 6) {
-            Product product = new Product("product" + String.valueOf(i), new Decimal128(new BigDecimal("25.99")), "action1");
+            Product product = new Product("product" + String.valueOf(i), new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
             product.setId("product" + String.valueOf(i));
             CompleteProduct completeProduct = new CompleteProduct(product, Optional.of(action));
             products.add(completeProduct);
@@ -229,7 +229,7 @@ public class ProductControllerTests {
     @Test
     void whenAddProduct_thenReturnJsonProduct() throws Exception {
         Action action = generateAction();
-        ProductDTO productDTO = new ProductDTO("testProduct", new Decimal128(new BigDecimal("25.99")), "action1");
+        ProductDTO productDTO = new ProductDTO("testProduct", new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
         given(actionRepository.findById("action1")).willReturn(Optional.of(action));
         Product product = new Product(productDTO);
         CompleteProduct completeProduct = new CompleteProduct(product, Optional.of(action));

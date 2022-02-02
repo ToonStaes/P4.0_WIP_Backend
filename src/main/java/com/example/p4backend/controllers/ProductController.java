@@ -27,15 +27,15 @@ public class ProductController {
     @PostConstruct
     public void fillDB() {
         if (productRepository.count() == 0) {
-            Product product1 = new Product("product1", new Decimal128(new BigDecimal(5)), "action1");
+            Product product1 = new Product("product1", new Decimal128(new BigDecimal(5)), "action1", "https://http.cat/400.jpg");
             product1.setId("product1");
-            Product product2 = new Product("product2", new Decimal128(new BigDecimal(15)), "action1");
+            Product product2 = new Product("product2", new Decimal128(new BigDecimal(15)), "action1", "https://http.cat/400.jpg");
             product2.setId("product2");
-            Product product3 = new Product("product3", new Decimal128(new BigDecimal(12)), "action1");
+            Product product3 = new Product("product3", new Decimal128(new BigDecimal(12)), "action1", "https://http.cat/400.jpg");
             product3.setId("product3");
-            Product product4 = new Product("product4", new Decimal128(new BigDecimal(2.5)), "action2");
+            Product product4 = new Product("product4", new Decimal128(new BigDecimal(2.5)), "action2", "https://http.cat/400.jpg");
             product4.setId("product4");
-            Product product5 = new Product("product5", new Decimal128(new BigDecimal(6.5)), "action3");
+            Product product5 = new Product("product5", new Decimal128(new BigDecimal(6.5)), "action3", "https://http.cat/400.jpg");
             product5.setId("product5");
 
             productRepository.saveAll(Arrays.asList(product1, product2, product3, product4, product5));

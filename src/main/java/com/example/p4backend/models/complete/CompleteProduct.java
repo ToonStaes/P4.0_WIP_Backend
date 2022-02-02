@@ -17,11 +17,13 @@ public class CompleteProduct {
     private String name;
     private Decimal128 cost;
     private Action action;
+    private String image;
 
     public CompleteProduct(Product product, Optional<Action> action) {
         this.id = product.getId();
         this.name = product.getName();
         this.cost = product.getCost();
+        this.image = product.getImage();
         action.ifPresent(value -> this.action = value); // If action is present, the value of the optional is taken and placed into the action property of the object.
     }
 }
