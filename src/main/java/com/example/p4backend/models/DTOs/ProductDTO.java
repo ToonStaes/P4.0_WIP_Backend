@@ -10,4 +10,5 @@ public class ProductDTO {
     private String name;
     private Decimal128 cost;
     private String actionId;
+    private String image;
 }

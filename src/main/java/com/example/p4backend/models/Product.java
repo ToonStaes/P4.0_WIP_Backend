@@ -18,12 +18,14 @@ public class Product {
     private String name;
     private Decimal128 cost;
     private String actionId;
+    private String image;
     private boolean isActive;
 
-    public Product(String name, Decimal128 cost, String actionId) {
+    public Product(String name, Decimal128 cost, String actionId, String image) {
         this.name = name;
         this.cost = cost;
         this.actionId = actionId;
+        this.image = image;
         this.isActive = true;
     }
 
