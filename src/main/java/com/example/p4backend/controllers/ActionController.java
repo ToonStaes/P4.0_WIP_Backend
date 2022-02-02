@@ -209,16 +209,30 @@ public class ActionController {
 
     // Get the filled CompleteAction for the given action
     private CompleteAction getCompleteAction(Action action) {
+        List<Product> products = productRepository.findProductsByActionId(action.getId());
+        List<String> images = new ArrayList<>();
+        for (Product product: products){
+            if (!product.getImage().isEmpty()){
+                images.add(product.getImage());
+            }
+        }
         Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
         CompleteVzw completeVzw = getCompleteVzw(vzw);
-        return new CompleteAction(action, completeVzw);
+        return new CompleteAction(action, completeVzw, images);
     }
 
     // Get the filled CompleteActionWithProgress for the given action and progress
     private CompleteActionWithProgress getCompleteActionWithProgress(Action action, double progress) {
+        List<Product> products = productRepository.findProductsByActionId(action.getId());
+        List<String> images = new ArrayList<>();
+        for (Product product: products){
+            if (!product.getImage().isEmpty()){
+                images.add(product.getImage());
+            }
+        }
         Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
         CompleteVzw completeVzw = getCompleteVzw(vzw);
-        return new CompleteActionWithProgress(action, completeVzw, progress);
+        return new CompleteActionWithProgress(action, completeVzw, progress, images);
     }
 
     // Calculate the progress percentage of a given action

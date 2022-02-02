@@ -14,8 +14,8 @@ import java.util.List;
 public class CompleteActionWithProgress extends CompleteAction{
     private double progress;
 
-    public CompleteActionWithProgress(Action action, CompleteVzw vzw, double progress) {
-        super(action, vzw);
+    public CompleteActionWithProgress(Action action, CompleteVzw vzw, double progress, List<String> images) {
+        super(action, vzw, images);
         this.progress = progress;
     }
 }
