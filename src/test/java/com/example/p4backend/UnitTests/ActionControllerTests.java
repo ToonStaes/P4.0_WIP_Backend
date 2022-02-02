@@ -83,25 +83,17 @@ public class ActionControllerTests {
             "password",
             "9");
     // ----- PRODUCT -----
-    Product product1 = new Product("product1", new Decimal128(5), "action1");
-    Product product2 = new Product("product2", new Decimal128(15), "action1");
-    Product product3 = new Product("product3", new Decimal128(12), "action1");
-    Product product4 = new Product("product4", new Decimal128(2), "action2");
-    Product product5 = new Product("product5", new Decimal128(6), "action3");
+    Product product1 = new Product("product1", new Decimal128(new BigDecimal(5)), "action1", "https://http.cat/400.jpg");
+    Product product2 = new Product("product2", new Decimal128(new BigDecimal(15)), "action1", "https://http.cat/400.jpg");
+    Product product3 = new Product("product3", new Decimal128(new BigDecimal(12)), "action1", "https://http.cat/400.jpg");
+    Product product4 = new Product("product4", new Decimal128(new BigDecimal(2)), "action2", "https://http.cat/400.jpg");
+    Product product5 = new Product("product5", new Decimal128(new BigDecimal(6)), "action3", "https://http.cat/400.jpg");
     // ----- PURCHASE -----
     Purchase purchase1 = new Purchase("user1", "product1", 1);
     Purchase purchase2 = new Purchase("user2", "product2", 2);
     Purchase purchase3 = new Purchase("user3", "product4", 5);
     Purchase purchase4 = new Purchase("user4", "product5", 2);
     Purchase purchase5 = new Purchase("user1", "product3", 3);
-    // ----- ACTION IMAGE -----
-    ActionImage image1 = new ActionImage("https://http.cat/400.jpg", "action1");
-    ActionImage image2 = new ActionImage("https://http.cat/401.jpg", "action1");
-    ActionImage image3 = new ActionImage("https://http.cat/402.jpg", "action2");
-    ActionImage image4 = new ActionImage("https://http.cat/403.jpg", "action2");
-    ActionImage image5 = new ActionImage("https://http.cat/404.jpg", "action2");
-    ActionImage image6 = new ActionImage("https://http.cat/405.jpg", "action3");
-    ActionImage image7 = new ActionImage("https://http.cat/406.jpg", "action4");
     // ----- ACTION -----
     Action action1 = new Action(
             "action1",
@@ -144,8 +136,6 @@ public class ActionControllerTests {
     @MockBean
     private PurchaseRepository purchaseRepository;
     @MockBean
-    private ActionImageRepository actionImageRepository;
-    @MockBean
     private ActionRepository actionRepository;
 
     private List<Address> generateAddressList() {
@@ -175,10 +165,6 @@ public class ActionControllerTests {
 
     private List<Purchase> generatePurchasesList() {
         return List.of(purchase1, purchase2, purchase3, purchase4, purchase5);
-    }
-
-    private List<ActionImage> generateActionImagesList() {
-        return List.of(image1, image2, image3, image4, image5, image6, image7);
     }
 
     private List<Action> generateActionsList() {
@@ -1650,7 +1636,7 @@ public class ActionControllerTests {
 
     // When updating an Action, get back the updated CompleteAction
     @Test
-    void givenAction_whenPutAction_thenReturnJsonAction() throws Exception {
+    void givenAction_whenPutAction_thenReturnJsonCompleteAction() throws Exception {
         Action actionPut = new Action(
                 "action1 Updated",
                 new Decimal128(new BigDecimal("255.99")),
@@ -1660,11 +1646,11 @@ public class ActionControllerTests {
         List<Action> actionList = generateActionsList();
         List<Vzw> vzwList = generateVzwsList();
         List<Address> addressList = generateAddressList();
-        List<ActionImage> actionImageList = generateActionImagesList();
+        List<Product> productList = generateProductsList();
         given(actionRepository.findById("action1")).willReturn(Optional.of(actionList.get(0)));
         given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
         given(addressRepository.findById("8")).willReturn(Optional.of(addressList.get(1)));
-        given(actionImageRepository.findActionImagesByActionId("action1")).willReturn(List.of(actionImageList.get(0), actionImageList.get(1)));
+        given(productRepository.findProductsByActionId("action1")).willReturn(List.of(productList.get(0), productList.get(1), productList.get(2)));
 
         mockMvc.perform(put("/action/{id}", "action1") // Command
                         .content(mapper.writeValueAsString(actionPut))
@@ -1692,9 +1678,6 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$.vzw.address.box").isEmpty())
                 .andExpect(jsonPath("$.vzw.address.city", is("Kasterlee")))
                 .andExpect(jsonPath("$.vzw.address.postalCode", is("2460")))
-                .andExpect(jsonPath("$.actionImages[0].fileLocation", is("https://http.cat/400.jpg")))
-                .andExpect(jsonPath("$.actionImages[0].actionId", is("action1")))
-                .andExpect(jsonPath("$.actionImages[1].fileLocation", is("https://http.cat/401.jpg")))
-                .andExpect(jsonPath("$.actionImages[1].actionId", is("action1")));
+                .andExpect(jsonPath("$.images[0]", is("https://http.cat/400.jpg")));
     }
 }
