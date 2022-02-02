@@ -33,6 +33,7 @@ public class Product {
         this.name = productDTO.getName();
         this.cost = productDTO.getCost();
         this.actionId = productDTO.getActionId();
+        this.image = productDTO.getImage();
         this.isActive = true;
     }
 }

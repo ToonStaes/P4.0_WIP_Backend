@@ -1,15 +1,15 @@
 package com.example.p4backend.models.complete;
 
 import com.example.p4backend.models.Action;
-import com.example.p4backend.models.Vzw;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bson.types.Decimal128;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,7 +22,7 @@ public class CompleteAction {
     private Date startDate;
     private Date endDate;
     private CompleteVzw vzw;
-    private List<String> images = new ArrayList<>();
+    private Set<String> images = new HashSet<>(); // Set to remove dupe images
 
     public CompleteAction(Action action, CompleteVzw vzw, List<String> images) {
         this.id = action.getId();

@@ -258,7 +258,7 @@ public class ProductControllerTests {
     @Test
     void givenProduct_whenPutProduct_thenReturnJsonProduct() throws Exception {
         Action action = generateAction();
-        ProductDTO productDTO = new ProductDTO("Product Put", new Decimal128(new BigDecimal("3.55")), "action1");
+        ProductDTO productDTO = new ProductDTO("Product Put", new Decimal128(new BigDecimal("3.55")), "action1", "https://http.cat/400.jpg");
         Product product = new Product(productDTO);
         CompleteProduct completeProduct = new CompleteProduct(product, Optional.of(action));
 
@@ -278,12 +278,13 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$.action.description", is(completeProduct.getAction().getDescription())))
                 .andExpect(jsonPath("$.action.goal", is(completeProduct.getAction().getGoal().intValue())))
                 .andExpect(jsonPath("$.action.vzwID", is(completeProduct.getAction().getVzwID())))
+                .andExpect(jsonPath("$.image", is(completeProduct.getImage())))
                 .andExpect(jsonPath("$.active", is(completeProduct.isActive())));
     }
 
     @Test
     void givenProduct_whenPutProductIdNotExist_thenReturn404() throws Exception {
-        ProductDTO productDTO = new ProductDTO("Product Put", new Decimal128(new BigDecimal("3.55")), "action1");
+        ProductDTO productDTO = new ProductDTO("Product Put", new Decimal128(new BigDecimal("3.55")), "action1", "https://http.cat/400.jpg");
         given(productRepository.findById("product999")).willReturn(Optional.empty());
 
         mockMvc.perform(put("/product/{id}", "product999")
