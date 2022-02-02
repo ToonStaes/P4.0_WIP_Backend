@@ -1,5 +1,6 @@
 package com.example.p4backend.models;
 
+import com.example.p4backend.models.dto.AddressDTO;
 import com.mongodb.lang.Nullable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,5 +36,13 @@ public class Address {
         this.box = box;
         this.city = city;
         this.postalCode = postalCode;
+    }
+
+    public Address(AddressDTO addressDTO) {
+        this.street = addressDTO.getStreet();
+        this.houseNumber = addressDTO.getHouseNumber();
+        this.box = addressDTO.getBox();
+        this.city = addressDTO.getCity();
+        this.postalCode = addressDTO.getPostalCode();
     }
 }

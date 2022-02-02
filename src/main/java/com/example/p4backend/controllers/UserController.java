@@ -1,19 +1,14 @@
 package com.example.p4backend.controllers;
 
-import com.example.p4backend.models.Action;
 import com.example.p4backend.models.Address;
-import com.example.p4backend.models.Product;
 import com.example.p4backend.models.User;
-import com.example.p4backend.models.complete.CompleteProduct;
 import com.example.p4backend.models.complete.CompleteUser;
+import com.example.p4backend.models.dto.UserDTO;
 import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
@@ -93,6 +88,29 @@ public class UserController {
             return getCompleteUser(Objects.requireNonNull(user.get()));
         } else {
             return "false";
+        }
+    }
+
+    // @PostMapping("/users")
+    public User addUser(@RequestBody UserDTO userDTO) {
+        User persistentUser = new User(userDTO);
+        userRepository.save(persistentUser);
+        return persistentUser;
+    }
+
+    // @PutMapping("/users/{id}")
+    public User updateUser(@RequestBody UserDTO updateUser, @PathVariable String id) {
+        Optional<User> tempUser = userRepository.findById(id);
+
+        if (tempUser.isPresent()) {
+            User user = Objects.requireNonNull(tempUser.get());
+            user.setName(updateUser.getName());
+            userRepository.save(user);
+            return user;
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "The User with ID " + id + " doesn't exist"
+            );
         }
     }
 
