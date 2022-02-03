@@ -1,10 +1,16 @@
 package com.example.p4backend.UnitTests;
 
 import com.example.p4backend.models.Action;
+import com.example.p4backend.models.DTOs.ProductDTO;
 import com.example.p4backend.models.Product;
 import com.example.p4backend.models.complete.CompleteProduct;
 import com.example.p4backend.repositories.ActionRepository;
 import com.example.p4backend.repositories.ProductRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.bson.types.Decimal128;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +35,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ProductControllerTests {
+    private final ObjectMapper mapper = JsonMapper.builder()
+            .addModule(new ParameterNamesModule())
+            .addModule(new Jdk8Module())
+            .addModule(new JavaTimeModule())
+            .build();
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -37,13 +48,13 @@ public class ProductControllerTests {
     private ActionRepository actionRepository;
 
     private Product generateProduct() {
-        Product product = new Product("product1", new Decimal128(new BigDecimal("25.99")), "action1");
+        Product product = new Product("product1", new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
         product.setId("product1");
         return product;
     }
 
     private CompleteProduct generateCompleteProduct() {
-        Product product = new Product("product1", new Decimal128(new BigDecimal("25.99")), "action1");
+        Product product = new Product("product1", new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
         product.setId("product1");
         Action action = new Action("action1", new Decimal128(new BigDecimal("200")), "new action", "vzw1", new Date());
         action.setId("action1");
@@ -56,7 +67,7 @@ public class ProductControllerTests {
         int i = 1;
         List<Product> products = new ArrayList<>();
         while (i < 6) {
-            Product product = new Product("product" + String.valueOf(i), new Decimal128(new BigDecimal("25.99")), "action1");
+            Product product = new Product("product" + String.valueOf(i), new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
             product.setId("product" + String.valueOf(i));
             products.add(product);
             i++;
@@ -70,7 +81,7 @@ public class ProductControllerTests {
         List<CompleteProduct> products = new ArrayList<>();
         Action action = generateAction();
         while (i < 6) {
-            Product product = new Product("product" + String.valueOf(i), new Decimal128(new BigDecimal("25.99")), "action1");
+            Product product = new Product("product" + String.valueOf(i), new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
             product.setId("product" + String.valueOf(i));
             CompleteProduct completeProduct = new CompleteProduct(product, Optional.of(action));
             products.add(completeProduct);
@@ -82,7 +93,7 @@ public class ProductControllerTests {
     private Action generateAction() {
         Action action = new Action("action1", new Decimal128(new BigDecimal("200")), "new action", "vzw1", new Date());
         action.setId("action1");
-        action.setEndDate(new GregorianCalendar(2022, Calendar.JANUARY, 18).getTime());
+        action.setStartDate(new GregorianCalendar(2022, Calendar.JANUARY, 18).getTime());
         action.setEndDate(new GregorianCalendar(2022, Calendar.MARCH, 18).getTime());
 
         return action;
@@ -212,6 +223,29 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$[3].action.description", is(completeProducts.get(3).getAction().getDescription())))
                 .andExpect(jsonPath("$[3].action.goal", is(completeProducts.get(3).getAction().getGoal().intValue())))
                 .andExpect(jsonPath("$[3].action.vzwID", is(completeProducts.get(3).getAction().getVzwID())));
+
+    }
+
+    @Test
+    void whenAddProduct_thenReturnJsonProduct() throws Exception {
+        Action action = generateAction();
+        ProductDTO productDTO = new ProductDTO("testProduct", new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
+        given(actionRepository.findById("action1")).willReturn(Optional.of(action));
+        Product product = new Product(productDTO);
+        CompleteProduct completeProduct = new CompleteProduct(product, Optional.of(action));
+
+        mockMvc.perform(post("/product")
+                        .content(mapper.writeValueAsString(product))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(completeProduct.getId())))
+                .andExpect(jsonPath("$.cost", is(25.99)))
+                .andExpect(jsonPath("$.action.id", is(completeProduct.getAction().getId())))
+                .andExpect(jsonPath("$.action.name", is(completeProduct.getAction().getName())))
+                .andExpect(jsonPath("$.action.goal", is(completeProduct.getAction().getGoal().intValue())))
+                .andExpect(jsonPath("$.action.description", is(completeProduct.getAction().getDescription())))
+                .andExpect(jsonPath("$.action.vzwID", is(completeProduct.getAction().getVzwID())));
 
     }
 }

@@ -1,5 +1,6 @@
 package com.example.p4backend.models;
 
+import com.example.p4backend.models.DTOs.ProductDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,10 +20,18 @@ public class Product {
     private String name;
     private Decimal128 cost;
     private String actionId;
+    private String image;
 
-    public Product(String name, Decimal128 cost, String actionId) {
+    public Product(String name, Decimal128 cost, String actionId, String image) {
         this.name = name;
         this.cost = cost;
         this.actionId = actionId;
+        this.image = image;
+    }
+
+    public Product(ProductDTO productDTO){
+        this.name = productDTO.getName();
+        this.cost = productDTO.getCost();
+        this.actionId = productDTO.getActionId();
     }
 }

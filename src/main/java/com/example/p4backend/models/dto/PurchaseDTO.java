@@ -2,12 +2,17 @@ package com.example.p4backend.models.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class AddressDTO {
+public class PurchaseDTO {
+    // PURCHASE
+    private int amount;
+    private String productId;
+    // USER
+    private String name;
+    private String email;
+    // ADRESS
     private String street;
     private String houseNumber;
     private String box;

@@ -1,8 +1,10 @@
 package com.example.p4backend.UnitTests;
 
+import com.example.p4backend.models.DTOs.DonationDTO;
 import com.example.p4backend.models.Donation;
 import com.example.p4backend.models.User;
 import com.example.p4backend.models.Vzw;
+import com.example.p4backend.models.complete.CompleteDonation;
 import com.example.p4backend.repositories.DonationRepository;
 import com.example.p4backend.repositories.UserRepository;
 import com.example.p4backend.repositories.VzwRepository;
@@ -19,8 +21,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,8 +33,10 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -84,11 +90,12 @@ public class DonationControllerTests {
             "password",
             "9");
     // ----- DONATION -----
-    Donation donation1 = new Donation("user1", "vzw1", new Decimal128(5));
-    Donation donation2 = new Donation("user2", "vzw2", new Decimal128(15));
-    Donation donation3 = new Donation("user3", "vzw3", new Decimal128(10));
-    Donation donation4 = new Donation("user4", "vzw4", new Decimal128(3));
-    Donation donation5 = new Donation("user1", "vzw2", new Decimal128(7));
+    Donation donation1 = new Donation("user1", "vzw1", new Decimal128(5), "desc");
+    Donation donation2 = new Donation("user2", "vzw2", new Decimal128(15), "desc");
+    Donation donation3 = new Donation("user3", "vzw3", new Decimal128(10), "desc");
+    Donation donation4 = new Donation("user4", "vzw4", new Decimal128(3), "desc");
+    Donation donation5 = new Donation("user1", "vzw2", new Decimal128(7), "desc");
+
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -277,5 +284,36 @@ public class DonationControllerTests {
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
                 .andExpect(result -> assertEquals("404 NOT_FOUND \"The Donation with ID donation999 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
+    }
+
+    @Test
+    void whenPostDonation_thenReturnDonation() throws Exception {
+        List<Vzw> vzwList = generateVzwsList();
+        DonationDTO donationDTO = new DonationDTO("vzw4", new Decimal128(new BigDecimal("195.68")), "desc");
+        given(vzwRepository.findById("vzw4")).willReturn(Optional.of(vzwList.get(3)));
+        Donation donation = new Donation(donationDTO);
+        Optional<Vzw> vzw = vzwRepository.findById(donation.getVzwId());
+        CompleteDonation completeDonation = new CompleteDonation(donation, vzw);
+
+
+
+        mockMvc.perform(post("/donation")
+                        .content(mapper.writeValueAsString(donation))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(completeDonation.getId())))
+                .andExpect(jsonPath("$.user").isEmpty())
+                .andExpect(jsonPath("$.amount", is(195.68)))
+                .andExpect(jsonPath("$.vzw.id", is(completeDonation.getVzw().getId())))
+                .andExpect(jsonPath("$.vzw.addressID", is(completeDonation.getVzw().getAddressID())))
+                .andExpect(jsonPath("$.vzw.bio", is(completeDonation.getVzw().getBio())))
+                .andExpect(jsonPath("$.vzw.email", is(completeDonation.getVzw().getEmail())))
+                .andExpect(jsonPath("$.vzw.name", is(completeDonation.getVzw().getName())))
+                .andExpect(jsonPath("$.vzw.profilePicture", is(completeDonation.getVzw().getProfilePicture())))
+                .andExpect(jsonPath("$.vzw.rekeningNR", is(completeDonation.getVzw().getRekeningNR())))
+                .andExpect(jsonPath("$.vzw.youtubeLink", is(completeDonation.getVzw().getYoutubeLink())));
+
+
     }
 }

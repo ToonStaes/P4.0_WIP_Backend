@@ -1,6 +1,7 @@
 package com.example.p4backend.controllers;
 
 import com.example.p4backend.models.*;
+import com.example.p4backend.models.DTOs.ActionDTO;
 import com.example.p4backend.models.complete.CompleteAction;
 import com.example.p4backend.models.complete.CompleteActionWithProgress;
 import com.example.p4backend.models.complete.CompleteVzw;
@@ -25,8 +26,6 @@ public class ActionController {
     @Autowired
     private VzwRepository vzwRepository;
     @Autowired
-    private ActionImageRepository actionImageRepository;
-    @Autowired
     private ProductRepository productRepository;
     @Autowired
     private PurchaseRepository purchaseRepository;
@@ -39,7 +38,7 @@ public class ActionController {
             Action action1 = new Action(
                     "action1",
                     new Decimal128(500),
-                    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed mi quis elit vulputate porttitor. Integer ex diam, maximus in mi ac, vulputate varius lacus. Ut aliquam eros ac est sagittis pellentesque. Suspendisse feugiat nibh nec lectus consectetur facilisis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vulputate nisi lacus, quis tincidunt diam pharetra ac. Ut dictum magna vel sem sollicitudin efficitur. Sed accumsan, lacus sit amet tempus commodo, metus quam faucibus tortor,",
                     "vzw1",
                     new GregorianCalendar(2022, Calendar.FEBRUARY, 18).getTime());
             action1.setId("action1");
@@ -50,7 +49,7 @@ public class ActionController {
             Action action2 = new Action(
                     "action2",
                     new Decimal128(200),
-                    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
+                    "quis dictum dui odio sed odio. Sed sed mattis enim. Curabitur fringilla lorem at mauris tempor, sit amet tincidunt odio scelerisque. Morbi ac leo sed nisi hendrerit vulputate. Vivamus id blandit libero, sit amet aliquet diam. Morbi sit amet nibh a turpis ultricies accumsan quis eu massa. Suspendisse potenti. Integer dapibus, nibh quis sollicitudin vestibulum, urna nulla dignissim sem, eget semper nisl neque non nisi.",
                     "vzw2",
                     new GregorianCalendar(2022, Calendar.MARCH, 18).getTime());
             action2.setId("action2");
@@ -61,7 +60,7 @@ public class ActionController {
             Action action3 = new Action(
                     "action3",
                     new Decimal128(400),
-                    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
+                    "Sed ante elit, scelerisque in egestas facilisis, eleifend at eros. Morbi congue ornare orci, a pharetra urna. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent sed lorem sit amet enim ornare scelerisque. Nam sit amet eleifend est. Proin a sagittis lorem, at tincidunt metus.",
                     "vzw3",
                     new GregorianCalendar(2022, Calendar.APRIL, 28).getTime());
             action3.setId("action3");
@@ -72,7 +71,7 @@ public class ActionController {
             Action action4 = new Action(
                     "action4",
                     new Decimal128(450),
-                    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
+                    "Duis at posuere felis. Etiam pellentesque euismod purus. Fusce turpis lorem, rhoncus sed nulla sagittis, finibus venenatis dui. Ut ut scelerisque nulla. Quisque eu orci pharetra, dictum turpis vel, suscipit sem. Vivamus quis rutrum est. Phasellus ut magna vitae tellus pharetra eleifend et quis nulla. Integer eu erat erat. Vivamus non sapien augue. Morbi consequat ante ac nibh feugiat fringilla.",
                     "vzw4",
                     new GregorianCalendar(2022, Calendar.FEBRUARY, 28).getTime());
             action4.setId("action4");
@@ -81,7 +80,7 @@ public class ActionController {
             Action action5 = new Action(
                     "action5",
                     new Decimal128(500),
-                    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
+                    "Mauris vitae risus ut nulla vestibulum scelerisque at eu nulla.\n" + "\n" + "Sed tincidunt massa sed mattis porttitor. Fusce at euismod dui. Aliquam sed lorem accumsan, porta orci nec, efficitur leo. Curabitur iaculis lorem tincidunt risus vestibulum, eget posuere urna vehicula. Morbi et felis posuere, blandit massa quis, sagittis nisl. Fusce eu metus nunc. Phasellus id dui sit amet augue tincidunt gravida in in orci.",
                     "vzw1",
                     new GregorianCalendar(2022, Calendar.FEBRUARY, 1).getTime());
             action5.setId("action5");
@@ -98,7 +97,7 @@ public class ActionController {
     @GetMapping("/actions")
     public List<CompleteAction> getAll(@RequestParam(defaultValue = "false") boolean progress) {
         List<CompleteAction> returnList = new ArrayList<>();
-        List<Action> actions = actionRepository.findAll();
+        List<Action> actions = actionRepository.findByEndDateAfter(new Date());
 
         for (Action action : actions) {
             if (progress) {
@@ -195,7 +194,7 @@ public class ActionController {
     @GetMapping("/actions/vzw/{vzwId}")
     public List<CompleteAction> getActionsByVzwId(@PathVariable String vzwId, @RequestParam(defaultValue = "false") boolean progress) {
         List<CompleteAction> returnList = new ArrayList<>();
-        List<Action> actions = actionRepository.findActionsByVzwID(vzwId);
+        List<Action> actions = actionRepository.findActionsByVzwIDAndEndDateAfter(vzwId, new Date());
 
         for (Action action : actions) {
             if (progress) {
@@ -210,18 +209,30 @@ public class ActionController {
 
     // Get the filled CompleteAction for the given action
     private CompleteAction getCompleteAction(Action action) {
+        List<Product> products = productRepository.findProductsByActionId(action.getId());
+        List<String> images = new ArrayList<>();
+        for (Product product: products){
+            if (!product.getImage().isEmpty()){
+                images.add(product.getImage());
+            }
+        }
         Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
         CompleteVzw completeVzw = getCompleteVzw(vzw);
-        List<ActionImage> actionImages = actionImageRepository.findActionImagesByActionId(action.getId());
-        return new CompleteAction(action, completeVzw, actionImages);
+        return new CompleteAction(action, completeVzw, images);
     }
 
     // Get the filled CompleteActionWithProgress for the given action and progress
     private CompleteActionWithProgress getCompleteActionWithProgress(Action action, double progress) {
+        List<Product> products = productRepository.findProductsByActionId(action.getId());
+        List<String> images = new ArrayList<>();
+        for (Product product: products){
+            if (!product.getImage().isEmpty()){
+                images.add(product.getImage());
+            }
+        }
         Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
         CompleteVzw completeVzw = getCompleteVzw(vzw);
-        List<ActionImage> actionImages = actionImageRepository.findActionImagesByActionId(action.getId());
-        return new CompleteActionWithProgress(action, completeVzw, actionImages, progress);
+        return new CompleteActionWithProgress(action, completeVzw, progress, images);
     }
 
     // Calculate the progress percentage of a given action
@@ -237,6 +248,41 @@ public class ActionController {
         }
 
         return actionPurchased.doubleValue() / Objects.requireNonNull(actionGoal).doubleValue() * 100; // calculate progress percentage (total value purchased / goal * 100)
+    }
+
+
+    @GetMapping(value="/actions/search")
+    public List<CompleteAction> searchActionsEmpty(@RequestParam(defaultValue = "false") boolean progress){
+        return getAll(progress);
+    }
+
+    @GetMapping(value="/actions/search/{terms}")
+    public List<CompleteAction> searchActionsByNameContaining(@PathVariable String terms, @RequestParam(defaultValue = "false") boolean progress){
+        Set<Action> actions = new HashSet<>(actionRepository.findActionsByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndEndDateAfter(terms, terms, new Date())); // HashSet to prevent duplicate actions
+        List<Vzw> vzws = vzwRepository.findVzwsByNameContainingIgnoreCase(terms);
+        List<CompleteAction> returnList = new ArrayList<>();
+
+        // Add the actions from the vzw whose name also matched the search terms
+        for (Vzw vzw : vzws) {
+            actions.addAll(actionRepository.findActionsByVzwIDAndEndDateAfter(vzw.getId(), new Date()));
+        }
+
+        for (Action action : actions) {
+            if (progress) {
+                double actionProgress = getProgress(action);
+                returnList.add(getCompleteActionWithProgress(action, actionProgress));
+            } else {
+                returnList.add(getCompleteAction(action));
+            }
+        }
+        return returnList;
+    }
+
+    @PostMapping("/action")
+    public CompleteAction postAction(@RequestBody ActionDTO actionDTO){
+        Action action = new Action(actionDTO);
+        actionRepository.save(action);
+        return getCompleteAction(action);
     }
 
     // Generate Complete vzw to include address

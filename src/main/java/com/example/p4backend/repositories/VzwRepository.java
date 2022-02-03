@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface VzwRepository extends MongoRepository<Vzw, String> {
     List<Vzw> searchByNameContaining(String name);
+    List<Vzw> findVzwsByNameContainingIgnoreCase(String termsName);
     Optional<Vzw> findFirstByEmailAndPassword(String email, String password);
     Boolean existsByEmail(String email);
 }
