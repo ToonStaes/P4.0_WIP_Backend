@@ -137,7 +137,7 @@ public class VzwController {
     }
 
     // register vzw
-    @PostMapping("/vzws")
+    @PostMapping("/vzw")
     public Vzw addVzw(@RequestBody VzwDTO vzwDTO) {
         // Check to validate if the user input is valid
         if (!vzwDTO.getRekeningNR().matches(PATTERN_REKENINGNR)
@@ -160,20 +160,19 @@ public class VzwController {
         Address persistentAddress = addressController.addAddress(tempAddress);
 
         // Vzw
-        Vzw tempVzw = new Vzw();
-        Vzw persistentVzw = getVzwFromVzwDTO(tempVzw, vzwDTO, persistentAddress);
+        Vzw persistentVzw = new Vzw(vzwDTO, persistentAddress);
         vzwRepository.save(persistentVzw);
         return persistentVzw;
     }
 
     // Login as vzw
-    @PostMapping("/vzws/login")
+    @PostMapping("/vzw/login")
     public CompleteVzw authenticateVzw(@RequestBody LoginRequest loginRequest) {
         // Check if email exists
-        if (vzwRepository.existsByEmail(loginRequest.getEmail())
-        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Vzw with email doesn't exists");}
+        if (!vzwRepository.existsByEmail(loginRequest.getEmail())
+        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"No vzw with email " + loginRequest.getEmail() + " exists");}
         
-        Optional<Vzw> vzw = vzwRepository.findFirstByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
+        Optional<Vzw> vzw = vzwRepository.findVzwByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
         if (vzw.isPresent()) {
             return getCompleteVzw(Objects.requireNonNull(vzw.get()));
         } else {
@@ -187,18 +186,5 @@ public class VzwController {
     private CompleteVzw getCompleteVzw(Vzw vzw) {
         Optional<Address> address = addressRepository.findById(vzw.getAddressID());
         return new CompleteVzw(vzw, address);
-    }
-    
-    // Make a real Vzw from the VzwDTO
-    private Vzw getVzwFromVzwDTO(Vzw vzw, VzwDTO vzwDTO, Address persistentAddress) {
-        vzw.setName(vzwDTO.getName());
-        vzw.setEmail(vzwDTO.getEmail());
-        vzw.setRekeningNR(vzwDTO.getRekeningNR());
-        vzw.setBio(vzwDTO.getBio());
-        vzw.setYoutubeLink(vzwDTO.getYoutubeLink());
-        vzw.setProfilePicture(vzwDTO.getProfilePicture());
-        vzw.setPassword(vzwDTO.getPassword());
-        vzw.setAddressID(persistentAddress.getId());
-        return vzw;
     }
 }

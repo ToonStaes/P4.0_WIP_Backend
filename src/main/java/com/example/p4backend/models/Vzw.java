@@ -1,5 +1,6 @@
 package com.example.p4backend.models;
 
+import com.example.p4backend.models.dto.VzwDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mongodb.lang.Nullable;
 import lombok.Getter;
@@ -38,5 +39,16 @@ public class Vzw {
         this.profilePicture = profilePicture;
         this.password = password;
         this.addressID = addressID;
+    }
+
+    public Vzw(VzwDTO vzwDTO, Address address) {
+        this.name = vzwDTO.getName();
+        this.email = vzwDTO.getEmail();
+        this.rekeningNR = vzwDTO.getRekeningNR();
+        this.bio = vzwDTO.getBio();
+        this.youtubeLink = vzwDTO.getYoutubeLink();
+        this.profilePicture = vzwDTO.getProfilePicture();
+        this.password = vzwDTO.getPassword();
+        this.addressID = address.getId();
     }
 }
