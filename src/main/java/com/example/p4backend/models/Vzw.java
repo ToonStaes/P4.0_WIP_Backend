@@ -41,14 +41,14 @@ public class Vzw {
         this.addressID = addressID;
     }
 
-    public Vzw(VzwDTO vzwDTO, Address address) {
+    public Vzw(VzwDTO vzwDTO, Address address, String password) {
         this.name = vzwDTO.getName();
         this.email = vzwDTO.getEmail();
         this.rekeningNR = vzwDTO.getRekeningNR();
         this.bio = vzwDTO.getBio();
         this.youtubeLink = vzwDTO.getYoutubeLink();
         this.profilePicture = vzwDTO.getProfilePicture();
-        this.password = vzwDTO.getPassword();
+        this.password = password;
         this.addressID = address.getId();
     }
 }

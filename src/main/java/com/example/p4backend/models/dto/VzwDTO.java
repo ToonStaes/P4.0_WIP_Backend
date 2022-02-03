@@ -1,6 +1,5 @@
 package com.example.p4backend.models.dto;
 
-import com.mongodb.lang.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

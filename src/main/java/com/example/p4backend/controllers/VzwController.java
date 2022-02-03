@@ -1,10 +1,8 @@
 package com.example.p4backend.controllers;
 
 import com.example.p4backend.models.Address;
-import com.example.p4backend.models.User;
 import com.example.p4backend.models.Vzw;
 import com.example.p4backend.models.auth.LoginRequest;
-import com.example.p4backend.models.complete.CompleteUser;
 import com.example.p4backend.models.complete.CompleteVzw;
 import com.example.p4backend.models.dto.AddressDTO;
 import com.example.p4backend.models.dto.VzwDTO;
@@ -12,6 +10,7 @@ import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.VzwRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -31,6 +30,8 @@ public class VzwController {
     private AddressRepository addressRepository;
     @Autowired
     private AddressController addressController;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private static final String PATTERN_REKENINGNR = "^BE[0-9]{2}[- ]{0,1}[0-9]{4}[- ]{0,1}[0-9]{4}[- ]{0,1}[0-9]{4}$";
     private static final String PATTERN_EMAIL = "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,6})+$";
@@ -45,7 +46,7 @@ public class VzwController {
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
                     "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
                     "https://http.cat/200.jpg",
-                    "password",
+                    "$2a$10$GJAYbleVgyB0gXfnXMvVYuAXEL6tyUrmnA0jY65oSPb6.NwmYWu3K", // password
                     "8");
             vzw1.setId("vzw1");
 
@@ -56,7 +57,7 @@ public class VzwController {
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
                     "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
                     "https://http.cat/201.jpg",
-                    "password",
+                    "$2a$10$sZC3j1tNmN.gM0t8Ic50KudiaCBINjncw3d.nlzo5RwZzlKaPRuzi", // password
                     "7");
             vzw2.setId("vzw2");
 
@@ -67,7 +68,7 @@ public class VzwController {
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
                     "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
                     "https://http.cat/202.jpg",
-                    "password",
+                    "$2a$10$GMQj3igq4pNpB1IlaKArSu5LWT90R/32AFgiVw6d7L8j49LAVN/fq", // password
                     "10");
             vzw3.setId("vzw3");
 
@@ -78,7 +79,7 @@ public class VzwController {
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
                     "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
                     "https://http.cat/203.jpg",
-                    "password",
+                    "$2a$10$NgLOCjJ3.SxLIxfJrgo6zeBQ1XrhWuhD9/wVJ6TSNqV7Sphf7Vh4.", // password
                     "9");
             vzw4.setId("vzw4");
 
@@ -160,7 +161,7 @@ public class VzwController {
         Address persistentAddress = addressController.addAddress(tempAddress);
 
         // Vzw
-        Vzw persistentVzw = new Vzw(vzwDTO, persistentAddress);
+        Vzw persistentVzw = new Vzw(vzwDTO, persistentAddress, passwordEncoder.encode(vzwDTO.getPassword()));
         vzwRepository.save(persistentVzw);
         return persistentVzw;
     }
@@ -168,18 +169,14 @@ public class VzwController {
     // Login as vzw
     @PostMapping("/vzw/login")
     public CompleteVzw authenticateVzw(@RequestBody LoginRequest loginRequest) {
-        // Check if email exists
-        if (!vzwRepository.existsByEmail(loginRequest.getEmail())
-        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"No vzw with email " + loginRequest.getEmail() + " exists");}
-        
-        Optional<Vzw> vzw = vzwRepository.findVzwByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
-        if (vzw.isPresent()) {
-            return getCompleteVzw(Objects.requireNonNull(vzw.get()));
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "The password doesn't match for the vzw linked to the provided email"
-            );
-        }
+        Optional<Vzw> vzwOptional = vzwRepository.findVzwByEmail(loginRequest.getEmail());
+        if (vzwOptional.isPresent()) {
+            Vzw vzw = Objects.requireNonNull(vzwOptional.get());
+            // Check if input passwords matches the hashed password
+            if (passwordEncoder.matches(loginRequest.getPassword(), vzw.getPassword())) {
+                return getCompleteVzw(vzw);
+            } else {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The password doesn't match for the vzw linked to the provided email");}
+        } else {throw new ResponseStatusException(HttpStatus.NOT_FOUND ,"No vzw with email " + loginRequest.getEmail() + " exists");}
     }
 
     // Get the filled CompleteVzw for the given vzw
