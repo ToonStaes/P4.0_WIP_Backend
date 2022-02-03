@@ -5,7 +5,6 @@ import com.example.p4backend.models.complete.CompleteAction;
 import com.example.p4backend.models.complete.CompleteActionWithProgress;
 import com.example.p4backend.models.complete.CompleteVzw;
 import com.example.p4backend.repositories.*;
-import com.example.p4backend.services.WipActionService;
 import org.bson.types.Decimal128;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,12 +32,6 @@ public class ActionController {
     private PurchaseRepository purchaseRepository;
     @Autowired
     private AddressRepository addressRepository;
-
-    private WipActionService wipActionService;
-
-    public ActionController(WipActionService wipActionService) {
-        this.wipActionService = wipActionService;
-    }
 
     @PostConstruct
     public void fillDB() throws InterruptedException {
@@ -139,7 +132,19 @@ public class ActionController {
 
     @GetMapping("/actions/newest")
     public List<CompleteAction> getNewestActions(@RequestParam(defaultValue = "false") boolean progress) {
-      return WipActionService.getNewestActions(progress);
+        List<Action> newestActions = actionRepository.findByEndDateAfterOrderByStartDateDesc(new Date());
+        List<CompleteAction> completeActions = new ArrayList<>();
+
+        for (Action action : newestActions) {
+            if (progress) {
+                double actionProgress = getProgress(action);
+                completeActions.add(getCompleteActionWithProgress(action, actionProgress));
+            } else {
+                completeActions.add(getCompleteAction(action));
+            }
+        }
+
+        return completeActions.stream().limit(4).collect(Collectors.toList()); // Take first n (number in limit(n)) items and return them.
     }
 
     @GetMapping("/actions/random")
@@ -241,8 +246,5 @@ public class ActionController {
             return new CompleteVzw(vzw.get(), address);
         }
         return null;
-    }
-public WipActionService getWipActionService() {
-        return wipActionService;
     }
 }
