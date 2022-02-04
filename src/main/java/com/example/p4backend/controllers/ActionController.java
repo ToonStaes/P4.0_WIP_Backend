@@ -285,6 +285,26 @@ public class ActionController {
         return getCompleteAction(action);
     }
 
+    @PutMapping("/action/{id}")
+    public CompleteAction updateAction(@RequestBody ActionDTO updateAction, @PathVariable String id) {
+        Optional<Action> tempAction = actionRepository.findById(id);
+
+        if (tempAction.isPresent()) {
+            Action action = Objects.requireNonNull(tempAction.get());
+            action.setName(updateAction.getName());
+            action.setGoal(updateAction.getGoal());
+            action.setDescription(updateAction.getDescription());
+            action.setVzwID(updateAction.getVzwID());
+            action.setEndDate(updateAction.getEndDate());
+            actionRepository.save(action);
+            return getCompleteAction(action);
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"
+            );
+        }
+    }
+
     // Generate Complete vzw to include address
     private CompleteVzw getCompleteVzw(Optional<Vzw> vzw){
         if (vzw.isPresent()){
