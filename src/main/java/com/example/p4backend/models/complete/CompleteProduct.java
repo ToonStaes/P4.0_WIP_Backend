@@ -18,6 +18,7 @@ public class CompleteProduct {
     private Decimal128 cost;
     private Action action;
     private String image;
+    private boolean isActive;
 
     public CompleteProduct(Product product, Optional<Action> action) {
         this.id = product.getId();
@@ -25,5 +26,6 @@ public class CompleteProduct {
         this.cost = product.getCost();
         this.image = product.getImage();
         action.ifPresent(value -> this.action = value); // If action is present, the value of the optional is taken and placed into the action property of the object.
+        this.isActive = product.isActive();
     }
 }
