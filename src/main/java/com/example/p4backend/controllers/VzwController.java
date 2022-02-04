@@ -139,7 +139,7 @@ public class VzwController {
 
     // register vzw
     @PostMapping("/vzw")
-    public Vzw addVzw(@RequestBody VzwDTO vzwDTO) {
+    public CompleteVzw addVzw(@RequestBody VzwDTO vzwDTO) {
         // Check to validate if the user input is valid
         if (!vzwDTO.getRekeningNR().matches(PATTERN_REKENINGNR)
         ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input rekeningnummer doesn't match the pattern");}
@@ -163,7 +163,7 @@ public class VzwController {
         // Vzw
         Vzw persistentVzw = new Vzw(vzwDTO, persistentAddress, passwordEncoder.encode(vzwDTO.getPassword()));
         vzwRepository.save(persistentVzw);
-        return persistentVzw;
+        return getCompleteVzw(persistentVzw);
     }
 
     // Login as vzw
