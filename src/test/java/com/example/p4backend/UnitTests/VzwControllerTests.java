@@ -1,7 +1,13 @@
 package com.example.p4backend.UnitTests;
 
+import com.example.p4backend.models.Action;
 import com.example.p4backend.models.Address;
+import com.example.p4backend.models.DTOs.ProductDTO;
+import com.example.p4backend.models.Product;
 import com.example.p4backend.models.Vzw;
+import com.example.p4backend.models.complete.CompleteProduct;
+import com.example.p4backend.models.complete.CompleteVzw;
+import com.example.p4backend.models.dto.VzwDTO;
 import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.VzwRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +15,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import org.bson.types.Decimal128;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,6 +24,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +32,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -356,5 +365,27 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[0].address.box").isEmpty())
                 .andExpect(jsonPath("$[0].address.city", is("Malle")))
                 .andExpect(jsonPath("$[0].address.postalCode", is("2390")));
+    }
+
+    // When register a vzw, when valid gives back a completeVZW
+    @Test
+    void whenAddVzw_thenReturnJsonVzw() throws Exception {
+        VzwDTO vzwDTO = new VzwDTO("VZW Add", "vzw.add@test.com", "BE12-3456-6798-2555", "A new vzw.", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", "https://http.cat/200.jpg", "test", "Test Straat", "1", null, "Test City", "123");
+        given(actionRepository.findById("action1")).willReturn(Optional.of(action));
+        Vzw vzw = new Vzw(vzwDTO);
+        CompleteVzw completeVzw = new CompleteVzw(vzw, Optional.of(action));
+
+        mockMvc.perform(post("/vzw")
+                        .content(mapper.writeValueAsString(vzw))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(completeVzw.getId())))
+                .andExpect(jsonPath("$.cost", is(25.99)))
+                .andExpect(jsonPath("$.action.id", is(completeVzw.getAction().getId())))
+                .andExpect(jsonPath("$.action.name", is(completeVzw.getAction().getName())))
+                .andExpect(jsonPath("$.action.goal", is(completeVzw.getAction().getGoal().intValue())))
+                .andExpect(jsonPath("$.action.description", is(completeVzw.getAction().getDescription())))
+                .andExpect(jsonPath("$.action.vzwID", is(completeVzw.getAction().getVzwID())));
     }
 }
