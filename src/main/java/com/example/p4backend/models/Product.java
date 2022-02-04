@@ -8,8 +8,6 @@ import org.bson.types.Decimal128;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.math.BigDecimal;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,17 +19,21 @@ public class Product {
     private Decimal128 cost;
     private String actionId;
     private String image;
+    private boolean isActive;
 
     public Product(String name, Decimal128 cost, String actionId, String image) {
         this.name = name;
         this.cost = cost;
         this.actionId = actionId;
         this.image = image;
+        this.isActive = true;
     }
 
     public Product(ProductDTO productDTO){
         this.name = productDTO.getName();
         this.cost = productDTO.getCost();
         this.actionId = productDTO.getActionId();
+        this.image = productDTO.getImage();
+        this.isActive = true;
     }
 }
