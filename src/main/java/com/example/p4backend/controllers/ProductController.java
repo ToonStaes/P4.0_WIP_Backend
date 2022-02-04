@@ -27,15 +27,15 @@ public class ProductController {
     @PostConstruct
     public void fillDB() {
         if (productRepository.count() == 0) {
-            Product product1 = new Product("product1", new Decimal128(new BigDecimal(5)), "action1", "https://http.cat/400.jpg");
+            Product product1 = new Product("Roze koeken", new Decimal128(new BigDecimal(5)), "action1", "https://upload.wikimedia.org/wikipedia/commons/1/12/Roze_koek.jpg");
             product1.setId("product1");
-            Product product2 = new Product("product2", new Decimal128(new BigDecimal(15)), "action1", "https://http.cat/400.jpg");
+            Product product2 = new Product("Cupcakes", new Decimal128(new BigDecimal(15)), "action1", "https://cdn.pixabay.com/photo/2015/04/25/13/45/cake-739151_1280.jpg");
             product2.setId("product2");
-            Product product3 = new Product("product3", new Decimal128(new BigDecimal(12)), "action1", "https://http.cat/400.jpg");
+            Product product3 = new Product("Cake", new Decimal128(new BigDecimal(12)), "action1", "https://cdn.pixabay.com/photo/2015/01/03/09/32/cake-587274_1280.jpg");
             product3.setId("product3");
-            Product product4 = new Product("product4", new Decimal128(new BigDecimal(2.5)), "action2", "https://http.cat/400.jpg");
+            Product product4 = new Product("Appeltaart", new Decimal128(new BigDecimal("2.5")), "action2", "https://img.static-rmg.be/a/food/image/q100/w480/h360/1096415/snelle-appeltaart.jpg");
             product4.setId("product4");
-            Product product5 = new Product("product5", new Decimal128(new BigDecimal(6.5)), "action3", "https://http.cat/400.jpg");
+            Product product5 = new Product("Hollandse appeltaart", new Decimal128(new BigDecimal("6.5")), "action3", "https://watschaftdepodcast.com/wp-content/uploads/2020/03/WSDP-18-Hollandse-Appeltaart-SQ-lofi-scaled.jpg");
             product5.setId("product5");
 
             productRepository.saveAll(Arrays.asList(product1, product2, product3, product4, product5));
