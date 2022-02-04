@@ -113,14 +113,14 @@ public class ProductController {
 
     // Set product as inactive
     @DeleteMapping("/product/{id}")
-    public CompleteProduct deleteProduct(@PathVariable String id) {
+    public Product deleteProduct(@PathVariable String id) {
         Optional<Product> tempProduct = productRepository.findById(id);
 
         if (tempProduct.isPresent()) {
             Product product = Objects.requireNonNull(tempProduct.get());
             product.setActive(false);
             productRepository.save(product);
-            return getCompleteProduct(product);
+            return product;
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The Product with ID " + id + " doesn't exist");
         }
