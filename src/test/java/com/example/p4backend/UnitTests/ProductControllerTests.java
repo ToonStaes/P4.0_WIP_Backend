@@ -294,4 +294,28 @@ public class ProductControllerTests {
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
                 .andExpect(result -> assertEquals("404 NOT_FOUND \"The Product with ID product999 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
+
+    @Test
+    void givenProduct_whenDeleteProduct_thenReturnJsonProduct() throws Exception {
+        Action action = generateAction();
+        Product product = new Product("Product Delete", new Decimal128(new BigDecimal("3.55")), "action1", "https://http.cat/400.jpg");
+        product.setActive(false);
+        CompleteProduct completeProduct = new CompleteProduct(product, Optional.of(action));
+
+        given(actionRepository.findById("action1")).willReturn(Optional.of(action));
+        given(productRepository.findById("product1")).willReturn(Optional.of(product));
+
+        mockMvc.perform(delete("/product/{id}", "product1")
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(completeProduct.getName())))
+                .andExpect(jsonPath("$.cost", is(completeProduct.getCost().doubleValue())))
+                .andExpect(jsonPath("$.action.id", is(completeProduct.getAction().getId())))
+                .andExpect(jsonPath("$.action.name", is(completeProduct.getAction().getName())))
+                .andExpect(jsonPath("$.action.description", is(completeProduct.getAction().getDescription())))
+                .andExpect(jsonPath("$.action.goal", is(completeProduct.getAction().getGoal().intValue())))
+                .andExpect(jsonPath("$.action.vzwID", is(completeProduct.getAction().getVzwID())))
+                .andExpect(jsonPath("$.image", is(completeProduct.getImage())))
+                .andExpect(jsonPath("$.active", is(completeProduct.isActive())));
+    }
 }
