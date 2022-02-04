@@ -33,8 +33,8 @@ public class VzwController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private static final String PATTERN_REKENINGNR = "^BE[0-9]{2}[- ]{0,1}[0-9]{4}[- ]{0,1}[0-9]{4}[- ]{0,1}[0-9]{4}$";
-    private static final String PATTERN_EMAIL = "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,6})+$";
+    private static final String PATTERN_REKENINGNR = "^(?i)BE[0-9]{2}[- ]?[0-9]{4}[- ]?[0-9]{4}[- ]?[0-9]{4}$";
+    private static final String PATTERN_EMAIL = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,6})+$";
 
     @PostConstruct
     public void fillDB() {
@@ -42,7 +42,7 @@ public class VzwController {
             Vzw vzw1 = new Vzw(
                     "vzw1",
                     "vzw1.kasterlee@mail.com",
-                    "be1234566798",
+                    "BE12-3456-6798-1234",
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
                     "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
                     "https://http.cat/200.jpg",
@@ -53,7 +53,7 @@ public class VzwController {
             Vzw vzw2 = new Vzw(
                     "vzw2",
                     "vzw2.malle@mail.com",
-                    "be1234566798",
+                    "BE12-3456-6798-2564",
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
                     "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
                     "https://http.cat/201.jpg",
@@ -64,7 +64,7 @@ public class VzwController {
             Vzw vzw3 = new Vzw(
                     "vzw3",
                     "vzw3.herselt@mail.com",
-                    "be1234599798",
+                    "BE12-3459-9798-6547",
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
                     "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
                     "https://http.cat/202.jpg",
@@ -75,7 +75,7 @@ public class VzwController {
             Vzw vzw4 = new Vzw(
                     "vzw4",
                     "vzw4.malle@mail.com",
-                    "be1234566798",
+                    "BE12-3456-6798-6971",
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
                     "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
                     "https://http.cat/203.jpg",

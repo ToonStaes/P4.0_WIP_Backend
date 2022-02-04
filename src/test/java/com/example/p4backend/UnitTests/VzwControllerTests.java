@@ -43,7 +43,7 @@ public class VzwControllerTests {
     Vzw vzw1 = new Vzw(
             "vzw1",
             "vzw1.kasterlee@mail.com",
-            "be1234566798",
+            "BE12-3456-6798-1234",
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
             "https://http.cat/200.jpg",
@@ -52,7 +52,7 @@ public class VzwControllerTests {
     Vzw vzw2 = new Vzw(
             "vzw2",
             "vzw2.malle@mail.com",
-            "be1234566798",
+            "BE12-3456-6798-2564",
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
             "https://http.cat/201.jpg",
@@ -61,7 +61,7 @@ public class VzwControllerTests {
     Vzw vzw3 = new Vzw(
             "vzw3",
             "vzw3.herselt@mail.com",
-            "be1234599798",
+            "BE12-3459-9798-6547",
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
             "https://http.cat/202.jpg",
@@ -70,7 +70,7 @@ public class VzwControllerTests {
     Vzw vzw4 = new Vzw(
             "vzw4",
             "vzw4.malle@mail.com",
-            "be1234566798",
+            "BE12-3456-6798-6971",
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
             "https://http.cat/203.jpg",
@@ -132,7 +132,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[0].id", is("vzw1")))
                 .andExpect(jsonPath("$[0].name", is("vzw1")))
                 .andExpect(jsonPath("$[0].email", is("vzw1.kasterlee@mail.com")))
-                .andExpect(jsonPath("$[0].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[0].rekeningNR", is("BE12-3456-6798-1234")))
                 .andExpect(jsonPath("$[0].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[0].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[0].profilePicture", is("https://http.cat/200.jpg")))
@@ -147,7 +147,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[1].id", is("vzw2")))
                 .andExpect(jsonPath("$[1].name", is("vzw2")))
                 .andExpect(jsonPath("$[1].email", is("vzw2.malle@mail.com")))
-                .andExpect(jsonPath("$[1].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[1].rekeningNR", is("BE12-3456-6798-2564")))
                 .andExpect(jsonPath("$[1].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[1].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[1].profilePicture", is("https://http.cat/201.jpg")))
@@ -162,7 +162,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[2].id", is("vzw3")))
                 .andExpect(jsonPath("$[2].name", is("vzw3")))
                 .andExpect(jsonPath("$[2].email", is("vzw3.herselt@mail.com")))
-                .andExpect(jsonPath("$[2].rekeningNR", is("be1234599798")))
+                .andExpect(jsonPath("$[2].rekeningNR", is("BE12-3459-9798-6547")))
                 .andExpect(jsonPath("$[2].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[2].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[2].profilePicture", is("https://http.cat/202.jpg")))
@@ -177,7 +177,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[3].id", is("vzw4")))
                 .andExpect(jsonPath("$[3].name", is("vzw4")))
                 .andExpect(jsonPath("$[3].email", is("vzw4.malle@mail.com")))
-                .andExpect(jsonPath("$[3].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[3].rekeningNR", is("BE12-3456-6798-6971")))
                 .andExpect(jsonPath("$[3].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[3].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[3].profilePicture", is("https://http.cat/203.jpg")))
@@ -206,7 +206,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$.id", is("vzw1")))
                 .andExpect(jsonPath("$.name", is("vzw1")))
                 .andExpect(jsonPath("$.email", is("vzw1.kasterlee@mail.com")))
-                .andExpect(jsonPath("$.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$.rekeningNR", is("BE12-3456-6798-1234")))
                 .andExpect(jsonPath("$.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$.profilePicture", is("https://http.cat/200.jpg")))
@@ -235,7 +235,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$.id", is("vzw2")))
                 .andExpect(jsonPath("$.name", is("vzw2")))
                 .andExpect(jsonPath("$.email", is("vzw2.malle@mail.com")))
-                .andExpect(jsonPath("$.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$.rekeningNR", is("BE12-3456-6798-2564")))
                 .andExpect(jsonPath("$.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$.profilePicture", is("https://http.cat/201.jpg")))
@@ -269,7 +269,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[0].id", is("vzw1")))
                 .andExpect(jsonPath("$[0].name", is("vzw1")))
                 .andExpect(jsonPath("$[0].email", is("vzw1.kasterlee@mail.com")))
-                .andExpect(jsonPath("$[0].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[0].rekeningNR", is("BE12-3456-6798-1234")))
                 .andExpect(jsonPath("$[0].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[0].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[0].profilePicture", is("https://http.cat/200.jpg")))
@@ -284,7 +284,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[1].id", is("vzw2")))
                 .andExpect(jsonPath("$[1].name", is("vzw2")))
                 .andExpect(jsonPath("$[1].email", is("vzw2.malle@mail.com")))
-                .andExpect(jsonPath("$[1].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[1].rekeningNR", is("BE12-3456-6798-2564")))
                 .andExpect(jsonPath("$[1].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[1].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[1].profilePicture", is("https://http.cat/201.jpg")))
@@ -299,7 +299,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[2].id", is("vzw3")))
                 .andExpect(jsonPath("$[2].name", is("vzw3")))
                 .andExpect(jsonPath("$[2].email", is("vzw3.herselt@mail.com")))
-                .andExpect(jsonPath("$[2].rekeningNR", is("be1234599798")))
+                .andExpect(jsonPath("$[2].rekeningNR", is("BE12-3459-9798-6547")))
                 .andExpect(jsonPath("$[2].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[2].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[2].profilePicture", is("https://http.cat/202.jpg")))
@@ -314,7 +314,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[3].id", is("vzw4")))
                 .andExpect(jsonPath("$[3].name", is("vzw4")))
                 .andExpect(jsonPath("$[3].email", is("vzw4.malle@mail.com")))
-                .andExpect(jsonPath("$[3].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[3].rekeningNR", is("BE12-3456-6798-6971")))
                 .andExpect(jsonPath("$[3].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[3].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[3].profilePicture", is("https://http.cat/203.jpg")))
@@ -345,7 +345,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[0].id", is("vzw2")))
                 .andExpect(jsonPath("$[0].name", is("vzw2")))
                 .andExpect(jsonPath("$[0].email", is("vzw2.malle@mail.com")))
-                .andExpect(jsonPath("$[0].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[0].rekeningNR", is("BE12-3456-6798-2564")))
                 .andExpect(jsonPath("$[0].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[0].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[0].profilePicture", is("https://http.cat/201.jpg")))
