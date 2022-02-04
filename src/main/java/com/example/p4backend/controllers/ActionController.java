@@ -35,62 +35,83 @@ public class ActionController {
     @PostConstruct
     public void fillDB() throws InterruptedException {
         if (actionRepository.count() == 0) {
+            // Action 1
             Action action1 = new Action(
                     "action1",
-                    new Decimal128(500),
+                    new Decimal128(new BigDecimal("500.0")),
                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed mi quis elit vulputate porttitor. Integer ex diam, maximus in mi ac, vulputate varius lacus. Ut aliquam eros ac est sagittis pellentesque. Suspendisse feugiat nibh nec lectus consectetur facilisis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vulputate nisi lacus, quis tincidunt diam pharetra ac. Ut dictum magna vel sem sollicitudin efficitur. Sed accumsan, lacus sit amet tempus commodo, metus quam faucibus tortor,",
                     "vzw1",
                     new GregorianCalendar(2022, Calendar.FEBRUARY, 18).getTime());
+
+            GregorianCalendar action1StartCallender = new GregorianCalendar();
+            GregorianCalendar action1EndCallender = new GregorianCalendar();
+            action1StartCallender.add(Calendar.DATE, -5);
+            action1EndCallender.add(Calendar.YEAR, 1);
             action1.setId("action1");
-            action1.setStartDate(new GregorianCalendar(2022, Calendar.JANUARY, 18).getTime());
+            action1.setStartDate(action1StartCallender.getTime());
+            action1.setEndDate(action1EndCallender.getTime());
 
-            Thread.sleep(2000);
-
+            // Action 2
             Action action2 = new Action(
                     "action2",
-                    new Decimal128(200),
+                    new Decimal128(new BigDecimal("200.0")),
                     "quis dictum dui odio sed odio. Sed sed mattis enim. Curabitur fringilla lorem at mauris tempor, sit amet tincidunt odio scelerisque. Morbi ac leo sed nisi hendrerit vulputate. Vivamus id blandit libero, sit amet aliquet diam. Morbi sit amet nibh a turpis ultricies accumsan quis eu massa. Suspendisse potenti. Integer dapibus, nibh quis sollicitudin vestibulum, urna nulla dignissim sem, eget semper nisl neque non nisi.",
                     "vzw2",
                     new GregorianCalendar(2022, Calendar.MARCH, 18).getTime());
+
+            GregorianCalendar action2StartCallender = new GregorianCalendar();
+            GregorianCalendar action2EndCallender = new GregorianCalendar();
+            action2StartCallender.add(Calendar.DATE, -4);
+            action2EndCallender.add(Calendar.DATE, 61);
             action2.setId("action2");
-            action2.setStartDate(new GregorianCalendar(2022, Calendar.JANUARY, 16).getTime());
-
-            Thread.sleep(2000);
-
+            action2.setStartDate(action2StartCallender.getTime());
+            action2.setEndDate(action2EndCallender.getTime());
+            // Action 3
             Action action3 = new Action(
                     "action3",
-                    new Decimal128(400),
+                    new Decimal128(new BigDecimal("400.0")),
                     "Sed ante elit, scelerisque in egestas facilisis, eleifend at eros. Morbi congue ornare orci, a pharetra urna. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent sed lorem sit amet enim ornare scelerisque. Nam sit amet eleifend est. Proin a sagittis lorem, at tincidunt metus.",
                     "vzw3",
                     new GregorianCalendar(2022, Calendar.APRIL, 28).getTime());
+            GregorianCalendar action3StartCallender = new GregorianCalendar();
+            GregorianCalendar action3EndCallender = new GregorianCalendar();
+            action3StartCallender.add(Calendar.DATE, -3);
+            action3EndCallender.add(Calendar.DATE, 30);
             action3.setId("action3");
-            action3.setStartDate(new GregorianCalendar(2022, Calendar.JANUARY, 17).getTime());
+            action3.setStartDate(action3StartCallender.getTime());
+            action3.setEndDate(action3EndCallender.getTime());
 
-            Thread.sleep(2000);
-
+            // Action 4
             Action action4 = new Action(
                     "action4",
-                    new Decimal128(450),
+                    new Decimal128(new BigDecimal("450.0")),
                     "Duis at posuere felis. Etiam pellentesque euismod purus. Fusce turpis lorem, rhoncus sed nulla sagittis, finibus venenatis dui. Ut ut scelerisque nulla. Quisque eu orci pharetra, dictum turpis vel, suscipit sem. Vivamus quis rutrum est. Phasellus ut magna vitae tellus pharetra eleifend et quis nulla. Integer eu erat erat. Vivamus non sapien augue. Morbi consequat ante ac nibh feugiat fringilla.",
                     "vzw4",
                     new GregorianCalendar(2022, Calendar.FEBRUARY, 28).getTime());
+            GregorianCalendar action4StartCallender = new GregorianCalendar();
+            GregorianCalendar action4EndCallender = new GregorianCalendar();
+            action4StartCallender.add(Calendar.DATE, -2);
+            action4EndCallender.add(Calendar.DATE, 5);
             action4.setId("action4");
-            action4.setStartDate(new GregorianCalendar(2021, Calendar.DECEMBER, 2).getTime());
+            action4.setStartDate(action4StartCallender.getTime());
+            action4.setEndDate(action4EndCallender.getTime());
 
+            // Action 5
             Action action5 = new Action(
                     "action5",
-                    new Decimal128(500),
+                    new Decimal128(new BigDecimal("500.0")),
                     "Mauris vitae risus ut nulla vestibulum scelerisque at eu nulla.\n" + "\n" + "Sed tincidunt massa sed mattis porttitor. Fusce at euismod dui. Aliquam sed lorem accumsan, porta orci nec, efficitur leo. Curabitur iaculis lorem tincidunt risus vestibulum, eget posuere urna vehicula. Morbi et felis posuere, blandit massa quis, sagittis nisl. Fusce eu metus nunc. Phasellus id dui sit amet augue tincidunt gravida in in orci.",
                     "vzw1",
                     new GregorianCalendar(2022, Calendar.FEBRUARY, 1).getTime());
+            GregorianCalendar action5StartCallender = new GregorianCalendar();
+            GregorianCalendar action5EndCallender = new GregorianCalendar();
+            action5StartCallender.add(Calendar.DATE, 5);
+            action5EndCallender.add(Calendar.DATE, 155);
             action5.setId("action5");
-            action5.setStartDate(new GregorianCalendar(2022, Calendar.JANUARY, 18).getTime());
+            action5.setStartDate(action5StartCallender.getTime());
+            action5.setEndDate(action5EndCallender.getTime());
 
-            actionRepository.save(action1);
-            actionRepository.save(action2);
-            actionRepository.save(action3);
-            actionRepository.save(action4);
-            actionRepository.save(action5);
+            actionRepository.saveAll(List.of(action1, action2, action3, action4, action5));
         }
     }
 
@@ -283,6 +304,26 @@ public class ActionController {
         Action action = new Action(actionDTO);
         actionRepository.save(action);
         return getCompleteAction(action);
+    }
+
+    @PutMapping("/action/{id}")
+    public CompleteAction updateAction(@RequestBody ActionDTO updateAction, @PathVariable String id) {
+        Optional<Action> tempAction = actionRepository.findById(id);
+
+        if (tempAction.isPresent()) {
+            Action action = Objects.requireNonNull(tempAction.get());
+            action.setName(updateAction.getName());
+            action.setGoal(updateAction.getGoal());
+            action.setDescription(updateAction.getDescription());
+            action.setVzwID(updateAction.getVzwID());
+            action.setEndDate(updateAction.getEndDate());
+            actionRepository.save(action);
+            return getCompleteAction(action);
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"
+            );
+        }
     }
 
     // Generate Complete vzw to include address
