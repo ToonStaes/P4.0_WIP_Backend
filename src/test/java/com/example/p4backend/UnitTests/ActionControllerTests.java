@@ -28,8 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -1679,5 +1679,43 @@ public class ActionControllerTests {
                 .andExpect(jsonPath("$.vzw.address.city", is("Kasterlee")))
                 .andExpect(jsonPath("$.vzw.address.postalCode", is("2460")))
                 .andExpect(jsonPath("$.images[0]", is("https://http.cat/400.jpg")));
+    }
+
+
+    @Test
+    void givenAction_whenDeleteAction_thenReturnJsonAction() throws Exception {
+        List<Vzw> vzwList = generateVzwsList();
+        Action action = new Action(
+                "action1 Delete",
+                new Decimal128(new BigDecimal("255.99")),
+                "Delete action 1",
+                "vzw1",
+                new GregorianCalendar(2023, Calendar.MARCH, 31).getTime());
+        action.setActive(false);
+
+        given(actionRepository.findById("action1")).willReturn(Optional.of(action));
+        given(productRepository.findProductsByActionId("action1")).willReturn(new ArrayList<>());
+
+        mockMvc.perform(delete("/action/{id}", "action1"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(action.getId())))
+                .andExpect(jsonPath("$.name", is(action.getName())))
+                .andExpect(jsonPath("$.goal", is(action.getGoal().doubleValue())))
+                .andExpect(jsonPath("$.description", is(action.getDescription())))
+                .andExpect(jsonPath("$.startDate").exists())
+                .andExpect(jsonPath("$.endDate").exists())
+                .andExpect(jsonPath("$.vzwID", is(action.getVzwID())))
+                .andExpect(jsonPath("$.active", is(false)));
+    }
+
+    @Test
+    void givenAction_whenDeleteActionIdNotExist_thenReturn404() throws Exception {
+        given(actionRepository.findById("action999")).willReturn(Optional.empty());
+
+        mockMvc.perform(delete("/action/{id}", "action999"))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("404 NOT_FOUND \"The Action with ID action999 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
 }
