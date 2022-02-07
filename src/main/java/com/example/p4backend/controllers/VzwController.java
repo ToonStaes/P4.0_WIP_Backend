@@ -2,18 +2,22 @@ package com.example.p4backend.controllers;
 
 import com.example.p4backend.models.Address;
 import com.example.p4backend.models.Vzw;
+import com.example.p4backend.models.auth.LoginRequest;
 import com.example.p4backend.models.complete.CompleteVzw;
+import com.example.p4backend.models.dto.AddressDTO;
+import com.example.p4backend.models.dto.VzwDTO;
 import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.VzwRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -24,6 +28,13 @@ public class VzwController {
     private VzwRepository vzwRepository;
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private AddressController addressController;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    private static final String PATTERN_REKENINGNR = "^(?i)BE[0-9]{2}[- ]?[0-9]{4}[- ]?[0-9]{4}[- ]?[0-9]{4}$";
+    private static final String PATTERN_EMAIL = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,6})+$";
 
     @PostConstruct
     public void fillDB() {
@@ -31,44 +42,44 @@ public class VzwController {
             Vzw vzw1 = new Vzw(
                     "Chiro",
                     "chiro.kasterlee@mail.com",
-                    "be1234566798",
+                    "BE12-3456-6798-1234",
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
                     "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
                     "https://upload.wikimedia.org/wikipedia/commons/6/6f/Logo_chiro.jpg",
-                    "password",
+                    "$2a$10$GJAYbleVgyB0gXfnXMvVYuAXEL6tyUrmnA0jY65oSPb6.NwmYWu3K", // password
                     "8");
             vzw1.setId("vzw1");
 
             Vzw vzw2 = new Vzw(
                     "Movements",
                     "movements.malle@mail.com",
-                    "be1234566798",
+                    "BE12-3456-6798-2564",
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
                     "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
                     "https://upload.wikimedia.org/wikipedia/commons/2/2f/Movements_logo_large.png",
-                    "password",
+                    "$2a$10$sZC3j1tNmN.gM0t8Ic50KudiaCBINjncw3d.nlzo5RwZzlKaPRuzi", // password
                     "7");
             vzw2.setId("vzw2");
 
             Vzw vzw3 = new Vzw(
                     "Vlaamse Volksbeweging",
                     "vlaamse.volksbeweging.herselt@mail.com",
-                    "be1234599798",
+                    "BE12-3459-9798-6547",
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
                     "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
                     "https://upload.wikimedia.org/wikipedia/commons/3/3e/VVB-logo.png",
-                    "password",
+                    "$2a$10$GMQj3igq4pNpB1IlaKArSu5LWT90R/32AFgiVw6d7L8j49LAVN/fq", // password
                     "10");
             vzw3.setId("vzw3");
 
             Vzw vzw4 = new Vzw(
                     "Vriendenkring Kleine Bloemenstoet",
                     "vkb.malle@mail.com",
-                    "be1234566798",
+                    "BE12-3456-6798-6971",
                     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
                     "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
                     "https://upload.wikimedia.org/wikipedia/commons/d/d7/Logo_Kleine_Bloemenstoet_Wommelgem.jpg",
-                    "password",
+                    "$2a$10$NgLOCjJ3.SxLIxfJrgo6zeBQ1XrhWuhD9/wVJ6TSNqV7Sphf7Vh4.", // password
                     "9");
             vzw4.setId("vzw4");
 
@@ -121,5 +132,53 @@ public class VzwController {
             completeVzws.add(completeVzw);
         }
         return completeVzws;
+    }
+
+    // register vzw
+    @PostMapping("/vzw")
+    public CompleteVzw addVzw(@RequestBody VzwDTO vzwDTO) {
+        // Check to validate if the user input is valid
+        if (!vzwDTO.getRekeningNR().matches(PATTERN_REKENINGNR)
+        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input rekeningnummer doesn't match the pattern");}
+        if (!vzwDTO.getEmail().matches(PATTERN_EMAIL)
+        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input email doesn't seem te be a valid email address");}
+
+        // Check if email not already taken
+        if (vzwRepository.existsByEmail(vzwDTO.getEmail())
+        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Vzw with email already exists");}
+
+        // Address
+        AddressDTO tempAddress = new AddressDTO(
+                vzwDTO.getStreet(),
+                vzwDTO.getHouseNumber(),
+                vzwDTO.getBox(),
+                vzwDTO.getCity(),
+                vzwDTO.getPostalCode());
+
+        Address persistentAddress = addressController.addAddress(tempAddress);
+
+        // Vzw
+        Vzw persistentVzw = new Vzw(vzwDTO, persistentAddress, passwordEncoder.encode(vzwDTO.getPassword()));
+        vzwRepository.save(persistentVzw);
+        return getCompleteVzw(persistentVzw);
+    }
+
+    // Login as vzw
+    @PostMapping("/vzw/login")
+    public CompleteVzw authenticateVzw(@RequestBody LoginRequest loginRequest) {
+        Optional<Vzw> vzwOptional = vzwRepository.findVzwByEmail(loginRequest.getEmail());
+        if (vzwOptional.isPresent()) {
+            Vzw vzw = Objects.requireNonNull(vzwOptional.get());
+            // Check if input passwords matches the hashed password
+            if (passwordEncoder.matches(loginRequest.getPassword(), vzw.getPassword())) {
+                return getCompleteVzw(vzw);
+            } else {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The password doesn't match for the vzw linked to the provided email");}
+        } else {throw new ResponseStatusException(HttpStatus.NOT_FOUND ,"No vzw with email " + loginRequest.getEmail() + " exists");}
+    }
+
+    // Get the filled CompleteVzw for the given vzw
+    private CompleteVzw getCompleteVzw(Vzw vzw) {
+        Optional<Address> address = addressRepository.findById(vzw.getAddressID());
+        return new CompleteVzw(vzw, address);
     }
 }

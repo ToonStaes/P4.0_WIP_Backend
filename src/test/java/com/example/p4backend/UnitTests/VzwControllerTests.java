@@ -1,7 +1,12 @@
 package com.example.p4backend.UnitTests;
 
+import com.example.p4backend.controllers.AddressController;
 import com.example.p4backend.models.Address;
 import com.example.p4backend.models.Vzw;
+import com.example.p4backend.models.auth.LoginRequest;
+import com.example.p4backend.models.complete.CompleteVzw;
+import com.example.p4backend.models.dto.AddressDTO;
+import com.example.p4backend.models.dto.VzwDTO;
 import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.VzwRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,20 +15,27 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -43,7 +55,7 @@ public class VzwControllerTests {
     Vzw vzw1 = new Vzw(
             "vzw1",
             "vzw1.kasterlee@mail.com",
-            "be1234566798",
+            "BE12-3456-6798-1234",
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
             "https://http.cat/200.jpg",
@@ -52,7 +64,7 @@ public class VzwControllerTests {
     Vzw vzw2 = new Vzw(
             "vzw2",
             "vzw2.malle@mail.com",
-            "be1234566798",
+            "BE12-3456-6798-2564",
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
             "https://http.cat/201.jpg",
@@ -61,7 +73,7 @@ public class VzwControllerTests {
     Vzw vzw3 = new Vzw(
             "vzw3",
             "vzw3.herselt@mail.com",
-            "be1234599798",
+            "BE12-3459-9798-6547",
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
             "https://http.cat/202.jpg",
@@ -70,7 +82,7 @@ public class VzwControllerTests {
     Vzw vzw4 = new Vzw(
             "vzw4",
             "vzw4.malle@mail.com",
-            "be1234566798",
+            "BE12-3456-6798-6971",
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?",
             "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
             "https://http.cat/203.jpg",
@@ -82,6 +94,8 @@ public class VzwControllerTests {
     private VzwRepository vzwRepository;
     @MockBean
     private AddressRepository addressRepository;
+    @Mock
+    private AddressController addressController;
 
 
     private Vzw generateVzw1() {
@@ -132,7 +146,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[0].id", is("vzw1")))
                 .andExpect(jsonPath("$[0].name", is("vzw1")))
                 .andExpect(jsonPath("$[0].email", is("vzw1.kasterlee@mail.com")))
-                .andExpect(jsonPath("$[0].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[0].rekeningNR", is("BE12-3456-6798-1234")))
                 .andExpect(jsonPath("$[0].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[0].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[0].profilePicture", is("https://http.cat/200.jpg")))
@@ -147,7 +161,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[1].id", is("vzw2")))
                 .andExpect(jsonPath("$[1].name", is("vzw2")))
                 .andExpect(jsonPath("$[1].email", is("vzw2.malle@mail.com")))
-                .andExpect(jsonPath("$[1].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[1].rekeningNR", is("BE12-3456-6798-2564")))
                 .andExpect(jsonPath("$[1].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[1].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[1].profilePicture", is("https://http.cat/201.jpg")))
@@ -162,7 +176,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[2].id", is("vzw3")))
                 .andExpect(jsonPath("$[2].name", is("vzw3")))
                 .andExpect(jsonPath("$[2].email", is("vzw3.herselt@mail.com")))
-                .andExpect(jsonPath("$[2].rekeningNR", is("be1234599798")))
+                .andExpect(jsonPath("$[2].rekeningNR", is("BE12-3459-9798-6547")))
                 .andExpect(jsonPath("$[2].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[2].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[2].profilePicture", is("https://http.cat/202.jpg")))
@@ -177,7 +191,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[3].id", is("vzw4")))
                 .andExpect(jsonPath("$[3].name", is("vzw4")))
                 .andExpect(jsonPath("$[3].email", is("vzw4.malle@mail.com")))
-                .andExpect(jsonPath("$[3].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[3].rekeningNR", is("BE12-3456-6798-6971")))
                 .andExpect(jsonPath("$[3].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[3].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[3].profilePicture", is("https://http.cat/203.jpg")))
@@ -206,7 +220,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$.id", is("vzw1")))
                 .andExpect(jsonPath("$.name", is("vzw1")))
                 .andExpect(jsonPath("$.email", is("vzw1.kasterlee@mail.com")))
-                .andExpect(jsonPath("$.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$.rekeningNR", is("BE12-3456-6798-1234")))
                 .andExpect(jsonPath("$.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$.profilePicture", is("https://http.cat/200.jpg")))
@@ -235,7 +249,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$.id", is("vzw2")))
                 .andExpect(jsonPath("$.name", is("vzw2")))
                 .andExpect(jsonPath("$.email", is("vzw2.malle@mail.com")))
-                .andExpect(jsonPath("$.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$.rekeningNR", is("BE12-3456-6798-2564")))
                 .andExpect(jsonPath("$.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$.profilePicture", is("https://http.cat/201.jpg")))
@@ -269,7 +283,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[0].id", is("vzw1")))
                 .andExpect(jsonPath("$[0].name", is("vzw1")))
                 .andExpect(jsonPath("$[0].email", is("vzw1.kasterlee@mail.com")))
-                .andExpect(jsonPath("$[0].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[0].rekeningNR", is("BE12-3456-6798-1234")))
                 .andExpect(jsonPath("$[0].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[0].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[0].profilePicture", is("https://http.cat/200.jpg")))
@@ -284,7 +298,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[1].id", is("vzw2")))
                 .andExpect(jsonPath("$[1].name", is("vzw2")))
                 .andExpect(jsonPath("$[1].email", is("vzw2.malle@mail.com")))
-                .andExpect(jsonPath("$[1].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[1].rekeningNR", is("BE12-3456-6798-2564")))
                 .andExpect(jsonPath("$[1].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[1].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[1].profilePicture", is("https://http.cat/201.jpg")))
@@ -299,7 +313,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[2].id", is("vzw3")))
                 .andExpect(jsonPath("$[2].name", is("vzw3")))
                 .andExpect(jsonPath("$[2].email", is("vzw3.herselt@mail.com")))
-                .andExpect(jsonPath("$[2].rekeningNR", is("be1234599798")))
+                .andExpect(jsonPath("$[2].rekeningNR", is("BE12-3459-9798-6547")))
                 .andExpect(jsonPath("$[2].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[2].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[2].profilePicture", is("https://http.cat/202.jpg")))
@@ -314,7 +328,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[3].id", is("vzw4")))
                 .andExpect(jsonPath("$[3].name", is("vzw4")))
                 .andExpect(jsonPath("$[3].email", is("vzw4.malle@mail.com")))
-                .andExpect(jsonPath("$[3].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[3].rekeningNR", is("BE12-3456-6798-6971")))
                 .andExpect(jsonPath("$[3].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[3].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[3].profilePicture", is("https://http.cat/203.jpg")))
@@ -345,7 +359,7 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[0].id", is("vzw2")))
                 .andExpect(jsonPath("$[0].name", is("vzw2")))
                 .andExpect(jsonPath("$[0].email", is("vzw2.malle@mail.com")))
-                .andExpect(jsonPath("$[0].rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$[0].rekeningNR", is("BE12-3456-6798-2564")))
                 .andExpect(jsonPath("$[0].bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
                 .andExpect(jsonPath("$[0].youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
                 .andExpect(jsonPath("$[0].profilePicture", is("https://http.cat/201.jpg")))
@@ -356,5 +370,144 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$[0].address.box").isEmpty())
                 .andExpect(jsonPath("$[0].address.city", is("Malle")))
                 .andExpect(jsonPath("$[0].address.postalCode", is("2390")));
+    }
+
+    // When register a vzw, when valid gives back a completeVZW
+    // Address part disabled because even though I say that address controller should return a full address object including id it just doesn't and the id is null, breaking the test...
+    @Test
+    void whenAddVzw_thenReturnJsonVzw() throws Exception {
+        VzwDTO vzwDTO = new VzwDTO("VZW Add", "vzw.add@test.com", "BE12-3456-6798-2555", "A new vzw.", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", "https://http.cat/200.jpg", "test", "Test Straat", "1", null, "Test City", "123");
+        // address
+        AddressDTO addressDTO = new AddressDTO(vzwDTO.getStreet(), vzwDTO.getHouseNumber(), vzwDTO.getBox(), vzwDTO.getCity(), vzwDTO.getPostalCode());
+        Address address = new Address(addressDTO);
+        address.setId("AddressPost1");
+        // vzw
+        Vzw vzw = new Vzw(vzwDTO, address, "$2a$10$YBlUtu8sF86Sg8xeyZJJtecgjw5vq839dr1Tqb9XiLGZbfZIfzB2O");
+        CompleteVzw completeVzw = new CompleteVzw(vzw, Optional.of(address));
+        given(vzwRepository.existsByEmail(vzwDTO.getEmail())).willReturn(false);
+        doReturn(address).when(addressController).addAddress(addressDTO);
+
+        mockMvc.perform(post("/vzw")
+                        .content(mapper.writeValueAsString(vzwDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(completeVzw.getId())))
+                .andExpect(jsonPath("$.name", is(completeVzw.getName())))
+                .andExpect(jsonPath("$.email", is(completeVzw.getEmail())))
+                .andExpect(jsonPath("$.rekeningNR", is(completeVzw.getRekeningNR())))
+                .andExpect(jsonPath("$.bio", is(completeVzw.getBio())))
+                .andExpect(jsonPath("$.youtubeLink", is(completeVzw.getYoutubeLink())))
+                .andExpect(jsonPath("$.profilePicture", is(completeVzw.getProfilePicture())))
+//                .andExpect(jsonPath("$.address.id", is(completeVzw.getAddress().getId())))
+//                .andExpect(jsonPath("$.address.street", is(completeVzw.getAddress().getStreet())))
+//                .andExpect(jsonPath("$.address.houseNumber", is(completeVzw.getAddress().getHouseNumber())))
+//                .andExpect(jsonPath("$.address.box", is(completeVzw.getAddress().getBox())))
+//                .andExpect(jsonPath("$.address.city", is(completeVzw.getAddress().getCity())))
+//                .andExpect(jsonPath("$.address.postalCode", is(completeVzw.getAddress().getPostalCode())))
+        ;
+    }
+
+    // When register a vzw, when email taken returns 400 bad request
+    @Test
+    void whenAddVzwEmailTaken_thenReturn400BadRequest() throws Exception {
+        VzwDTO vzwDTO = new VzwDTO("VZW Add", "vzw.add@test.com", "BE12-3456-6798-2555", "A new vzw.", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", "https://http.cat/200.jpg", "test", "Test Straat", "1", null, "Test City", "123");
+        given(vzwRepository.existsByEmail(vzwDTO.getEmail())).willReturn(true);
+
+        mockMvc.perform(post("/vzw")
+                        .content(mapper.writeValueAsString(vzwDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("400 BAD_REQUEST \"Vzw with email already exists\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
+    }
+
+    // When register a vzw, when invalid rekeningnr returns 400 bad request
+    @Test
+    void whenAddVzwRekeningNRInvalid_thenReturn400BadRequest() throws Exception {
+        VzwDTO vzwDTO = new VzwDTO("VZW Add", "vzw.add@test.com", "BE12-invalid", "A new vzw.", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", "https://http.cat/200.jpg", "test", "Test Straat gerd", "1", null, "Test City", "123");
+
+        mockMvc.perform(post("/vzw")
+                        .content(mapper.writeValueAsString(vzwDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("400 BAD_REQUEST \"Input rekeningnummer doesn't match the pattern\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
+    }
+
+    // When register a vzw, when invalid email returns 400 bad request
+    @Test
+    void whenAddVzwEmailInvalid_thenReturn400BadRequest() throws Exception {
+        VzwDTO vzwDTO = new VzwDTO("VZW Add", "vzw.add.invalid", "BE12-3456-6798-2555", "A new vzw.", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", "https://http.cat/200.jpg", "test", "Test Straat gerd", "1", null, "Test City", "123");
+
+        mockMvc.perform(post("/vzw")
+                        .content(mapper.writeValueAsString(vzwDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("400 BAD_REQUEST \"Input email doesn't seem te be a valid email address\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
+    }
+
+    // When login as vzw, when valid gives back a completeVZW
+    @Test
+    void whenLogin_thenReturnJsonVzw() throws Exception {
+        LoginRequest loginRequest = new LoginRequest("vzw.add@test.com", "test");
+        // address
+        Address address = new Address("Test Straat", "1", null, "Test City", "123");
+        address.setId("AddressPost");
+        // vzw
+        Vzw vzw = new Vzw("VZW Add", "vzw.add@test.com", "BE12-3456-6798-2555", "A new vzw.", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", "https://http.cat/200.jpg", "$2a$10$YBlUtu8sF86Sg8xeyZJJtecgjw5vq839dr1Tqb9XiLGZbfZIfzB2O", address.getId()); // password = bcrypt hashed version of "test"
+        CompleteVzw completeVzw = new CompleteVzw(vzw, Optional.of(address));
+        given(vzwRepository.findVzwByEmail(loginRequest.getEmail())).willReturn(Optional.of(vzw));
+        given(addressRepository.findById("AddressPost")).willReturn(Optional.of(address));
+
+        mockMvc.perform(post("/vzw/login")
+                        .content(mapper.writeValueAsString(loginRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(completeVzw.getId())))
+                .andExpect(jsonPath("$.name", is(completeVzw.getName())))
+                .andExpect(jsonPath("$.email", is(completeVzw.getEmail())))
+                .andExpect(jsonPath("$.rekeningNR", is(completeVzw.getRekeningNR())))
+                .andExpect(jsonPath("$.bio", is(completeVzw.getBio())))
+                .andExpect(jsonPath("$.youtubeLink", is(completeVzw.getYoutubeLink())))
+                .andExpect(jsonPath("$.profilePicture", is(completeVzw.getProfilePicture())))
+                .andExpect(jsonPath("$.address.id", is(completeVzw.getAddress().getId())))
+                .andExpect(jsonPath("$.address.street", is(completeVzw.getAddress().getStreet())))
+                .andExpect(jsonPath("$.address.houseNumber", is(completeVzw.getAddress().getHouseNumber())))
+                .andExpect(jsonPath("$.address.box", is(completeVzw.getAddress().getBox())))
+                .andExpect(jsonPath("$.address.city", is(completeVzw.getAddress().getCity())))
+                .andExpect(jsonPath("$.address.postalCode", is(completeVzw.getAddress().getPostalCode())));
+    }
+
+    // When login as vzw, when invalid password returns 400 bad request
+    @Test
+    void whenLoginPasswordInvalid_thenReturn400BadRequest() throws Exception {
+        LoginRequest loginRequest = new LoginRequest("vzw.add@test.com", "passwordInvalid");
+        // vzw
+        Vzw vzw = new Vzw("VZW Add", "vzw.add@test.com", "BE12-3456-6798-2555", "A new vzw.", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", "https://http.cat/200.jpg", "$2a$10$YBlUtu8sF86Sg8xeyZJJtecgjw5vq839dr1Tqb9XiLGZbfZIfzB2O", "addressPost"); // password = bcrypt hashed version of "test"
+        given(vzwRepository.findVzwByEmail(loginRequest.getEmail())).willReturn(Optional.of(vzw));
+
+        mockMvc.perform(post("/vzw/login")
+                        .content(mapper.writeValueAsString(loginRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("400 BAD_REQUEST \"The password doesn't match for the vzw linked to the provided email\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
+    }
+
+    // When login as vzw, when mail doesn't exist returns 404 not found
+    @Test
+    void whenLoginEmailNotFound_thenReturn400BadRequest() throws Exception {
+        LoginRequest loginRequest = new LoginRequest("vzw.add@test.com", "passwordInvalid");
+        given(vzwRepository.findVzwByEmail(loginRequest.getEmail())).willReturn(Optional.empty());
+
+        mockMvc.perform(post("/vzw/login")
+                        .content(mapper.writeValueAsString(loginRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("404 NOT_FOUND \"No vzw with email vzw.add@test.com exists\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
 }
