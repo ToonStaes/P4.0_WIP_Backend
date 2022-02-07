@@ -223,7 +223,7 @@ public class ActionControllerTests {
 //        List<Vzw> vzwList = generateVzwsList();
 //        List<Address> addressList = generateAddressList();
 //        List<ActionImage> actionImageList = generateActionImagesList();
-//        given(actionRepository.findByEndDateAfter(new Date())).willReturn(actionList);
+//        given(actionRepository.findActionsByIsActiveTrueAndEndDateAfter(new Date())).willReturn(actionList);
 //        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
 //        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzwList.get(1)));
 //        given(vzwRepository.findById("vzw3")).willReturn(Optional.of(vzwList.get(2)));
@@ -373,7 +373,7 @@ public class ActionControllerTests {
 //        List<Vzw> vzwList = generateVzwsList();
 //        List<Address> addressList = generateAddressList();
 //        List<ActionImage> actionImageList = generateActionImagesList();
-//        given(actionRepository.findByEndDateAfter(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionList);
+//        given(actionRepository.findActionsByIsActiveTrueAndEndDateAfter(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionList);
 //        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
 //        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzwList.get(1)));
 //        given(vzwRepository.findById("vzw3")).willReturn(Optional.of(vzwList.get(2)));
@@ -550,7 +550,7 @@ public class ActionControllerTests {
 //        List<ActionImage> actionImageList = generateActionImagesList();
 //        Mockito.when(currentCallender).thenReturn(currentCallender);
 //        Mockito.when(futureDate).thenReturn(futureDate);
-//        given(actionRepository.findActionsByEndDateBetweenAndStartDateBeforeOrderByEndDateDesc(currentDate, futureDate, currentDate)).willReturn(List.of(actionList.get(3)));
+//        given(actionRepository.findActionsByIsActiveTrueAndEndDateBetweenAndStartDateBeforeOrderByEndDateDesc(currentDate, futureDate, currentDate)).willReturn(List.of(actionList.get(3)));
 //        given(vzwRepository.findById("vzw4")).willReturn(Optional.of(vzwList.get(3)));
 //        given(addressRepository.findById("9")).willReturn(Optional.of(addressList.get(2)));
 //        given(actionImageRepository.findActionImagesByActionId("action4")).willReturn(List.of(actionImageList.get(6)));
@@ -688,7 +688,7 @@ public class ActionControllerTests {
 //        List<Vzw> vzwList = generateVzwsList();
 //        List<Address> addressList = generateAddressList();
 //        List<ActionImage> actionImageList = generateActionImagesList();
-//        given(actionRepository.findByEndDateAfter(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionList);
+//        given(actionRepository.findActionsByIsActiveTrueAndEndDateAfter(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionList);
 //        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
 //        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzwList.get(1)));
 //        given(vzwRepository.findById("vzw3")).willReturn(Optional.of(vzwList.get(2)));
@@ -828,7 +828,7 @@ public class ActionControllerTests {
 //        List<Vzw> vzwList = generateVzwsList();
 //        List<Address> addressList = generateAddressList();
 //        List<ActionImage> actionImageList = generateActionImagesList();
-//        given(actionRepository.findByEndDateAfter(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionList);
+//        given(actionRepository.findActionsByIsActiveTrueAndEndDateAfter(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionList);
 //        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
 //        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzwList.get(1)));
 //        given(vzwRepository.findById("vzw3")).willReturn(Optional.of(vzwList.get(2)));
@@ -985,7 +985,7 @@ public class ActionControllerTests {
 //        List<Vzw> vzwList = generateVzwsList();
 //        List<Address> addressList = generateAddressList();
 //        List<ActionImage> actionImageList = generateActionImagesList();
-//        given(actionRepository.findActionsByVzwIDAndEndDateAfter("vzw1", new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(List.of(actionList.get(0), actionList.get(4)));
+//        given(actionRepository.findActionsByIsActiveTrueAndVzwIDAndEndDateAfter("vzw1", new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(List.of(actionList.get(0), actionList.get(4)));
 //        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
 //        given(addressRepository.findById("8")).willReturn(Optional.of(addressList.get(1)));
 //        given(actionImageRepository.findActionImagesByActionId("action1")).willReturn(List.of(actionImageList.get(0), actionImageList.get(1)));
@@ -1055,7 +1055,7 @@ public class ActionControllerTests {
 //        List<ActionImage> actionImageList = generateActionImagesList();
 //        List<Product> productList = generateProductsList();
 //        List<Purchase> purchaseList = generatePurchasesList();
-//        given(actionRepository.findActionsByVzwIDAndEndDateAfter("vzw1", new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(List.of(actionList.get(0), actionList.get(4)));
+//        given(actionRepository.findActionsByIsActiveTrueAndVzwIDAndEndDateAfter("vzw1", new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(List.of(actionList.get(0), actionList.get(4)));
 //        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
 //        given(addressRepository.findById("8")).willReturn(Optional.of(addressList.get(1)));
 //        given(actionImageRepository.findActionImagesByActionId("action1")).willReturn(List.of(actionImageList.get(0), actionImageList.get(1)));
@@ -1130,7 +1130,7 @@ public class ActionControllerTests {
 //        List<Vzw> vzwList = generateVzwsList();
 //        List<Address> addressList = generateAddressList();
 //        List<ActionImage> actionImageList = generateActionImagesList();
-//        given(actionRepository.findByEndDateAfter(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionList);
+//        given(actionRepository.findActionsByIsActiveTrueAndEndDateAfter(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionList);
 //        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
 //        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzwList.get(1)));
 //        given(vzwRepository.findById("vzw3")).willReturn(Optional.of(vzwList.get(2)));
@@ -1280,7 +1280,7 @@ public class ActionControllerTests {
 //        List<Vzw> vzwList = generateVzwsList();
 //        List<Address> addressList = generateAddressList();
 //        List<ActionImage> actionImageList = generateActionImagesList();
-//        given(actionRepository.findByEndDateAfter(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionList);
+//        given(actionRepository.findActionsByIsActiveTrueAndEndDateAfter(new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionList);
 //        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
 //        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzwList.get(1)));
 //        given(vzwRepository.findById("vzw3")).willReturn(Optional.of(vzwList.get(2)));
@@ -1449,7 +1449,7 @@ public class ActionControllerTests {
 //        List<Vzw> vzwList = generateVzwsList();
 //        List<Address> addressList = generateAddressList();
 //        List<ActionImage> actionImageList = generateActionImagesList();
-//        given(actionRepository.findActionsByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndEndDateAfter("vestibulum", "vestibulum", new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionSearchList);
+//        given(actionRepository.findActionsByIsActiveTrueAndNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndEndDateAfter("vestibulum", "vestibulum", new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionSearchList);
 //        given(vzwRepository.findVzwsByNameContainingIgnoreCase("vestibulum")).willReturn(new ArrayList<>());
 //        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
 //        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzwList.get(1)));
@@ -1519,7 +1519,7 @@ public class ActionControllerTests {
 //        List<Vzw> vzwList = generateVzwsList();
 //        List<Address> addressList = generateAddressList();
 //        List<ActionImage> actionImageList = generateActionImagesList();
-//        given(actionRepository.findActionsByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndEndDateAfter("vestibulum", "vestibulum", new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionSearchList);
+//        given(actionRepository.findActionsByIsActiveTrueAndNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndEndDateAfter("vestibulum", "vestibulum", new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionSearchList);
 //        given(vzwRepository.findVzwsByNameContainingIgnoreCase("vestibulum")).willReturn(new ArrayList<>());
 //        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
 //        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzwList.get(1)));
@@ -1594,7 +1594,7 @@ public class ActionControllerTests {
 //        List<Vzw> vzwList = generateVzwsList();
 //        List<Address> addressList = generateAddressList();
 //        List<ActionImage> actionImageList = generateActionImagesList();
-//        given(actionRepository.findActionsByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndEndDateAfter("vzw2", "vzw2", new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionSearchList);
+//        given(actionRepository.findActionsByIsActiveTrueAndNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndEndDateAfter("vzw2", "vzw2", new GregorianCalendar(2022, Calendar.JANUARY, 1).getTime())).willReturn(actionSearchList);
 //        given(vzwRepository.findVzwsByNameContainingIgnoreCase("vzw2")).willReturn(List.of(vzwList.get(1)));
 //        given(vzwRepository.findById("vzw2")).willReturn(Optional.of(vzwList.get(1)));
 //        given(addressRepository.findById("7")).willReturn(Optional.of(addressList.get(0)));

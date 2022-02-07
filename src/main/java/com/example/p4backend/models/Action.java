@@ -27,6 +27,7 @@ public class Action {
     private String vzwID;
     private Date startDate;
     private Date endDate;
+    private boolean isActive;
 
     public Action(String name, @Nullable Decimal128 goal, String description, String vzwID, Date endDate) {
         this.name = name;
@@ -35,6 +36,7 @@ public class Action {
         this.vzwID = vzwID;
         this.endDate = endDate;
         this.startDate = new Date();
+        this.isActive = true;
     }
 
     public Action(ActionDTO actionDTO){
@@ -44,6 +46,7 @@ public class Action {
         this.vzwID = actionDTO.getVzwID();
         this.endDate = actionDTO.getEndDate();
         this.startDate = new Date();
+        this.isActive = true;
     }
 }
 

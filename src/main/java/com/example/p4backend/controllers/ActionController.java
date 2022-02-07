@@ -31,6 +31,8 @@ public class ActionController {
     private PurchaseRepository purchaseRepository;
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private ProductController productController;
 
     @PostConstruct
     public void fillDB() throws InterruptedException {
@@ -118,7 +120,7 @@ public class ActionController {
     @GetMapping("/actions")
     public List<CompleteAction> getAll(@RequestParam(defaultValue = "false") boolean progress) {
         List<CompleteAction> returnList = new ArrayList<>();
-        List<Action> actions = actionRepository.findByEndDateAfter(new Date());
+        List<Action> actions = actionRepository.findActionsByIsActiveTrueAndEndDateAfter(new Date());
 
         for (Action action : actions) {
             if (progress) {
@@ -152,7 +154,7 @@ public class ActionController {
 
     @GetMapping("/actions/newest")
     public List<CompleteAction> getNewestActions(@RequestParam(defaultValue = "false") boolean progress) {
-        List<Action> newestActions = actionRepository.findByEndDateAfterOrderByStartDateDesc(new Date());
+        List<Action> newestActions = actionRepository.findActionsByIsActiveTrueAndEndDateAfterOrderByStartDateDesc(new Date());
         List<CompleteAction> completeActions = new ArrayList<>();
 
         for (Action action : newestActions) {
@@ -169,7 +171,7 @@ public class ActionController {
 
     @GetMapping("/actions/random")
     public List<CompleteAction> getRandomActions(@RequestParam(defaultValue = "false") boolean progress){
-        List<Action> actions = actionRepository.findAll();
+        List<Action> actions = actionRepository.findActionsByIsActiveTrueAndEndDateAfter(new Date());
         Collections.shuffle(actions);
         List<Action> selectedActions = actions.stream().limit(6).collect(Collectors.toList()); // Take first n (number in limit(n)) items and return them.;
 
@@ -197,7 +199,7 @@ public class ActionController {
         currentCallender.add(Calendar.WEEK_OF_YEAR, 2);
         Date futureDate = currentCallender.getTime();
 
-        List<Action> deadlineActions = actionRepository.findActionsByEndDateBetweenAndStartDateBeforeOrderByEndDateDesc(currentDate, futureDate, currentDate);
+        List<Action> deadlineActions = actionRepository.findActionsByIsActiveTrueAndEndDateBetweenAndStartDateBeforeOrderByEndDateDesc(currentDate, futureDate, currentDate);
         List<CompleteAction> completeActions = new ArrayList<>();
 
         for (Action action : deadlineActions) {
@@ -215,7 +217,7 @@ public class ActionController {
     @GetMapping("/actions/vzw/{vzwId}")
     public List<CompleteAction> getActionsByVzwId(@PathVariable String vzwId, @RequestParam(defaultValue = "false") boolean progress) {
         List<CompleteAction> returnList = new ArrayList<>();
-        List<Action> actions = actionRepository.findActionsByVzwIDAndEndDateAfter(vzwId, new Date());
+        List<Action> actions = actionRepository.findActionsByIsActiveTrueAndVzwIDAndEndDateAfter(vzwId, new Date());
 
         for (Action action : actions) {
             if (progress) {
@@ -279,13 +281,13 @@ public class ActionController {
 
     @GetMapping(value="/actions/search/{terms}")
     public List<CompleteAction> searchActionsByNameContaining(@PathVariable String terms, @RequestParam(defaultValue = "false") boolean progress){
-        Set<Action> actions = new HashSet<>(actionRepository.findActionsByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndEndDateAfter(terms, terms, new Date())); // HashSet to prevent duplicate actions
+        Set<Action> actions = new HashSet<>(actionRepository.findActionsByIsActiveTrueAndNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndEndDateAfter(terms, terms, new Date())); // HashSet to prevent duplicate actions
         List<Vzw> vzws = vzwRepository.findVzwsByNameContainingIgnoreCase(terms);
         List<CompleteAction> returnList = new ArrayList<>();
 
         // Add the actions from the vzw whose name also matched the search terms
         for (Vzw vzw : vzws) {
-            actions.addAll(actionRepository.findActionsByVzwIDAndEndDateAfter(vzw.getId(), new Date()));
+            actions.addAll(actionRepository.findActionsByIsActiveTrueAndVzwIDAndEndDateAfter(vzw.getId(), new Date()));
         }
 
         for (Action action : actions) {
@@ -324,6 +326,26 @@ public class ActionController {
                     HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"
             );
         }
+    }
+
+    // Set action and linked products to inActive
+    @DeleteMapping("/action/{id}")
+    public Action deleteAction(@PathVariable String id) {
+        Optional<Action> tempAction = actionRepository.findById(id);
+        if (tempAction.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist");}
+
+        // Set products of deleted action to inActive
+        List<Product> productList = productRepository.findProductsByActionId(id);
+        for (Product product : productList) {
+            productController.deleteProduct(product.getId());
+        }
+
+        // Set deleted action to inActive
+        Action action = Objects.requireNonNull(tempAction.get());
+        action.setActive(false);
+        actionRepository.save(action);
+        return action;
     }
 
     // Generate Complete vzw to include address
