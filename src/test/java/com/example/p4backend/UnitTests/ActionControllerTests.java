@@ -28,8 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -1633,6 +1632,49 @@ public class ActionControllerTests {
 //                .andExpect(jsonPath("$[0].actionImages[2].fileLocation", is("https://http.cat/404.jpg")))
 //                .andExpect(jsonPath("$[0].actionImages[2].actionId", is("action2")));
 //    }
+
+    // When adding an Action, get back the updated CompleteAction
+    @Test
+    void givenAction_whenPostAction_thenReturnJsonCompleteAction() throws Exception {
+        Action actionPost = new Action(
+                "action1 Post",
+                new Decimal128(new BigDecimal("255.99")),
+                "Post action 1",
+                "vzw1",
+                new GregorianCalendar(2023, Calendar.MARCH, 31).getTime());
+        List<Vzw> vzwList = generateVzwsList();
+        List<Address> addressList = generateAddressList();
+        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
+        given(addressRepository.findById("8")).willReturn(Optional.of(addressList.get(1)));
+
+        mockMvc.perform(post("/action") // Command
+                        .content(mapper.writeValueAsString(actionPost))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                // actionPost is correct
+                .andExpect(jsonPath("$.id").hasJsonPath())
+                .andExpect(jsonPath("$.name", is("action1 Post")))
+                .andExpect(jsonPath("$.goal", is(255.99)))
+                .andExpect(jsonPath("$.description", is("Post action 1")))
+                .andExpect(jsonPath("$.startDate").exists())
+                .andExpect(jsonPath("$.endDate").exists())
+                .andExpect(jsonPath("$.vzw.id", is("vzw1")))
+                .andExpect(jsonPath("$.vzw.name", is("vzw1")))
+                .andExpect(jsonPath("$.vzw.email", is("vzw1.kasterlee@mail.com")))
+                .andExpect(jsonPath("$.vzw.rekeningNR", is("be1234566798")))
+                .andExpect(jsonPath("$.vzw.bio", is("Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur voluptas sequi voluptatum pariatur! Quae cumque quidem dolor maxime enim debitis omnis nemo facilis sequi autem? Quae tenetur, repellat vero deleniti vitae dolores? Cum tempore, mollitia provident placeat fugit earum, sint, quae iusto optio ea officiis consectetur sit necessitatibus itaque explicabo?")))
+                .andExpect(jsonPath("$.vzw.youtubeLink", is("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")))
+                .andExpect(jsonPath("$.vzw.profilePicture", is("https://http.cat/200.jpg")))
+                .andExpect(jsonPath("$.vzw.password").doesNotExist())
+                .andExpect(jsonPath("$.vzw.address.id", is("8")))
+                .andExpect(jsonPath("$.vzw.address.street", is("Markt")))
+                .andExpect(jsonPath("$.vzw.address.houseNumber", is("22")))
+                .andExpect(jsonPath("$.vzw.address.box").isEmpty())
+                .andExpect(jsonPath("$.vzw.address.city", is("Kasterlee")))
+                .andExpect(jsonPath("$.vzw.address.postalCode", is("2460")))
+                .andExpect(jsonPath("$.images").hasJsonPath());
+    }
 
     // When updating an Action, get back the updated CompleteAction
     @Test
