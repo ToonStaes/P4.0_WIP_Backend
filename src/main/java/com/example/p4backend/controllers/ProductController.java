@@ -111,6 +111,21 @@ public class ProductController {
         }
     }
 
+    // Set product as inactive
+    @DeleteMapping("/product/{id}")
+    public Product deleteProduct(@PathVariable String id) {
+        Optional<Product> tempProduct = productRepository.findById(id);
+
+        if (tempProduct.isPresent()) {
+            Product product = Objects.requireNonNull(tempProduct.get());
+            product.setActive(false);
+            productRepository.save(product);
+            return product;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The Product with ID " + id + " doesn't exist");
+        }
+    }
+
     // Get the filled CompleteProduct for the given product
     private CompleteProduct getCompleteProduct(Product product) {
         Optional<Action> action = actionRepository.findById(product.getActionId());

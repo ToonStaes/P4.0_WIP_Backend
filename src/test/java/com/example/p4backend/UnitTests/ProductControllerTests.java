@@ -294,4 +294,33 @@ public class ProductControllerTests {
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
                 .andExpect(result -> assertEquals("404 NOT_FOUND \"The Product with ID product999 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
+
+    @Test
+    void givenProduct_whenDeleteProduct_thenReturnJsonProduct() throws Exception {
+        Action action = generateAction();
+        Product product = new Product("Product Delete", new Decimal128(new BigDecimal("3.55")), "action1", "https://http.cat/400.jpg");
+        product.setActive(false);
+
+        given(actionRepository.findById("action1")).willReturn(Optional.of(action));
+        given(productRepository.findById("product1")).willReturn(Optional.of(product));
+
+        mockMvc.perform(delete("/product/{id}", "product1"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(product.getId())))
+                .andExpect(jsonPath("$.name", is(product.getName())))
+                .andExpect(jsonPath("$.cost", is(product.getCost().doubleValue())))
+                .andExpect(jsonPath("$.actionId", is(product.getActionId())))
+                .andExpect(jsonPath("$.active", is(false)));
+    }
+
+    @Test
+    void givenProduct_whenDeleteProductIdNotExist_thenReturn404() throws Exception {
+        given(productRepository.findById("product999")).willReturn(Optional.empty());
+
+        mockMvc.perform(delete("/product/{id}", "product999"))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("404 NOT_FOUND \"The Product with ID product999 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
+    }
 }
