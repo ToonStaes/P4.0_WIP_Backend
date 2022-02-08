@@ -51,4 +51,14 @@ public class Vzw {
         this.password = password;
         this.addressID = address.getId();
     }
+    
+    public void UpdateVzwNoPassword(VzwDTO vzwDTO) {
+        this.setName(vzwDTO.getName());
+        this.setEmail(vzwDTO.getEmail());
+        this.setRekeningNR(vzwDTO.getRekeningNR());
+        this.setRekeningNR(vzwDTO.getRekeningNR());
+        this.setBio(vzwDTO.getBio());
+        this.setYoutubeLink(vzwDTO.getYoutubeLink());
+        this.setProfilePicture(vzwDTO.getProfilePicture());
+    }
 }
