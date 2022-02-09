@@ -34,8 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -441,6 +440,98 @@ public class VzwControllerTests {
         VzwDTO vzwDTO = new VzwDTO("VZW Add", "vzw.add.invalid", "BE12-3456-6798-2555", "A new vzw.", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", "https://http.cat/200.jpg", "test", "Test Straat gerd", "1", null, "Test City", "123");
 
         mockMvc.perform(post("/vzw")
+                        .content(mapper.writeValueAsString(vzwDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("400 BAD_REQUEST \"Input email doesn't seem te be a valid email address\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
+    }
+
+    // When updating a vzw, when valid gives back a completeVZW
+    @Test
+    void whenPutVzw_thenReturnJsonVzw() throws Exception {
+        VzwDTO vzwDTO = new VzwDTO("VZW Put", "vzw.put@test.com", "BE12-3456-6798-2555", "A new vzw.", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", "https://http.cat/200.jpg", "test", "Test Straat", "1", null, "Test City", "123");
+
+        // address
+        Address address = new Address(vzwDTO.getStreet(), vzwDTO.getHouseNumber(), vzwDTO.getBox(), vzwDTO.getCity(), vzwDTO.getPostalCode());
+        address.setId("8");
+
+        // vzw
+        Vzw vzw = new Vzw(vzwDTO, address, "password");
+        vzw.setId("vzw1");
+        CompleteVzw completeVzw = new CompleteVzw(vzw, Optional.of(address));
+
+        given(vzwRepository.existsByEmail(vzwDTO.getEmail())).willReturn(false);
+        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(generateVzw1()));
+        given(addressRepository.findById("8")).willReturn(Optional.of(address));
+
+        mockMvc.perform(put("/vzw/{id}", "vzw1")
+                        .content(mapper.writeValueAsString(vzwDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(completeVzw.getId())))
+                .andExpect(jsonPath("$.name", is(completeVzw.getName())))
+                .andExpect(jsonPath("$.email", is(completeVzw.getEmail())))
+                .andExpect(jsonPath("$.rekeningNR", is(completeVzw.getRekeningNR())))
+                .andExpect(jsonPath("$.bio", is(completeVzw.getBio())))
+                .andExpect(jsonPath("$.youtubeLink", is(completeVzw.getYoutubeLink())))
+                .andExpect(jsonPath("$.profilePicture", is(completeVzw.getProfilePicture())))
+                .andExpect(jsonPath("$.address.id", is(completeVzw.getAddress().getId())))
+                .andExpect(jsonPath("$.address.street", is(completeVzw.getAddress().getStreet())))
+                .andExpect(jsonPath("$.address.houseNumber", is(completeVzw.getAddress().getHouseNumber())))
+                .andExpect(jsonPath("$.address.box", is(completeVzw.getAddress().getBox())))
+                .andExpect(jsonPath("$.address.city", is(completeVzw.getAddress().getCity())))
+                .andExpect(jsonPath("$.address.postalCode", is(completeVzw.getAddress().getPostalCode())));
+    }
+
+    // When updating a vzw, when invalid id returns 404 not found
+    @Test
+    void whenPutVzwIdNotExist_thenReturn404BadRequest() throws Exception {
+        VzwDTO vzwDTO = new VzwDTO("VZW Put", "vzw.put@test.com", "BE12-3456-6798-2555", "A new vzw.", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", "https://http.cat/200.jpg", "test", "Test Straat", "1", null, "Test City", "123");
+
+        mockMvc.perform(put("/vzw/{id}", "vzw999")
+                        .content(mapper.writeValueAsString(vzwDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("404 NOT_FOUND \"The vzw with ID vzw999 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
+    }
+
+    // When updating a vzw, when email taken returns 400 bad request
+    @Test
+    void whenPutVzwEmailTaken_thenReturn400BadRequest() throws Exception {
+        VzwDTO vzwDTO = new VzwDTO("VZW Put", "vzw.put@test.com", "BE12-3456-6798-2555", "A new vzw.", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", "https://http.cat/200.jpg", "test", "Test Straat", "1", null, "Test City", "123");
+        given(vzwRepository.findById("vzw1")).willReturn(Optional.of(generateVzw1()));
+        given(vzwRepository.existsByEmail(vzwDTO.getEmail())).willReturn(true);
+
+        mockMvc.perform(put("/vzw/{id}", "vzw1")
+                        .content(mapper.writeValueAsString(vzwDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("400 BAD_REQUEST \"Vzw with email vzw.put@test.com already exists\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
+    }
+
+    // When updating a vzw, when invalid rekeningnr returns 400 bad request
+    @Test
+    void whenPutVzwRekeningNRInvalid_thenReturn400BadRequest() throws Exception {
+        VzwDTO vzwDTO = new VzwDTO("VZW Put", "vzw.put@test.com", "BE12-invalid", "A new vzw.", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", "https://http.cat/200.jpg", "test", "Test Straat gerd", "1", null, "Test City", "123");
+
+        mockMvc.perform(put("/vzw/{id}", "vzw1")
+                        .content(mapper.writeValueAsString(vzwDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("400 BAD_REQUEST \"Input rekeningnummer doesn't match the pattern\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
+    }
+
+    // When updating a vzw, when invalid email returns 400 bad request
+    @Test
+    void whenPutVzwEmailInvalid_thenReturn400BadRequest() throws Exception {
+        VzwDTO vzwDTO = new VzwDTO("VZW Put", "vzw.put.invalid", "BE12-3456-6798-2555", "A new vzw.", "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley", "https://http.cat/200.jpg", "test", "Test Straat gerd", "1", null, "Test City", "123");
+
+        mockMvc.perform(put("/vzw/{id}", "vzw1")
                         .content(mapper.writeValueAsString(vzwDTO))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())

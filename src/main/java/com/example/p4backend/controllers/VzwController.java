@@ -176,6 +176,36 @@ public class VzwController {
         } else {throw new ResponseStatusException(HttpStatus.NOT_FOUND ,"No vzw with email " + loginRequest.getEmail() + " exists");}
     }
 
+    // update vzw
+    @PutMapping("/vzw/{id}")
+    public CompleteVzw updateVzw(@RequestBody VzwDTO vzwDTO, @PathVariable String id) {
+        // Check to validate if the user input is valid
+        if (!vzwDTO.getRekeningNR().matches(PATTERN_REKENINGNR)
+        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input rekeningnummer doesn't match the pattern");}
+        if (!vzwDTO.getEmail().matches(PATTERN_EMAIL)
+        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input email doesn't seem te be a valid email address");}
+
+        Vzw vzw = vzwRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The vzw with ID " + id + " doesn't exist"));
+
+        // Check if email not already taken and email has been updated
+        if (vzwRepository.existsByEmail(vzwDTO.getEmail()) && !Objects.equals(vzwDTO.getEmail(), vzw.getEmail())
+        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Vzw with email " + vzwDTO.getEmail() + " already exists");}
+
+        // Update vzw's address
+        AddressDTO addressDTO = new AddressDTO(
+                vzwDTO.getStreet(),
+                vzwDTO.getHouseNumber(),
+                vzwDTO.getBox(),
+                vzwDTO.getCity(),
+                vzwDTO.getPostalCode());
+        addressController.updateAddress(addressDTO, vzw.getAddressID());
+
+        // Update vzw
+        vzw.UpdateVzwNoPassword(vzwDTO);
+        vzwRepository.save(vzw);
+        return getCompleteVzw(vzw);
+    }
+
     // Get the filled CompleteVzw for the given vzw
     private CompleteVzw getCompleteVzw(Vzw vzw) {
         Optional<Address> address = addressRepository.findById(vzw.getAddressID());
