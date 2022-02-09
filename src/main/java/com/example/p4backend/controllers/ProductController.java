@@ -1,7 +1,7 @@
 package com.example.p4backend.controllers;
 
 import com.example.p4backend.models.Action;
-import com.example.p4backend.models.DTOs.ProductDTO;
+import com.example.p4backend.models.dto.ProductDTO;
 import com.example.p4backend.models.Product;
 import com.example.p4backend.models.complete.CompleteProduct;
 import com.example.p4backend.repositories.ActionRepository;

@@ -1,6 +1,6 @@
 package com.example.p4backend.controllers;
 
-import com.example.p4backend.models.DTOs.DonationDTO;
+import com.example.p4backend.models.dto.DonationDTO;
 import com.example.p4backend.models.Donation;
 import com.example.p4backend.models.User;
 import com.example.p4backend.models.Vzw;

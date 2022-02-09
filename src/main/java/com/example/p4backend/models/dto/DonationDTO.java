@@ -1,4 +1,4 @@
-package com.example.p4backend.models.DTOs;
+package com.example.p4backend.models.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

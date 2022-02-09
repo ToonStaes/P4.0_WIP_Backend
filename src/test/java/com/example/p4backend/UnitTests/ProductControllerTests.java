@@ -2,7 +2,7 @@ package com.example.p4backend.UnitTests;
 
 import com.example.p4backend.controllers.ProductController;
 import com.example.p4backend.models.Action;
-import com.example.p4backend.models.DTOs.ProductDTO;
+import com.example.p4backend.models.dto.ProductDTO;
 import com.example.p4backend.models.Product;
 import com.example.p4backend.models.complete.CompleteProduct;
 import com.example.p4backend.repositories.ActionRepository;
@@ -14,7 +14,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.bson.types.Decimal128;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

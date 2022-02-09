@@ -1,6 +1,6 @@
 package com.example.p4backend.models;
 
-import com.example.p4backend.models.DTOs.ActionDTO;
+import com.example.p4backend.models.dto.ActionDTO;
 import com.mongodb.lang.Nullable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
