@@ -1,7 +1,6 @@
 package com.example.p4backend.models.complete;
 
 import com.example.p4backend.models.Action;
-import com.example.p4backend.models.ActionImage;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
