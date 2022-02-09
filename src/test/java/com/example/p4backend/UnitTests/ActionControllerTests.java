@@ -1718,6 +1718,26 @@ public class ActionControllerTests {
 
 
     @Test
+    void givenAction_whenPutActionIdNotExist_thenReturn404() throws Exception {
+        Action actionPut = new Action(
+                "action999 Updated",
+                new Decimal128(new BigDecimal("255.99")),
+                "Updated action 999",
+                "vzw1",
+                new GregorianCalendar(2023, Calendar.MARCH, 31).getTime());
+
+        given(actionRepository.findById("action999")).willReturn(Optional.empty());
+
+        mockMvc.perform(put("/action/{id}", "action999") // Command
+                        .content(mapper.writeValueAsString(actionPut))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("404 NOT_FOUND \"The Action with ID action999 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
+    }
+
+
+    @Test
     void givenAction_whenDeleteAction_thenReturnJsonAction() throws Exception {
         List<Vzw> vzwList = generateVzwsList();
         Action action = new Action(
