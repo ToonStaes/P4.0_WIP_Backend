@@ -40,11 +40,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class VzwControllerTests {
-    private final ObjectMapper mapper = JsonMapper.builder()
-            .addModule(new ParameterNamesModule())
-            .addModule(new Jdk8Module())
-            .addModule(new JavaTimeModule())
-            .build();
     // ----- ADDRESS -----
     final Address address7 = new Address("Kerstraat", "87", "Malle", "2390");
     final Address address8 = new Address("Markt", "22", "Kasterlee", "2460");
@@ -87,6 +82,11 @@ public class VzwControllerTests {
             "https://http.cat/203.jpg",
             "password",
             "9");
+    private final ObjectMapper mapper = JsonMapper.builder()
+            .addModule(new ParameterNamesModule())
+            .addModule(new Jdk8Module())
+            .addModule(new JavaTimeModule())
+            .build();
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -259,6 +259,18 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$.address.box").isEmpty())
                 .andExpect(jsonPath("$.address.city", is("Malle")))
                 .andExpect(jsonPath("$.address.postalCode", is("2390")));
+    }
+
+
+    // Gives one 404 back, searched on vzwId (vzw999)
+    @Test
+    void givenVzw_whenGetVzwByIdNotExist_thenReturn404() throws Exception {
+        given(vzwRepository.findById("vzw999")).willReturn(Optional.empty());
+
+        mockMvc.perform(get("/vzws/{id}", "vzw999"))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("404 NOT_FOUND \"The vzw with ID vzw999 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
 
 

@@ -16,13 +16,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -30,11 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class UserControllerTests {
-    private final ObjectMapper mapper = JsonMapper.builder()
-            .addModule(new ParameterNamesModule())
-            .addModule(new Jdk8Module())
-            .addModule(new JavaTimeModule())
-            .build();
     final User user1 = new User("Toon Staes", "r0784094@student.thomasmore.be", "password", "1");
     final User user2 = new User("Rutger Mols", "r0698466@student.thomasmore.be", "password", "4");
     final User user3 = new User("Axel Van Gestel", "r0784084@student.thomasmore.be", "password", "2");
@@ -48,6 +46,11 @@ public class UserControllerTests {
     final Address address4 = new Address("Zielestraat", "6", "Poederlee", "2275");
     final Address address5 = new Address("Hoogland", "2", "Kasterlee", "2460");
     final Address address6 = new Address("Slachthuisstraat", "87", "Turnhout", "2300");
+    private final ObjectMapper mapper = JsonMapper.builder()
+            .addModule(new ParameterNamesModule())
+            .addModule(new Jdk8Module())
+            .addModule(new JavaTimeModule())
+            .build();
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -233,6 +236,18 @@ public class UserControllerTests {
                 .andExpect(jsonPath("$.address.box").isEmpty())
                 .andExpect(jsonPath("$.address.city", is("Poederlee")))
                 .andExpect(jsonPath("$.address.postalCode", is("2275")));
+    }
+
+
+    // Gives one 404 back, searched on userId (user999)
+    @Test
+    void givenUser_whenGetUserByIdNotExist_thenReturn404() throws Exception {
+        given(userRepository.findById("user999")).willReturn(Optional.empty());
+
+        mockMvc.perform(get("/users/{id}", "user999"))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("404 NOT_FOUND \"The User with ID user999 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
 
 
