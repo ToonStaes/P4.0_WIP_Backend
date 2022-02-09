@@ -40,11 +40,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class DonationControllerTests {
-    private final ObjectMapper mapper = JsonMapper.builder()
-            .addModule(new ParameterNamesModule())
-            .addModule(new Jdk8Module())
-            .addModule(new JavaTimeModule())
-            .build();
     // ----- USER -----
     final User user1 = new User("Toon Staes", "r0784094@student.thomasmore.be", "password", "1");
     final User user2 = new User("Rutger Mols", "r0698466@student.thomasmore.be", "password", "4");
@@ -93,7 +88,11 @@ public class DonationControllerTests {
     final Donation donation3 = new Donation("user3", "vzw3", new Decimal128(10), "desc");
     final Donation donation4 = new Donation("user4", "vzw4", new Decimal128(3), "desc");
     final Donation donation5 = new Donation("user1", "vzw2", new Decimal128(7), "desc");
-
+    private final ObjectMapper mapper = JsonMapper.builder()
+            .addModule(new ParameterNamesModule())
+            .addModule(new Jdk8Module())
+            .addModule(new JavaTimeModule())
+            .build();
     @Autowired
     private MockMvc mockMvc;
     @MockBean

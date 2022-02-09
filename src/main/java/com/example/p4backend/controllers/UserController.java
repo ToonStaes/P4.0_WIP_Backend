@@ -7,7 +7,6 @@ import com.example.p4backend.models.dto.UserDTO;
 import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.UserRepository;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;

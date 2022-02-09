@@ -30,11 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ActionControllerTests {
-    private final ObjectMapper mapper = JsonMapper.builder()
-            .addModule(new ParameterNamesModule())
-            .addModule(new Jdk8Module())
-            .addModule(new JavaTimeModule())
-            .build();
     // ----- ADDRESS -----
     final Address address7 = new Address("Kerstraat", "87", "Malle", "2390");
     final Address address8 = new Address("Markt", "22", "Kasterlee", "2460");
@@ -120,6 +115,11 @@ public class ActionControllerTests {
             "Mauris vitae risus ut nulla vestibulum scelerisque at eu nulla.\n" + "\n" + "Sed tincidunt massa sed mattis porttitor. Fusce at euismod dui. Aliquam sed lorem accumsan, porta orci nec, efficitur leo. Curabitur iaculis lorem tincidunt risus vestibulum, eget posuere urna vehicula. Morbi et felis posuere, blandit massa quis, sagittis nisl. Fusce eu metus nunc. Phasellus id dui sit amet augue tincidunt gravida in in orci.",
             "vzw1",
             new GregorianCalendar(2022, Calendar.FEBRUARY, 1).getTime());
+    private final ObjectMapper mapper = JsonMapper.builder()
+            .addModule(new ParameterNamesModule())
+            .addModule(new Jdk8Module())
+            .addModule(new JavaTimeModule())
+            .build();
     @Autowired
     private MockMvc mockMvc;
     @MockBean
