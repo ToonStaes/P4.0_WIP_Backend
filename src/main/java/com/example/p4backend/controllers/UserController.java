@@ -63,17 +63,12 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public CompleteUser getUserById(@PathVariable String id) {
-        Optional<User> user = userRepository.findById(id);
-        CompleteUser completeUser = new CompleteUser();
+        User user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The User with ID " + id + " doesn't exist"));
 
         // Get address from DB
-        if (user.isPresent()) {
-            Optional<Address> address = addressRepository.findById(user.get().getAddressID());
-            // Make completeUser
-            completeUser = new CompleteUser(user.get(), address);
-        }
-
-        return completeUser;
+        Optional<Address> address = addressRepository.findById(user.getAddressID());
+        // Make completeUser
+        return new CompleteUser(user, address);
     }
 
     @GetMapping("/users/email/{email}")
@@ -95,18 +90,11 @@ public class UserController {
 
     // @PutMapping("/users/{id}")
     public User updateUser(@RequestBody UserDTO updateUser, @PathVariable String id) {
-        Optional<User> tempUser = userRepository.findById(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The User with ID " + id + " doesn't exist"));
 
-        if (tempUser.isPresent()) {
-            User user = Objects.requireNonNull(tempUser.get());
-            user.setName(updateUser.getName());
-            userRepository.save(user);
-            return user;
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "The User with ID " + id + " doesn't exist"
-            );
-        }
+        user.setName(updateUser.getName());
+        userRepository.save(user);
+        return user;
     }
 
     // Get the filled CompleteUser for the given user

@@ -63,15 +63,8 @@ public class PurchaseController {
 
     @GetMapping("/purchases/{id}")
     public CompletePurchase getPurchaseById(@PathVariable String id) {
-        Optional<Purchase> purchase = purchaseRepository.findById(id);
-
-        if (purchase.isPresent()) {
-            return getCompletePurchase(Objects.requireNonNull(purchase.get()));
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "The Purchase with ID " + id + " doesn't exist"
-            );
-        }
+        Purchase purchase = purchaseRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Purchase with ID " + id + " doesn't exist"));
+        return getCompletePurchase(purchase);
     }
 
     @PostMapping("/purchases")

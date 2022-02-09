@@ -53,15 +53,8 @@ public class DonationController {
 
     @GetMapping("/donations/{id}")
     public CompleteDonation getDonationById(@PathVariable String id) {
-        Optional<Donation> donation = donationRepository.findById(id);
-
-        if (donation.isPresent()) {
-            return getCompleteDonation(Objects.requireNonNull(donation.get()));
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "The Donation with ID " + id + " doesn't exist"
-            );
-        }
+        Donation donation = donationRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Donation with ID " + id + " doesn't exist"));
+        return getCompleteDonation(donation);
     }
 
     @PostMapping("/donation")

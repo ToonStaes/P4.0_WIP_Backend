@@ -102,16 +102,11 @@ public class VzwController {
 
     @GetMapping(value = "/vzws/{id}")
     public CompleteVzw getVzwById(@PathVariable String id) {
-        Optional<Vzw> vzw = vzwRepository.findById(id);
-        CompleteVzw completeVzw = new CompleteVzw();
+        Vzw vzw = vzwRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The vzw with ID " + id + " doesn't exist"));
 
-        if (vzw.isPresent()) {
-            Optional<Address> address = addressRepository.findById(vzw.get().getAddressID());
-            // Make completeUser
-            completeVzw = new CompleteVzw(vzw.get(), address);
-        }
-
-        return completeVzw;
+        Optional<Address> address = addressRepository.findById(vzw.getAddressID());
+        // Make completeUser
+        return new CompleteVzw(vzw, address);
     }
 
     @GetMapping(value = "/vzws/name")
@@ -171,17 +166,12 @@ public class VzwController {
     // Login as vzw
     @PostMapping("/vzw/login")
     public CompleteVzw authenticateVzw(@RequestBody LoginRequest loginRequest) {
-        Optional<Vzw> vzwOptional = vzwRepository.findVzwByEmail(loginRequest.getEmail());
-        if (vzwOptional.isPresent()) {
-            Vzw vzw = Objects.requireNonNull(vzwOptional.get());
-            // Check if input passwords matches the hashed password
-            if (passwordEncoder.matches(loginRequest.getPassword(), vzw.getPassword())) {
-                return getCompleteVzw(vzw);
-            } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The password doesn't match for the vzw linked to the provided email");
-            }
+        Vzw vzw = vzwRepository.findVzwByEmail(loginRequest.getEmail()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No vzw with email " + loginRequest.getEmail() + " exists"));
+        // Check if input passwords matches the hashed password
+        if (passwordEncoder.matches(loginRequest.getPassword(), vzw.getPassword())) {
+            return getCompleteVzw(vzw);
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No vzw with email " + loginRequest.getEmail() + " exists");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The password doesn't match for the vzw linked to the provided email");
         }
     }
 

@@ -55,15 +55,8 @@ public class ProductController {
 
     @GetMapping("/products/{id}")
     public CompleteProduct getProductById(@PathVariable String id) {
-        Optional<Product> product = productRepository.findById(id);
-
-        if (product.isPresent()) {
-            return getCompleteProduct(Objects.requireNonNull(product.get()));
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "The Product with ID " + id + " doesn't exist"
-            );
-        }
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Product with ID " + id + " doesn't exist"));
+        return getCompleteProduct(product);
     }
 
     @GetMapping("/products/action/{id}")
@@ -96,35 +89,23 @@ public class ProductController {
      */
     @PutMapping("/product/{id}")
     public CompleteProduct updateProduct(@RequestBody ProductDTO updateProduct, @PathVariable String id) {
-        Optional<Product> tempProduct = productRepository.findById(id);
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Product with ID " + id + " doesn't exist"));
 
-        if (tempProduct.isPresent()) {
-            // set old product to inActive
-            Product product = Objects.requireNonNull(tempProduct.get());
-            product.setActive(false);
-            productRepository.save(product);
-            // return a newly made product with updated values
-            return addProduct(updateProduct);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "The Product with ID " + id + " doesn't exist"
-            );
-        }
+        // set old product to inActive
+        product.setActive(false);
+        productRepository.save(product);
+        // return a newly made product with updated values
+        return addProduct(updateProduct);
     }
 
     // Set product as inactive
     @DeleteMapping("/product/{id}")
     public Product deleteProduct(@PathVariable String id) {
-        Optional<Product> tempProduct = productRepository.findById(id);
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Product with ID " + id + " doesn't exist"));
 
-        if (tempProduct.isPresent()) {
-            Product product = Objects.requireNonNull(tempProduct.get());
-            product.setActive(false);
-            productRepository.save(product);
-            return product;
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The Product with ID " + id + " doesn't exist");
-        }
+        product.setActive(false);
+        productRepository.save(product);
+        return product;
     }
 
     // Get the filled CompleteProduct for the given product

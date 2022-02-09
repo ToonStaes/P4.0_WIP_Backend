@@ -67,21 +67,14 @@ public class AddressController {
 
     // @PutMapping("/addresses/{id}")
     public Address updateAddress(@RequestBody AddressDTO updateAddress, @PathVariable String id) {
-        Optional<Address> tempAddress = addressRepository.findById(id);
+        Address address = addressRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Address with ID " + id + " doesn't exist"));
 
-        if (tempAddress.isPresent()) {
-            Address address = Objects.requireNonNull(tempAddress.get());
-            address.setBox(updateAddress.getBox());
-            address.setCity(updateAddress.getCity());
-            address.setStreet(updateAddress.getStreet());
-            address.setHouseNumber(updateAddress.getHouseNumber());
-            address.setPostalCode(updateAddress.getPostalCode());
-            addressRepository.save(address);
-            return address;
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "The Address with ID " + id + " doesn't exist"
-            );
-        }
+        address.setBox(updateAddress.getBox());
+        address.setCity(updateAddress.getCity());
+        address.setStreet(updateAddress.getStreet());
+        address.setHouseNumber(updateAddress.getHouseNumber());
+        address.setPostalCode(updateAddress.getPostalCode());
+        addressRepository.save(address);
+        return address;
     }
 }

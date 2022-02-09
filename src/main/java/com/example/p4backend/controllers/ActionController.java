@@ -135,20 +135,13 @@ public class ActionController {
 
     @GetMapping("/actions/{id}")
     public CompleteAction getActionById(@PathVariable String id, @RequestParam(defaultValue = "false") boolean progress) {
-        Optional<Action> action = actionRepository.findById(id);
+        Action action = actionRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"));
 
-        if (action.isPresent()) {
-            Action actionValue = Objects.requireNonNull(action.get());
-            if (progress) {
-                double progressValue = getProgress(Objects.requireNonNull(action.get()));
-                return getCompleteActionWithProgress(Objects.requireNonNull(action.get()), progressValue);
-            } else {
-                return getCompleteAction(actionValue);
-            }
+        if (progress) {
+            double progressValue = getProgress(action);
+            return getCompleteActionWithProgress(action, progressValue);
         } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"
-            );
+            return getCompleteAction(action);
         }
     }
 
@@ -310,31 +303,21 @@ public class ActionController {
 
     @PutMapping("/action/{id}")
     public CompleteAction updateAction(@RequestBody ActionDTO updateAction, @PathVariable String id) {
-        Optional<Action> tempAction = actionRepository.findById(id);
+        Action action = actionRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"));
 
-        if (tempAction.isPresent()) {
-            Action action = Objects.requireNonNull(tempAction.get());
-            action.setName(updateAction.getName());
-            action.setGoal(updateAction.getGoal());
-            action.setDescription(updateAction.getDescription());
-            action.setVzwID(updateAction.getVzwID());
-            action.setEndDate(updateAction.getEndDate());
-            actionRepository.save(action);
-            return getCompleteAction(action);
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"
-            );
-        }
+        action.setName(updateAction.getName());
+        action.setGoal(updateAction.getGoal());
+        action.setDescription(updateAction.getDescription());
+        action.setVzwID(updateAction.getVzwID());
+        action.setEndDate(updateAction.getEndDate());
+        actionRepository.save(action);
+        return getCompleteAction(action);
     }
 
     // Set action and linked products to inActive
     @DeleteMapping("/action/{id}")
     public Action deleteAction(@PathVariable String id) {
-        Optional<Action> tempAction = actionRepository.findById(id);
-        if (tempAction.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist");
-        }
+        Action action = actionRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"));
 
         // Set products of deleted action to inActive
         List<Product> productList = productRepository.findProductsByActionId(id);
@@ -343,7 +326,6 @@ public class ActionController {
         }
 
         // Set deleted action to inActive
-        Action action = Objects.requireNonNull(tempAction.get());
         action.setActive(false);
         actionRepository.save(action);
         return action;
