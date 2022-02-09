@@ -1,10 +1,10 @@
 package com.example.p4backend.UnitTests;
 
-import com.example.p4backend.models.dto.DonationDTO;
 import com.example.p4backend.models.Donation;
 import com.example.p4backend.models.User;
 import com.example.p4backend.models.Vzw;
 import com.example.p4backend.models.complete.CompleteDonation;
+import com.example.p4backend.models.dto.DonationDTO;
 import com.example.p4backend.repositories.DonationRepository;
 import com.example.p4backend.repositories.UserRepository;
 import com.example.p4backend.repositories.VzwRepository;

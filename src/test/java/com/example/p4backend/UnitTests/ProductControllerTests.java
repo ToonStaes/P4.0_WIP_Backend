@@ -2,9 +2,9 @@ package com.example.p4backend.UnitTests;
 
 import com.example.p4backend.controllers.ProductController;
 import com.example.p4backend.models.Action;
-import com.example.p4backend.models.dto.ProductDTO;
 import com.example.p4backend.models.Product;
 import com.example.p4backend.models.complete.CompleteProduct;
+import com.example.p4backend.models.dto.ProductDTO;
 import com.example.p4backend.repositories.ActionRepository;
 import com.example.p4backend.repositories.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
