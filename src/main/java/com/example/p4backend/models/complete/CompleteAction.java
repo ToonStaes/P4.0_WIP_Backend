@@ -23,6 +23,7 @@ public class CompleteAction {
     private Date endDate;
     private CompleteVzw vzw;
     private Set<String> images = new HashSet<>(); // Set to remove dupe images
+    private boolean isActive;
 
     public CompleteAction(Action action, CompleteVzw vzw, List<String> images) {
         this.id = action.getId();
@@ -33,5 +34,6 @@ public class CompleteAction {
         this.endDate = action.getEndDate();
         this.vzw = vzw;
         this.images.addAll(images);
+        this.isActive = action.isActive();
     }
 }
