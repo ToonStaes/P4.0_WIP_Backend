@@ -72,8 +72,8 @@ public class ProductControllerTests {
         int i = 1;
         List<Product> products = new ArrayList<>();
         while (i < 6) {
-            Product product = new Product("product" + String.valueOf(i), new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
-            product.setId("product" + String.valueOf(i));
+            Product product = new Product("product" + i, new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
+            product.setId("product" + i);
             products.add(product);
             i++;
         }
@@ -86,8 +86,8 @@ public class ProductControllerTests {
         List<CompleteProduct> products = new ArrayList<>();
         Action action = generateAction();
         while (i < 6) {
-            Product product = new Product("product" + String.valueOf(i), new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
-            product.setId("product" + String.valueOf(i));
+            Product product = new Product("product" + i, new Decimal128(new BigDecimal("25.99")), "action1", "https://http.cat/400.jpg");
+            product.setId("product" + i);
             CompleteProduct completeProduct = new CompleteProduct(product, Optional.of(action));
             products.add(completeProduct);
             i++;
