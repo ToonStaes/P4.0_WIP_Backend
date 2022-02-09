@@ -6,8 +6,8 @@ import com.example.p4backend.models.complete.CompleteActionWithProgress;
 import com.example.p4backend.models.complete.CompleteVzw;
 import com.example.p4backend.models.dto.ActionDTO;
 import com.example.p4backend.repositories.*;
+import lombok.Getter;
 import org.bson.types.Decimal128;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,26 +17,29 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Getter
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class ActionController {
+    private final ActionRepository actionRepository;
+    private final VzwRepository vzwRepository;
+    private final ProductRepository productRepository;
+    private final PurchaseRepository purchaseRepository;
+    private final AddressRepository addressRepository;
+    private final ProductController productController;
 
-    @Autowired
-    private ActionRepository actionRepository;
-    @Autowired
-    private VzwRepository vzwRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private PurchaseRepository purchaseRepository;
-    @Autowired
-    private AddressRepository addressRepository;
-    @Autowired
-    private ProductController productController;
+    public ActionController(ActionRepository actionRepository, VzwRepository vzwRepository, ProductRepository productRepository, PurchaseRepository purchaseRepository, AddressRepository addressRepository, ProductController productController) {
+        this.actionRepository = actionRepository;
+        this.vzwRepository = vzwRepository;
+        this.productRepository = productRepository;
+        this.purchaseRepository = purchaseRepository;
+        this.addressRepository = addressRepository;
+        this.productController = productController;
+    }
 
     @PostConstruct
     public void fillDB() {
-        if (actionRepository.count() == 0) {
+        if (getActionRepository().count() == 0) {
             // Action 1
             Action action1 = new Action(
                     "action1",
@@ -113,14 +116,14 @@ public class ActionController {
             action5.setStartDate(action5StartCallender.getTime());
             action5.setEndDate(action5EndCallender.getTime());
 
-            actionRepository.saveAll(List.of(action1, action2, action3, action4, action5));
+            getActionRepository().saveAll(List.of(action1, action2, action3, action4, action5));
         }
     }
 
     @GetMapping("/actions")
     public List<CompleteAction> getAll(@RequestParam(defaultValue = "false") boolean progress) {
         List<CompleteAction> returnList = new ArrayList<>();
-        List<Action> actions = actionRepository.findActionsByIsActiveTrueAndEndDateAfter(new Date());
+        List<Action> actions = getActionRepository().findActionsByIsActiveTrueAndEndDateAfter(new Date());
 
         for (Action action : actions) {
             if (progress) {
@@ -135,7 +138,7 @@ public class ActionController {
 
     @GetMapping("/actions/{id}")
     public CompleteAction getActionById(@PathVariable String id, @RequestParam(defaultValue = "false") boolean progress) {
-        Action action = actionRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"));
+        Action action = getActionRepository().findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"));
 
         if (progress) {
             double progressValue = getProgress(action);
@@ -147,7 +150,7 @@ public class ActionController {
 
     @GetMapping("/actions/newest")
     public List<CompleteAction> getNewestActions(@RequestParam(defaultValue = "false") boolean progress) {
-        List<Action> newestActions = actionRepository.findActionsByIsActiveTrueAndEndDateAfterOrderByStartDateDesc(new Date());
+        List<Action> newestActions = getActionRepository().findActionsByIsActiveTrueAndEndDateAfterOrderByStartDateDesc(new Date());
         List<CompleteAction> completeActions = new ArrayList<>();
 
         for (Action action : newestActions) {
@@ -164,7 +167,7 @@ public class ActionController {
 
     @GetMapping("/actions/random")
     public List<CompleteAction> getRandomActions(@RequestParam(defaultValue = "false") boolean progress) {
-        List<Action> actions = actionRepository.findActionsByIsActiveTrueAndEndDateAfter(new Date());
+        List<Action> actions = getActionRepository().findActionsByIsActiveTrueAndEndDateAfter(new Date());
         Collections.shuffle(actions);
         List<Action> selectedActions = actions.stream().limit(6).collect(Collectors.toList()); // Take first n (number in limit(n)) items and return them.;
 
@@ -192,7 +195,7 @@ public class ActionController {
         currentCallender.add(Calendar.WEEK_OF_YEAR, 2);
         Date futureDate = currentCallender.getTime();
 
-        List<Action> deadlineActions = actionRepository.findActionsByIsActiveTrueAndEndDateBetweenAndStartDateBeforeOrderByEndDateDesc(currentDate, futureDate, currentDate);
+        List<Action> deadlineActions = getActionRepository().findActionsByIsActiveTrueAndEndDateBetweenAndStartDateBeforeOrderByEndDateDesc(currentDate, futureDate, currentDate);
         List<CompleteAction> completeActions = new ArrayList<>();
 
         for (Action action : deadlineActions) {
@@ -210,7 +213,7 @@ public class ActionController {
     @GetMapping("/actions/vzw/{vzwId}")
     public List<CompleteAction> getActionsByVzwId(@PathVariable String vzwId, @RequestParam(defaultValue = "false") boolean progress) {
         List<CompleteAction> returnList = new ArrayList<>();
-        List<Action> actions = actionRepository.findActionsByIsActiveTrueAndVzwIDAndEndDateAfter(vzwId, new Date());
+        List<Action> actions = getActionRepository().findActionsByIsActiveTrueAndVzwIDAndEndDateAfter(vzwId, new Date());
 
         for (Action action : actions) {
             if (progress) {
@@ -225,28 +228,28 @@ public class ActionController {
 
     // Get the filled CompleteAction for the given action
     private CompleteAction getCompleteAction(Action action) {
-        List<Product> products = productRepository.findProductsByActionId(action.getId());
+        List<Product> products = getProductRepository().findProductsByActionId(action.getId());
         List<String> images = new ArrayList<>();
         for (Product product : products) {
             if (!product.getImage().isEmpty()) {
                 images.add(product.getImage());
             }
         }
-        Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
+        Optional<Vzw> vzw = getVzwRepository().findById(action.getVzwID());
         CompleteVzw completeVzw = getCompleteVzw(vzw);
         return new CompleteAction(action, completeVzw, images);
     }
 
     // Get the filled CompleteActionWithProgress for the given action and progress
     private CompleteActionWithProgress getCompleteActionWithProgress(Action action, double progress) {
-        List<Product> products = productRepository.findProductsByActionId(action.getId());
+        List<Product> products = getProductRepository().findProductsByActionId(action.getId());
         List<String> images = new ArrayList<>();
         for (Product product : products) {
             if (!product.getImage().isEmpty()) {
                 images.add(product.getImage());
             }
         }
-        Optional<Vzw> vzw = vzwRepository.findById(action.getVzwID());
+        Optional<Vzw> vzw = getVzwRepository().findById(action.getVzwID());
         CompleteVzw completeVzw = getCompleteVzw(vzw);
         return new CompleteActionWithProgress(action, completeVzw, progress, images);
     }
@@ -254,11 +257,11 @@ public class ActionController {
     // Calculate the progress percentage of a given action
     private double getProgress(Action action) {
         Decimal128 actionGoal = action.getGoal();
-        List<Product> products = productRepository.findProductsByActionId(action.getId());
+        List<Product> products = getProductRepository().findProductsByActionId(action.getId());
 
         BigDecimal actionPurchased = new BigDecimal(0);
         for (Product product : products) {
-            List<Purchase> purchases = purchaseRepository.findPurchasesByProductId(product.getId());
+            List<Purchase> purchases = getPurchaseRepository().findPurchasesByProductId(product.getId());
             int sum = purchases.stream().mapToInt(Purchase::getAmount).sum(); // Sum of all the amounts a product has been purchased
             actionPurchased = actionPurchased.add(BigDecimal.valueOf(sum * product.getCost().doubleValue())); // Add the total value of this product purchased to the total value action purchased
         }
@@ -274,13 +277,13 @@ public class ActionController {
 
     @GetMapping(value = "/actions/search/{terms}")
     public List<CompleteAction> searchActionsByNameContaining(@PathVariable String terms, @RequestParam(defaultValue = "false") boolean progress) {
-        Set<Action> actions = new HashSet<>(actionRepository.findActionsByIsActiveTrueAndNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndEndDateAfter(terms, terms, new Date())); // HashSet to prevent duplicate actions
-        List<Vzw> vzws = vzwRepository.findVzwsByNameContainingIgnoreCase(terms);
+        Set<Action> actions = new HashSet<>(getActionRepository().findActionsByIsActiveTrueAndNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndEndDateAfter(terms, terms, new Date())); // HashSet to prevent duplicate actions
+        List<Vzw> vzws = getVzwRepository().findVzwsByNameContainingIgnoreCase(terms);
         List<CompleteAction> returnList = new ArrayList<>();
 
         // Add the actions from the vzw whose name also matched the search terms
         for (Vzw vzw : vzws) {
-            actions.addAll(actionRepository.findActionsByIsActiveTrueAndVzwIDAndEndDateAfter(vzw.getId(), new Date()));
+            actions.addAll(getActionRepository().findActionsByIsActiveTrueAndVzwIDAndEndDateAfter(vzw.getId(), new Date()));
         }
 
         for (Action action : actions) {
@@ -297,44 +300,44 @@ public class ActionController {
     @PostMapping("/action")
     public CompleteAction postAction(@RequestBody ActionDTO actionDTO) {
         Action action = new Action(actionDTO);
-        actionRepository.save(action);
+        getActionRepository().save(action);
         return getCompleteAction(action);
     }
 
     @PutMapping("/action/{id}")
     public CompleteAction updateAction(@RequestBody ActionDTO updateAction, @PathVariable String id) {
-        Action action = actionRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"));
+        Action action = getActionRepository().findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"));
 
         action.setName(updateAction.getName());
         action.setGoal(updateAction.getGoal());
         action.setDescription(updateAction.getDescription());
         action.setVzwID(updateAction.getVzwID());
         action.setEndDate(updateAction.getEndDate());
-        actionRepository.save(action);
+        getActionRepository().save(action);
         return getCompleteAction(action);
     }
 
     // Set action and linked products to inActive
     @DeleteMapping("/action/{id}")
     public Action deleteAction(@PathVariable String id) {
-        Action action = actionRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"));
+        Action action = getActionRepository().findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist"));
 
         // Set products of deleted action to inActive
-        List<Product> productList = productRepository.findProductsByActionId(id);
+        List<Product> productList = getProductRepository().findProductsByActionId(id);
         for (Product product : productList) {
-            productController.deleteProduct(product.getId());
+            getProductController().deleteProduct(product.getId());
         }
 
         // Set deleted action to inActive
         action.setActive(false);
-        actionRepository.save(action);
+        getActionRepository().save(action);
         return action;
     }
 
     // Generate Complete vzw to include address
     private CompleteVzw getCompleteVzw(Optional<Vzw> vzw) {
         if (vzw.isPresent()) {
-            Optional<Address> address = addressRepository.findById(vzw.get().getAddressID());
+            Optional<Address> address = getAddressRepository().findById(vzw.get().getAddressID());
             return new CompleteVzw(vzw.get(), address);
         }
         return null;

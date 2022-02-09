@@ -8,7 +8,7 @@ import com.example.p4backend.models.dto.AddressDTO;
 import com.example.p4backend.models.dto.VzwDTO;
 import com.example.p4backend.repositories.AddressRepository;
 import com.example.p4backend.repositories.VzwRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -20,24 +20,28 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Getter
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class VzwController {
-
     private static final String PATTERN_REKENINGNR = "^(?i)BE[0-9]{2}[- ]?[0-9]{4}[- ]?[0-9]{4}[- ]?[0-9]{4}$";
     private static final String PATTERN_EMAIL = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,6})+$";
-    @Autowired
-    private VzwRepository vzwRepository;
-    @Autowired
-    private AddressRepository addressRepository;
-    @Autowired
-    private AddressController addressController;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+    private final VzwRepository vzwRepository;
+    private final AddressRepository addressRepository;
+    private final AddressController addressController;
+    private final PasswordEncoder passwordEncoder;
+
+    public VzwController(VzwRepository vzwRepository, AddressRepository addressRepository, AddressController addressController, PasswordEncoder passwordEncoder) {
+        this.vzwRepository = vzwRepository;
+        this.addressRepository = addressRepository;
+        this.addressController = addressController;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostConstruct
     public void fillDB() {
-        if (vzwRepository.count() == 0) {
+        if (getVzwRepository().count() == 0) {
             Vzw vzw1 = new Vzw(
                     "Chiro",
                     "chiro.kasterlee@mail.com",
@@ -82,18 +86,18 @@ public class VzwController {
                     "9");
             vzw4.setId("vzw4");
 
-            vzwRepository.saveAll(List.of(vzw1, vzw2, vzw3, vzw4));
+            getVzwRepository().saveAll(List.of(vzw1, vzw2, vzw3, vzw4));
         }
     }
 
     @GetMapping("/vzws")
     public List<CompleteVzw> getAll() {
-        List<Vzw> vzws = vzwRepository.findAll();
+        List<Vzw> vzws = getVzwRepository().findAll();
         List<CompleteVzw> completeVzws = new ArrayList<>();
 
         for (Vzw vzw : vzws) { // for vzw in vzws
             // Get address from DB
-            Optional<Address> address = addressRepository.findById(vzw.getAddressID());
+            Optional<Address> address = getAddressRepository().findById(vzw.getAddressID());
             CompleteVzw completeVzw = new CompleteVzw(vzw, address);
             completeVzws.add(completeVzw);
         }
@@ -102,9 +106,9 @@ public class VzwController {
 
     @GetMapping(value = "/vzws/{id}")
     public CompleteVzw getVzwById(@PathVariable String id) {
-        Vzw vzw = vzwRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The vzw with ID " + id + " doesn't exist"));
+        Vzw vzw = getVzwRepository().findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The vzw with ID " + id + " doesn't exist"));
 
-        Optional<Address> address = addressRepository.findById(vzw.getAddressID());
+        Optional<Address> address = getAddressRepository().findById(vzw.getAddressID());
         // Make completeUser
         return new CompleteVzw(vzw, address);
     }
@@ -116,12 +120,12 @@ public class VzwController {
 
     @GetMapping(value = "/vzws/name/{name}")
     public List<CompleteVzw> searchVzwsByNameContaining(@PathVariable String name) {
-        List<Vzw> vzws = vzwRepository.searchByNameContaining(name);
+        List<Vzw> vzws = getVzwRepository().searchByNameContaining(name);
         List<CompleteVzw> completeVzws = new ArrayList<>();
 
         for (Vzw vzw : vzws) { // for vzw in vzws
             // Get address from DB
-            Optional<Address> address = addressRepository.findById(vzw.getAddressID());
+            Optional<Address> address = getAddressRepository().findById(vzw.getAddressID());
             CompleteVzw completeVzw = new CompleteVzw(vzw, address);
             completeVzws.add(completeVzw);
         }
@@ -142,7 +146,7 @@ public class VzwController {
         }
 
         // Check if email not already taken
-        if (vzwRepository.existsByEmail(vzwDTO.getEmail())
+        if (getVzwRepository().existsByEmail(vzwDTO.getEmail())
         ) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vzw with email already exists");
         }
@@ -155,20 +159,20 @@ public class VzwController {
                 vzwDTO.getCity(),
                 vzwDTO.getPostalCode());
 
-        Address persistentAddress = addressController.addAddress(tempAddress);
+        Address persistentAddress = getAddressController().addAddress(tempAddress);
 
         // Vzw
-        Vzw persistentVzw = new Vzw(vzwDTO, persistentAddress, passwordEncoder.encode(vzwDTO.getPassword()));
-        vzwRepository.save(persistentVzw);
+        Vzw persistentVzw = new Vzw(vzwDTO, persistentAddress, getPasswordEncoder().encode(vzwDTO.getPassword()));
+        getVzwRepository().save(persistentVzw);
         return getCompleteVzw(persistentVzw);
     }
 
     // Login as vzw
     @PostMapping("/vzw/login")
     public CompleteVzw authenticateVzw(@RequestBody LoginRequest loginRequest) {
-        Vzw vzw = vzwRepository.findVzwByEmail(loginRequest.getEmail()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No vzw with email " + loginRequest.getEmail() + " exists"));
+        Vzw vzw = getVzwRepository().findVzwByEmail(loginRequest.getEmail()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No vzw with email " + loginRequest.getEmail() + " exists"));
         // Check if input passwords matches the hashed password
-        if (passwordEncoder.matches(loginRequest.getPassword(), vzw.getPassword())) {
+        if (getPasswordEncoder().matches(loginRequest.getPassword(), vzw.getPassword())) {
             return getCompleteVzw(vzw);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The password doesn't match for the vzw linked to the provided email");
@@ -188,10 +192,10 @@ public class VzwController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Input email doesn't seem te be a valid email address");
         }
 
-        Vzw vzw = vzwRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The vzw with ID " + id + " doesn't exist"));
+        Vzw vzw = getVzwRepository().findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The vzw with ID " + id + " doesn't exist"));
 
         // Check if email not already taken and email has been updated
-        if (vzwRepository.existsByEmail(vzwDTO.getEmail()) && !Objects.equals(vzwDTO.getEmail(), vzw.getEmail())
+        if (getVzwRepository().existsByEmail(vzwDTO.getEmail()) && !Objects.equals(vzwDTO.getEmail(), vzw.getEmail())
         ) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vzw with email " + vzwDTO.getEmail() + " already exists");
         }
@@ -203,17 +207,17 @@ public class VzwController {
                 vzwDTO.getBox(),
                 vzwDTO.getCity(),
                 vzwDTO.getPostalCode());
-        addressController.updateAddress(addressDTO, vzw.getAddressID());
+        getAddressController().updateAddress(addressDTO, vzw.getAddressID());
 
         // Update vzw
         vzw.UpdateVzwNoPassword(vzwDTO);
-        vzwRepository.save(vzw);
+        getVzwRepository().save(vzw);
         return getCompleteVzw(vzw);
     }
 
     // Get the filled CompleteVzw for the given vzw
     private CompleteVzw getCompleteVzw(Vzw vzw) {
-        Optional<Address> address = addressRepository.findById(vzw.getAddressID());
+        Optional<Address> address = getAddressRepository().findById(vzw.getAddressID());
         return new CompleteVzw(vzw, address);
     }
 }
