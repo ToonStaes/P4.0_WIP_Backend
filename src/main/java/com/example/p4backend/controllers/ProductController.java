@@ -38,7 +38,7 @@ public class ProductController {
             Product product5 = new Product("Hollandse appeltaart", new Decimal128(new BigDecimal("6.5")), "action3", "https://watschaftdepodcast.com/wp-content/uploads/2020/03/WSDP-18-Hollandse-Appeltaart-SQ-lofi-scaled.jpg");
             product5.setId("product5");
 
-            productRepository.saveAll(Arrays.asList(product1, product2, product3, product4, product5));
+            productRepository.saveAll(List.of(product1, product2, product3, product4, product5));
         }
     }
 

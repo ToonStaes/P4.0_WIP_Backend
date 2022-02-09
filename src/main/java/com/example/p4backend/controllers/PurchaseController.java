@@ -46,7 +46,7 @@ public class PurchaseController {
             Purchase purchase4 = new Purchase("user4", "product5", 2);
             Purchase purchase5 = new Purchase("user1", "product3", 3);
 
-            purchaseRepository.saveAll(Arrays.asList(purchase1, purchase2, purchase3, purchase4, purchase5));
+            purchaseRepository.saveAll(List.of(purchase1, purchase2, purchase3, purchase4, purchase5));
         }
     }
 

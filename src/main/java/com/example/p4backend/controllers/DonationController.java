@@ -36,7 +36,7 @@ public class DonationController {
             Donation donation4 = new Donation("user4", "vzw4", new Decimal128(3), "desc");
             Donation donation5 = new Donation("user1", "vzw2", new Decimal128(7), "desc");
 
-            donationRepository.saveAll(Arrays.asList(donation1, donation2, donation3, donation4, donation5));
+            donationRepository.saveAll(List.of(donation1, donation2, donation3, donation4, donation5));
         }
     }
 

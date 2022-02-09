@@ -44,16 +44,7 @@ public class AddressController {
             Address address10 = new Address("Stationsstraat", "27", "Herselt", "2230");
             address10.setId("10");
 
-            addressRepository.save(address1);
-            addressRepository.save(address2);
-            addressRepository.save(address3);
-            addressRepository.save(address4);
-            addressRepository.save(address5);
-            addressRepository.save(address6);
-            addressRepository.save(address7);
-            addressRepository.save(address8);
-            addressRepository.save(address9);
-            addressRepository.save(address10);
+            addressRepository.saveAll(List.of(address1, address2, address3, address4, address5, address6, address7, address8, address9, address10));
         }
     }
 

@@ -42,12 +42,7 @@ public class UserController {
             User user6 = new User("Gerd Janssens", "r0370181@student.thomasmore.be", "password", "6");
             user6.setId("user6");
 
-            userRepository.save(user1);
-            userRepository.save(user2);
-            userRepository.save(user3);
-            userRepository.save(user4);
-            userRepository.save(user5);
-            userRepository.save(user6);
+            userRepository.saveAll(List.of(user1, user2, user3, user4, user5, user6));
         }
     }
 
