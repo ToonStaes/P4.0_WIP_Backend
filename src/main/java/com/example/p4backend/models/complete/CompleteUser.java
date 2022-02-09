@@ -20,7 +20,7 @@ public class CompleteUser {
     private String password;
     private Address address;
 
-    public CompleteUser(User user, Optional<Address> address){
+    public CompleteUser(User user, Optional<Address> address) {
         this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();

@@ -24,6 +24,8 @@ import java.util.Optional;
 @RestController
 public class VzwController {
 
+    private static final String PATTERN_REKENINGNR = "^(?i)BE[0-9]{2}[- ]?[0-9]{4}[- ]?[0-9]{4}[- ]?[0-9]{4}$";
+    private static final String PATTERN_EMAIL = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,6})+$";
     @Autowired
     private VzwRepository vzwRepository;
     @Autowired
@@ -32,9 +34,6 @@ public class VzwController {
     private AddressController addressController;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    private static final String PATTERN_REKENINGNR = "^(?i)BE[0-9]{2}[- ]?[0-9]{4}[- ]?[0-9]{4}[- ]?[0-9]{4}$";
-    private static final String PATTERN_EMAIL = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,6})+$";
 
     @PostConstruct
     public void fillDB() {
@@ -92,7 +91,7 @@ public class VzwController {
         List<Vzw> vzws = vzwRepository.findAll();
         List<CompleteVzw> completeVzws = new ArrayList<>();
 
-        for (Vzw vzw: vzws){ // for vzw in vzws
+        for (Vzw vzw : vzws) { // for vzw in vzws
             // Get address from DB
             Optional<Address> address = addressRepository.findById(vzw.getAddressID());
             CompleteVzw completeVzw = new CompleteVzw(vzw, address);
@@ -101,12 +100,12 @@ public class VzwController {
         return completeVzws;
     }
 
-    @GetMapping(value="/vzws/{id}")
-    public CompleteVzw getVzwById(@PathVariable String id){
+    @GetMapping(value = "/vzws/{id}")
+    public CompleteVzw getVzwById(@PathVariable String id) {
         Optional<Vzw> vzw = vzwRepository.findById(id);
         CompleteVzw completeVzw = new CompleteVzw();
 
-        if (vzw.isPresent()){
+        if (vzw.isPresent()) {
             Optional<Address> address = addressRepository.findById(vzw.get().getAddressID());
             // Make completeUser
             completeVzw = new CompleteVzw(vzw.get(), address);
@@ -115,17 +114,17 @@ public class VzwController {
         return completeVzw;
     }
 
-    @GetMapping(value="/vzws/name")
-    public List<CompleteVzw> searchVzwsByNameEmpty(){
+    @GetMapping(value = "/vzws/name")
+    public List<CompleteVzw> searchVzwsByNameEmpty() {
         return getAll();
     }
 
-    @GetMapping(value="/vzws/name/{name}")
-    public List<CompleteVzw> searchVzwsByNameContaining(@PathVariable String name){
+    @GetMapping(value = "/vzws/name/{name}")
+    public List<CompleteVzw> searchVzwsByNameContaining(@PathVariable String name) {
         List<Vzw> vzws = vzwRepository.searchByNameContaining(name);
         List<CompleteVzw> completeVzws = new ArrayList<>();
 
-        for (Vzw vzw: vzws){ // for vzw in vzws
+        for (Vzw vzw : vzws) { // for vzw in vzws
             // Get address from DB
             Optional<Address> address = addressRepository.findById(vzw.getAddressID());
             CompleteVzw completeVzw = new CompleteVzw(vzw, address);
@@ -139,13 +138,19 @@ public class VzwController {
     public CompleteVzw addVzw(@RequestBody VzwDTO vzwDTO) {
         // Check to validate if the user input is valid
         if (!vzwDTO.getRekeningNR().matches(PATTERN_REKENINGNR)
-        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input rekeningnummer doesn't match the pattern");}
+        ) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Input rekeningnummer doesn't match the pattern");
+        }
         if (!vzwDTO.getEmail().matches(PATTERN_EMAIL)
-        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input email doesn't seem te be a valid email address");}
+        ) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Input email doesn't seem te be a valid email address");
+        }
 
         // Check if email not already taken
         if (vzwRepository.existsByEmail(vzwDTO.getEmail())
-        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Vzw with email already exists");}
+        ) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vzw with email already exists");
+        }
 
         // Address
         AddressDTO tempAddress = new AddressDTO(
@@ -172,8 +177,12 @@ public class VzwController {
             // Check if input passwords matches the hashed password
             if (passwordEncoder.matches(loginRequest.getPassword(), vzw.getPassword())) {
                 return getCompleteVzw(vzw);
-            } else {throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The password doesn't match for the vzw linked to the provided email");}
-        } else {throw new ResponseStatusException(HttpStatus.NOT_FOUND ,"No vzw with email " + loginRequest.getEmail() + " exists");}
+            } else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The password doesn't match for the vzw linked to the provided email");
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No vzw with email " + loginRequest.getEmail() + " exists");
+        }
     }
 
     // update vzw
@@ -181,15 +190,21 @@ public class VzwController {
     public CompleteVzw updateVzw(@RequestBody VzwDTO vzwDTO, @PathVariable String id) {
         // Check to validate if the user input is valid
         if (!vzwDTO.getRekeningNR().matches(PATTERN_REKENINGNR)
-        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input rekeningnummer doesn't match the pattern");}
+        ) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Input rekeningnummer doesn't match the pattern");
+        }
         if (!vzwDTO.getEmail().matches(PATTERN_EMAIL)
-        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input email doesn't seem te be a valid email address");}
+        ) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Input email doesn't seem te be a valid email address");
+        }
 
         Vzw vzw = vzwRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The vzw with ID " + id + " doesn't exist"));
 
         // Check if email not already taken and email has been updated
         if (vzwRepository.existsByEmail(vzwDTO.getEmail()) && !Objects.equals(vzwDTO.getEmail(), vzw.getEmail())
-        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Vzw with email " + vzwDTO.getEmail() + " already exists");}
+        ) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vzw with email " + vzwDTO.getEmail() + " already exists");
+        }
 
         // Update vzw's address
         AddressDTO addressDTO = new AddressDTO(

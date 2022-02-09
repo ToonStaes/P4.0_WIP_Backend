@@ -27,8 +27,8 @@ public class UserController {
     private AddressRepository addressRepository;
 
     @PostConstruct
-    public void fillDB(){
-        if (userRepository.count() == 0){
+    public void fillDB() {
+        if (userRepository.count() == 0) {
             User user1 = new User("Toon Staes", "r0784094@student.thomasmore.be", "password", "1");
             user1.setId("user1");
             User user2 = new User("Rutger Mols", "r0698466@student.thomasmore.be", "password", "4");
@@ -56,7 +56,7 @@ public class UserController {
         List<User> users = userRepository.findAll();
         List<CompleteUser> completeUsers = new ArrayList<CompleteUser>();
 
-        for (User user: users ){
+        for (User user : users) {
             // Get address from DB
             Optional<Address> address = addressRepository.findById(user.getAddressID());
             CompleteUser completeUser = new CompleteUser(user, address);
@@ -67,12 +67,12 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public CompleteUser getUserById(@PathVariable String id){
+    public CompleteUser getUserById(@PathVariable String id) {
         Optional<User> user = userRepository.findById(id);
         CompleteUser completeUser = new CompleteUser();
 
         // Get address from DB
-        if (user.isPresent()){
+        if (user.isPresent()) {
             Optional<Address> address = addressRepository.findById(user.get().getAddressID());
             // Make completeUser
             completeUser = new CompleteUser(user.get(), address);
@@ -82,7 +82,7 @@ public class UserController {
     }
 
     @GetMapping("/users/email/{email}")
-    public Object getUserByEmail(@PathVariable String email){
+    public Object getUserByEmail(@PathVariable String email) {
         Optional<User> user = userRepository.findFirstByEmail(email);
         if (user.isPresent()) {
             return getCompleteUser(Objects.requireNonNull(user.get()));

@@ -29,7 +29,7 @@ public class Product {
         this.isActive = true;
     }
 
-    public Product(ProductDTO productDTO){
+    public Product(ProductDTO productDTO) {
         this.name = productDTO.getName();
         this.cost = productDTO.getCost();
         this.actionId = productDTO.getActionId();

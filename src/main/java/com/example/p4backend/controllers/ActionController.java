@@ -170,7 +170,7 @@ public class ActionController {
     }
 
     @GetMapping("/actions/random")
-    public List<CompleteAction> getRandomActions(@RequestParam(defaultValue = "false") boolean progress){
+    public List<CompleteAction> getRandomActions(@RequestParam(defaultValue = "false") boolean progress) {
         List<Action> actions = actionRepository.findActionsByIsActiveTrueAndEndDateAfter(new Date());
         Collections.shuffle(actions);
         List<Action> selectedActions = actions.stream().limit(6).collect(Collectors.toList()); // Take first n (number in limit(n)) items and return them.;
@@ -213,7 +213,7 @@ public class ActionController {
 
         return completeActions.stream().limit(5).collect(Collectors.toList()); // Take first n (number in limit(n)) items and return them.
     }
-  
+
     @GetMapping("/actions/vzw/{vzwId}")
     public List<CompleteAction> getActionsByVzwId(@PathVariable String vzwId, @RequestParam(defaultValue = "false") boolean progress) {
         List<CompleteAction> returnList = new ArrayList<>();
@@ -234,8 +234,8 @@ public class ActionController {
     private CompleteAction getCompleteAction(Action action) {
         List<Product> products = productRepository.findProductsByActionId(action.getId());
         List<String> images = new ArrayList<>();
-        for (Product product: products){
-            if (!product.getImage().isEmpty()){
+        for (Product product : products) {
+            if (!product.getImage().isEmpty()) {
                 images.add(product.getImage());
             }
         }
@@ -248,8 +248,8 @@ public class ActionController {
     private CompleteActionWithProgress getCompleteActionWithProgress(Action action, double progress) {
         List<Product> products = productRepository.findProductsByActionId(action.getId());
         List<String> images = new ArrayList<>();
-        for (Product product: products){
-            if (!product.getImage().isEmpty()){
+        for (Product product : products) {
+            if (!product.getImage().isEmpty()) {
                 images.add(product.getImage());
             }
         }
@@ -274,13 +274,13 @@ public class ActionController {
     }
 
 
-    @GetMapping(value="/actions/search")
-    public List<CompleteAction> searchActionsEmpty(@RequestParam(defaultValue = "false") boolean progress){
+    @GetMapping(value = "/actions/search")
+    public List<CompleteAction> searchActionsEmpty(@RequestParam(defaultValue = "false") boolean progress) {
         return getAll(progress);
     }
 
-    @GetMapping(value="/actions/search/{terms}")
-    public List<CompleteAction> searchActionsByNameContaining(@PathVariable String terms, @RequestParam(defaultValue = "false") boolean progress){
+    @GetMapping(value = "/actions/search/{terms}")
+    public List<CompleteAction> searchActionsByNameContaining(@PathVariable String terms, @RequestParam(defaultValue = "false") boolean progress) {
         Set<Action> actions = new HashSet<>(actionRepository.findActionsByIsActiveTrueAndNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndEndDateAfter(terms, terms, new Date())); // HashSet to prevent duplicate actions
         List<Vzw> vzws = vzwRepository.findVzwsByNameContainingIgnoreCase(terms);
         List<CompleteAction> returnList = new ArrayList<>();
@@ -302,7 +302,7 @@ public class ActionController {
     }
 
     @PostMapping("/action")
-    public CompleteAction postAction(@RequestBody ActionDTO actionDTO){
+    public CompleteAction postAction(@RequestBody ActionDTO actionDTO) {
         Action action = new Action(actionDTO);
         actionRepository.save(action);
         return getCompleteAction(action);
@@ -333,7 +333,8 @@ public class ActionController {
     public Action deleteAction(@PathVariable String id) {
         Optional<Action> tempAction = actionRepository.findById(id);
         if (tempAction.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist");}
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The Action with ID " + id + " doesn't exist");
+        }
 
         // Set products of deleted action to inActive
         List<Product> productList = productRepository.findProductsByActionId(id);
@@ -349,8 +350,8 @@ public class ActionController {
     }
 
     // Generate Complete vzw to include address
-    private CompleteVzw getCompleteVzw(Optional<Vzw> vzw){
-        if (vzw.isPresent()){
+    private CompleteVzw getCompleteVzw(Optional<Vzw> vzw) {
+        if (vzw.isPresent()) {
             Optional<Address> address = addressRepository.findById(vzw.get().getAddressID());
             return new CompleteVzw(vzw.get(), address);
         }

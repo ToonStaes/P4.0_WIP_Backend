@@ -89,8 +89,9 @@ public class ProductController {
 
     /**
      * Old product gets disabled and a new product with the updated values gets made (so that old the cost on old purchases doesn't change)
+     *
      * @param updateProduct The DTO of the updated product
-     * @param id The id of the product you wish to update
+     * @param id            The id of the product you wish to update
      * @return The newly made product with the updated values
      */
     @PutMapping("/product/{id}")

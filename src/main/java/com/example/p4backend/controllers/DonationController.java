@@ -28,7 +28,7 @@ public class DonationController {
     private VzwRepository vzwRepository;
 
     @PostConstruct
-    public void fillDB(){
+    public void fillDB() {
         if (donationRepository.count() == 0) {
             Donation donation1 = new Donation("user1", "vzw1", new Decimal128(5), "desc");
             Donation donation2 = new Donation("user2", "vzw2", new Decimal128(15), "desc");
@@ -65,7 +65,7 @@ public class DonationController {
     }
 
     @PostMapping("/donation")
-    public CompleteDonation addDonation(@RequestBody DonationDTO donationDTO){
+    public CompleteDonation addDonation(@RequestBody DonationDTO donationDTO) {
         Donation donation = new Donation(donationDTO);
         donationRepository.save(donation);
         return getCompleteDonation(donation);
@@ -74,11 +74,10 @@ public class DonationController {
     // Get the filled CompleteDonation for the given donation
     private CompleteDonation getCompleteDonation(Donation donation) {
         Optional<Vzw> vzw = vzwRepository.findById(donation.getVzwId());
-        if (donation.getUserId() != null){
+        if (donation.getUserId() != null) {
             Optional<User> user = userRepository.findById(donation.getUserId());
             return new CompleteDonation(donation, user, vzw);
-        }
-        else {
+        } else {
             return new CompleteDonation(donation, vzw);
         }
 

@@ -20,7 +20,7 @@ public class AddressController {
     private AddressRepository addressRepository;
 
     @PostConstruct
-    public void fillDB(){
+    public void fillDB() {
         if (addressRepository.count() == 0) {
             Address address1 = new Address("Polderken", "7", "Kasterlee", "2460");
             address1.setId("1");
@@ -58,10 +58,14 @@ public class AddressController {
     }
 
     @GetMapping("/addresses")
-    public List<Address> getAll() { return addressRepository.findAll(); }
+    public List<Address> getAll() {
+        return addressRepository.findAll();
+    }
 
     @GetMapping("/addresses/{id}")
-    public Optional<Address> getAddressById(@PathVariable String id) { return addressRepository.findById(id); }
+    public Optional<Address> getAddressById(@PathVariable String id) {
+        return addressRepository.findById(id);
+    }
 
     // @PostMapping("/addresses")
     public Address addAddress(@RequestBody AddressDTO addressDTO) {

@@ -39,7 +39,7 @@ public class Action {
         this.isActive = true;
     }
 
-    public Action(ActionDTO actionDTO){
+    public Action(ActionDTO actionDTO) {
         this.name = actionDTO.getName();
         this.goal = actionDTO.getGoal();
         this.description = actionDTO.getDescription();

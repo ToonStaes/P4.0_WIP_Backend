@@ -294,7 +294,6 @@ public class DonationControllerTests {
         CompleteDonation completeDonation = new CompleteDonation(donation, vzw);
 
 
-
         mockMvc.perform(post("/donation")
                         .content(mapper.writeValueAsString(donation))
                         .contentType(MediaType.APPLICATION_JSON))

@@ -23,6 +23,7 @@ import java.util.*;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PurchaseController {
+    private static final String PATTERN_EMAIL = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,6})+$";
     @Autowired
     private PurchaseRepository purchaseRepository;
     @Autowired
@@ -36,10 +37,8 @@ public class PurchaseController {
     @Autowired
     private UserController userController;
 
-    private static final String PATTERN_EMAIL = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,6})+$";
-
     @PostConstruct
-    public void fillDB(){
+    public void fillDB() {
         if (purchaseRepository.count() == 0) {
             Purchase purchase1 = new Purchase("user1", "product1", 1);
             Purchase purchase2 = new Purchase("user2", "product2", 2);
@@ -79,7 +78,9 @@ public class PurchaseController {
     public CompletePurchase addPurchase(@RequestBody PurchaseDTO purchaseDTO) {
         // Check to validate if the user input is valid
         if (!purchaseDTO.getEmail().matches(PATTERN_EMAIL) || purchaseDTO.getAmount() <= 0 || !productRepository.existsById(purchaseDTO.getProductId())
-        ) {throw new ResponseStatusException(HttpStatus.BAD_REQUEST ,"Input email, amount or productId aren't valid");}
+        ) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Input email, amount or productId aren't valid");
+        }
 
         User persistentUser;
         AddressDTO addressDTO = new AddressDTO(

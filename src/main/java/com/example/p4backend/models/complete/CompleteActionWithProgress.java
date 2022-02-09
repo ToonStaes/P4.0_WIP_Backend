@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CompleteActionWithProgress extends CompleteAction{
+public class CompleteActionWithProgress extends CompleteAction {
     private double progress;
 
     public CompleteActionWithProgress(Action action, CompleteVzw vzw, double progress, List<String> images) {
