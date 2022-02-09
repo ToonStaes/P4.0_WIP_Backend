@@ -36,12 +36,12 @@ public class ActionControllerTests {
             .addModule(new JavaTimeModule())
             .build();
     // ----- ADDRESS -----
-    Address address7 = new Address("Kerstraat", "87", "Malle", "2390");
-    Address address8 = new Address("Markt", "22", "Kasterlee", "2460");
-    Address address9 = new Address("Sparrelaan", "17", "Malle", "2390");
-    Address address10 = new Address("Stationsstraat", "27", "Herselt", "2230");
+    final Address address7 = new Address("Kerstraat", "87", "Malle", "2390");
+    final Address address8 = new Address("Markt", "22", "Kasterlee", "2460");
+    final Address address9 = new Address("Sparrelaan", "17", "Malle", "2390");
+    final Address address10 = new Address("Stationsstraat", "27", "Herselt", "2230");
     // ----- VZW -----
-    Vzw vzw1 = new Vzw(
+    final Vzw vzw1 = new Vzw(
             "vzw1",
             "vzw1.kasterlee@mail.com",
             "be1234566798",
@@ -50,7 +50,7 @@ public class ActionControllerTests {
             "https://http.cat/200.jpg",
             "password",
             "8");
-    Vzw vzw2 = new Vzw(
+    final Vzw vzw2 = new Vzw(
             "vzw2",
             "vzw2.malle@mail.com",
             "be1234566798",
@@ -59,7 +59,7 @@ public class ActionControllerTests {
             "https://http.cat/201.jpg",
             "password",
             "7");
-    Vzw vzw3 = new Vzw(
+    final Vzw vzw3 = new Vzw(
             "vzw3",
             "vzw3.herselt@mail.com",
             "be1234599798",
@@ -68,7 +68,7 @@ public class ActionControllerTests {
             "https://http.cat/202.jpg",
             "password",
             "10");
-    Vzw vzw4 = new Vzw(
+    final Vzw vzw4 = new Vzw(
             "vzw4",
             "vzw4.malle@mail.com",
             "be1234566798",
@@ -78,43 +78,43 @@ public class ActionControllerTests {
             "password",
             "9");
     // ----- PRODUCT -----
-    Product product1 = new Product("product1", new Decimal128(new BigDecimal(5)), "action1", "https://http.cat/400.jpg");
-    Product product2 = new Product("product2", new Decimal128(new BigDecimal(15)), "action1", "https://http.cat/400.jpg");
-    Product product3 = new Product("product3", new Decimal128(new BigDecimal(12)), "action1", "https://http.cat/400.jpg");
-    Product product4 = new Product("product4", new Decimal128(new BigDecimal(2)), "action2", "https://http.cat/400.jpg");
-    Product product5 = new Product("product5", new Decimal128(new BigDecimal(6)), "action3", "https://http.cat/400.jpg");
+    final Product product1 = new Product("product1", new Decimal128(new BigDecimal(5)), "action1", "https://http.cat/400.jpg");
+    final Product product2 = new Product("product2", new Decimal128(new BigDecimal(15)), "action1", "https://http.cat/400.jpg");
+    final Product product3 = new Product("product3", new Decimal128(new BigDecimal(12)), "action1", "https://http.cat/400.jpg");
+    final Product product4 = new Product("product4", new Decimal128(new BigDecimal(2)), "action2", "https://http.cat/400.jpg");
+    final Product product5 = new Product("product5", new Decimal128(new BigDecimal(6)), "action3", "https://http.cat/400.jpg");
     // ----- PURCHASE -----
-    Purchase purchase1 = new Purchase("user1", "product1", 1);
-    Purchase purchase2 = new Purchase("user2", "product2", 2);
-    Purchase purchase3 = new Purchase("user3", "product4", 5);
-    Purchase purchase4 = new Purchase("user4", "product5", 2);
-    Purchase purchase5 = new Purchase("user1", "product3", 3);
+    final Purchase purchase1 = new Purchase("user1", "product1", 1);
+    final Purchase purchase2 = new Purchase("user2", "product2", 2);
+    final Purchase purchase3 = new Purchase("user3", "product4", 5);
+    final Purchase purchase4 = new Purchase("user4", "product5", 2);
+    final Purchase purchase5 = new Purchase("user1", "product3", 3);
     // ----- ACTION -----
-    Action action1 = new Action(
+    final Action action1 = new Action(
             "action1",
             new Decimal128(500),
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed mi quis elit vulputate porttitor. Integer ex diam, maximus in mi ac, vulputate varius lacus. Ut aliquam eros ac est sagittis pellentesque. Suspendisse feugiat nibh nec lectus consectetur facilisis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vulputate nisi lacus, quis tincidunt diam pharetra ac. Ut dictum magna vel sem sollicitudin efficitur. Sed accumsan, lacus sit amet tempus commodo, metus quam faucibus tortor,",
             "vzw1",
             new GregorianCalendar(2022, Calendar.FEBRUARY, 18).getTime());
-    Action action2 = new Action(
+    final Action action2 = new Action(
             "action2",
             new Decimal128(200),
             "quis dictum dui odio sed odio. Sed sed mattis enim. Curabitur fringilla lorem at mauris tempor, sit amet tincidunt odio scelerisque. Morbi ac leo sed nisi hendrerit vulputate. Vivamus id blandit libero, sit amet aliquet diam. Morbi sit amet nibh a turpis ultricies accumsan quis eu massa. Suspendisse potenti. Integer dapibus, nibh quis sollicitudin vestibulum, urna nulla dignissim sem, eget semper nisl neque non nisi.",
             "vzw2",
             new GregorianCalendar(2022, Calendar.MARCH, 18).getTime());
-    Action action3 = new Action(
+    final Action action3 = new Action(
             "action3",
             new Decimal128(400),
             "Sed ante elit, scelerisque in egestas facilisis, eleifend at eros. Morbi congue ornare orci, a pharetra urna. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent sed lorem sit amet enim ornare scelerisque. Nam sit amet eleifend est. Proin a sagittis lorem, at tincidunt metus.",
             "vzw3",
             new GregorianCalendar(2022, Calendar.APRIL, 28).getTime());
-    Action action4 = new Action(
+    final Action action4 = new Action(
             "action4",
             new Decimal128(450),
             "Duis at posuere felis. Etiam pellentesque euismod purus. Fusce turpis lorem, rhoncus sed nulla sagittis, finibus venenatis dui. Ut ut scelerisque nulla. Quisque eu orci pharetra, dictum turpis vel, suscipit sem. Vivamus quis rutrum est. Phasellus ut magna vitae tellus pharetra eleifend et quis nulla. Integer eu erat erat. Vivamus non sapien augue. Morbi consequat ante ac nibh feugiat fringilla.",
             "vzw4",
             new GregorianCalendar(2022, Calendar.FEBRUARY, 28).getTime());
-    Action action5 = new Action(
+    final Action action5 = new Action(
             "action5",
             new Decimal128(500),
             "Mauris vitae risus ut nulla vestibulum scelerisque at eu nulla.\n" + "\n" + "Sed tincidunt massa sed mattis porttitor. Fusce at euismod dui. Aliquam sed lorem accumsan, porta orci nec, efficitur leo. Curabitur iaculis lorem tincidunt risus vestibulum, eget posuere urna vehicula. Morbi et felis posuere, blandit massa quis, sagittis nisl. Fusce eu metus nunc. Phasellus id dui sit amet augue tincidunt gravida in in orci.",
@@ -163,44 +163,41 @@ public class ActionControllerTests {
     }
 
     private List<Action> generateActionsList() {
-        // Generate the current date
-        GregorianCalendar currentCallender = new GregorianCalendar();
-
         // Action 1
-        GregorianCalendar action1StartCallender = currentCallender;
-        GregorianCalendar action1EndCallender = currentCallender;
+        GregorianCalendar action1StartCallender = new GregorianCalendar();
+        GregorianCalendar action1EndCallender = new GregorianCalendar();
         action1StartCallender.add(Calendar.DAY_OF_YEAR, -5);
         action1EndCallender.add(Calendar.YEAR, 1);
         action1.setId("action1");
         action1.setStartDate(action1StartCallender.getTime());
         action1.setEndDate(action1EndCallender.getTime());
         // Action 2
-        GregorianCalendar action2StartCallender = currentCallender;
-        GregorianCalendar action2EndCallender = currentCallender;
+        GregorianCalendar action2StartCallender = new GregorianCalendar();
+        GregorianCalendar action2EndCallender = new GregorianCalendar();
         action2StartCallender.add(Calendar.DAY_OF_YEAR, -4);
         action2EndCallender.add(Calendar.DAY_OF_YEAR, 61);
         action2.setId("action2");
         action2.setStartDate(action2StartCallender.getTime());
         action2.setEndDate(action2EndCallender.getTime());
         // Action 3
-        GregorianCalendar action3StartCallender = currentCallender;
-        GregorianCalendar action3EndCallender = currentCallender;
+        GregorianCalendar action3StartCallender = new GregorianCalendar();
+        GregorianCalendar action3EndCallender = new GregorianCalendar();
         action3StartCallender.add(Calendar.DAY_OF_YEAR, -3);
         action3EndCallender.add(Calendar.DAY_OF_YEAR, 30);
         action3.setId("action3");
         action3.setStartDate(action3StartCallender.getTime());
         action3.setEndDate(action3EndCallender.getTime());
         // Action 4
-        GregorianCalendar action4StartCallender = currentCallender;
-        GregorianCalendar action4EndCallender = currentCallender;
+        GregorianCalendar action4StartCallender = new GregorianCalendar();
+        GregorianCalendar action4EndCallender = new GregorianCalendar();
         action4StartCallender.add(Calendar.DAY_OF_YEAR, -2);
         action4EndCallender.add(Calendar.DAY_OF_YEAR, 5);
         action4.setId("action4");
         action4.setStartDate(action4StartCallender.getTime());
         action4.setEndDate(action4EndCallender.getTime());
         // Action 5
-        GregorianCalendar action5StartCallender = currentCallender;
-        GregorianCalendar action5EndCallender = currentCallender;
+        GregorianCalendar action5StartCallender = new GregorianCalendar();
+        GregorianCalendar action5EndCallender = new GregorianCalendar();
         action5StartCallender.add(Calendar.DAY_OF_YEAR, 5);
         action5EndCallender.add(Calendar.DAY_OF_YEAR, 155);
         action5.setId("action5");
@@ -1739,7 +1736,7 @@ public class ActionControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(action.getId())))
                 .andExpect(jsonPath("$.name", is(action.getName())))
-                .andExpect(jsonPath("$.goal", is(action.getGoal().doubleValue())))
+                .andExpect(jsonPath("$.goal", is(Objects.requireNonNull(action.getGoal()).doubleValue())))
                 .andExpect(jsonPath("$.description", is(action.getDescription())))
                 .andExpect(jsonPath("$.startDate").exists())
                 .andExpect(jsonPath("$.endDate").exists())

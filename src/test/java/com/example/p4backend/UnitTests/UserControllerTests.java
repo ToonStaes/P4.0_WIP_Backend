@@ -35,19 +35,19 @@ public class UserControllerTests {
             .addModule(new Jdk8Module())
             .addModule(new JavaTimeModule())
             .build();
-    User user1 = new User("Toon Staes", "r0784094@student.thomasmore.be", "password", "1");
-    User user2 = new User("Rutger Mols", "r0698466@student.thomasmore.be", "password", "4");
-    User user3 = new User("Axel Van Gestel", "r0784084@student.thomasmore.be", "password", "2");
-    User user4 = new User("Britt Ooms", "r0802207@student.thomasmore.be", "password", "3");
-    User user5 = new User("Sebastiaan Hensels", "r0698052@student.thomasmore.be", "password", "5");
-    User user6 = new User("Gerd Janssens", "r0370181@student.thomasmore.be", "password", "6");
-    User userToBeDeleted = new User("To Delete", "to@delete.be", "password", "6");
-    Address address1 = new Address("Polderken", "7", "Kasterlee", "2460");
-    Address address2 = new Address("Parklaan", "35", "Turnhout", "2300");
-    Address address3 = new Address("Kerkeveld", "7", "Herselt", "2230");
-    Address address4 = new Address("Zielestraat", "6", "Poederlee", "2275");
-    Address address5 = new Address("Hoogland", "2", "Kasterlee", "2460");
-    Address address6 = new Address("Slachthuisstraat", "87", "Turnhout", "2300");
+    final User user1 = new User("Toon Staes", "r0784094@student.thomasmore.be", "password", "1");
+    final User user2 = new User("Rutger Mols", "r0698466@student.thomasmore.be", "password", "4");
+    final User user3 = new User("Axel Van Gestel", "r0784084@student.thomasmore.be", "password", "2");
+    final User user4 = new User("Britt Ooms", "r0802207@student.thomasmore.be", "password", "3");
+    final User user5 = new User("Sebastiaan Hensels", "r0698052@student.thomasmore.be", "password", "5");
+    final User user6 = new User("Gerd Janssens", "r0370181@student.thomasmore.be", "password", "6");
+    final User userToBeDeleted = new User("To Delete", "to@delete.be", "password", "6");
+    final Address address1 = new Address("Polderken", "7", "Kasterlee", "2460");
+    final Address address2 = new Address("Parklaan", "35", "Turnhout", "2300");
+    final Address address3 = new Address("Kerkeveld", "7", "Herselt", "2230");
+    final Address address4 = new Address("Zielestraat", "6", "Poederlee", "2275");
+    final Address address5 = new Address("Hoogland", "2", "Kasterlee", "2460");
+    final Address address6 = new Address("Slachthuisstraat", "87", "Turnhout", "2300");
     @Autowired
     private MockMvc mockMvc;
     @MockBean

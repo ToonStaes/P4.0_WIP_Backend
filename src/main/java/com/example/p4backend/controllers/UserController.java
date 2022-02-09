@@ -54,7 +54,7 @@ public class UserController {
     @GetMapping("/users")
     public List<CompleteUser> getAll() {
         List<User> users = userRepository.findAll();
-        List<CompleteUser> completeUsers = new ArrayList<CompleteUser>();
+        List<CompleteUser> completeUsers = new ArrayList<>();
 
         for (User user : users) {
             // Get address from DB

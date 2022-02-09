@@ -32,13 +32,13 @@ public class AddressControllerTests {
             .addModule(new Jdk8Module())
             .addModule(new JavaTimeModule())
             .build();
-    Address address1 = new Address("Polderken", "7", "Kasterlee", "2460");
-    Address address2 = new Address("Parklaan", "35", "Turnhout", "2300");
-    Address address3 = new Address("Kerkeveld", "7", "Herselt", "2230");
-    Address address4 = new Address("Zielestraat", "6", "Poederlee", "2275");
-    Address address5 = new Address("Hoogland", "2", "Kasterlee", "2460");
-    Address address6 = new Address("Slachthuisstraat", "87", "Turnhout", "2300");
-    Address address7 = new Address("Kerstraat", "87", "255", "Malle", "2390");
+    final Address address1 = new Address("Polderken", "7", "Kasterlee", "2460");
+    final Address address2 = new Address("Parklaan", "35", "Turnhout", "2300");
+    final Address address3 = new Address("Kerkeveld", "7", "Herselt", "2230");
+    final Address address4 = new Address("Zielestraat", "6", "Poederlee", "2275");
+    final Address address5 = new Address("Hoogland", "2", "Kasterlee", "2460");
+    final Address address6 = new Address("Slachthuisstraat", "87", "Turnhout", "2300");
+    final Address address7 = new Address("Kerstraat", "87", "255", "Malle", "2390");
     @Autowired
     private MockMvc mockMvc;
     @MockBean

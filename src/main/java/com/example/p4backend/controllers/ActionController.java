@@ -35,7 +35,7 @@ public class ActionController {
     private ProductController productController;
 
     @PostConstruct
-    public void fillDB() throws InterruptedException {
+    public void fillDB() {
         if (actionRepository.count() == 0) {
             // Action 1
             Action action1 = new Action(

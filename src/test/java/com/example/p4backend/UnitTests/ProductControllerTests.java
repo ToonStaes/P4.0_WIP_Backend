@@ -122,7 +122,7 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$[0].action.id", is(completeProducts.get(0).getAction().getId())))
                 .andExpect(jsonPath("$[0].action.name", is(completeProducts.get(0).getAction().getName())))
                 .andExpect(jsonPath("$[0].action.description", is(completeProducts.get(0).getAction().getDescription())))
-                .andExpect(jsonPath("$[0].action.goal", is(completeProducts.get(0).getAction().getGoal().intValue())))
+                .andExpect(jsonPath("$[0].action.goal", is(Objects.requireNonNull(completeProducts.get(0).getAction().getGoal()).intValue())))
                 .andExpect(jsonPath("$[0].action.vzwID", is(completeProducts.get(0).getAction().getVzwID())))
                 .andExpect(jsonPath("$[1].id", is(completeProducts.get(1).getId())))
                 .andExpect(jsonPath("$[1].name", is(completeProducts.get(1).getName())))
@@ -130,7 +130,7 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$[1].action.id", is(completeProducts.get(1).getAction().getId())))
                 .andExpect(jsonPath("$[1].action.name", is(completeProducts.get(1).getAction().getName())))
                 .andExpect(jsonPath("$[1].action.description", is(completeProducts.get(1).getAction().getDescription())))
-                .andExpect(jsonPath("$[1].action.goal", is(completeProducts.get(1).getAction().getGoal().intValue())))
+                .andExpect(jsonPath("$[1].action.goal", is(Objects.requireNonNull(completeProducts.get(1).getAction().getGoal()).intValue())))
                 .andExpect(jsonPath("$[1].action.vzwID", is(completeProducts.get(1).getAction().getVzwID())))
                 .andExpect(jsonPath("$[3].id", is(completeProducts.get(3).getId())))
                 .andExpect(jsonPath("$[3].name", is(completeProducts.get(3).getName())))
@@ -138,9 +138,8 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$[3].action.id", is(completeProducts.get(3).getAction().getId())))
                 .andExpect(jsonPath("$[3].action.name", is(completeProducts.get(3).getAction().getName())))
                 .andExpect(jsonPath("$[3].action.description", is(completeProducts.get(3).getAction().getDescription())))
-                .andExpect(jsonPath("$[3].action.goal", is(completeProducts.get(3).getAction().getGoal().intValue())))
+                .andExpect(jsonPath("$[3].action.goal", is(Objects.requireNonNull(completeProducts.get(3).getAction().getGoal()).intValue())))
                 .andExpect(jsonPath("$[3].action.vzwID", is(completeProducts.get(3).getAction().getVzwID())));
-
     }
 
     @Test
@@ -161,9 +160,8 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$.action.id", is(completeProduct.getAction().getId())))
                 .andExpect(jsonPath("$.action.name", is(completeProduct.getAction().getName())))
                 .andExpect(jsonPath("$.action.description", is(completeProduct.getAction().getDescription())))
-                .andExpect(jsonPath("$.action.goal", is(completeProduct.getAction().getGoal().intValue())))
+                .andExpect(jsonPath("$.action.goal", is(Objects.requireNonNull(completeProduct.getAction().getGoal()).intValue())))
                 .andExpect(jsonPath("$.action.vzwID", is(completeProduct.getAction().getVzwID())));
-
     }
 
     @Test
@@ -183,17 +181,10 @@ public class ProductControllerTests {
         Action action = generateAction();
 
         List<Product> actionProducts = new ArrayList<>();
-        List<CompleteProduct> actionCompleteProducts = new ArrayList<>();
 
         for (Product product : products) {
             if (product.getActionId().equals(action.getId())) {
                 actionProducts.add(product);
-            }
-        }
-
-        for (CompleteProduct completeProduct : completeProducts) {
-            if (completeProduct.getAction().getId().equals(action.getId())) {
-                actionCompleteProducts.add(completeProduct);
             }
         }
 
@@ -210,7 +201,7 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$[0].action.id", is(completeProducts.get(0).getAction().getId())))
                 .andExpect(jsonPath("$[0].action.name", is(completeProducts.get(0).getAction().getName())))
                 .andExpect(jsonPath("$[0].action.description", is(completeProducts.get(0).getAction().getDescription())))
-                .andExpect(jsonPath("$[0].action.goal", is(completeProducts.get(0).getAction().getGoal().intValue())))
+                .andExpect(jsonPath("$[0].action.goal", is(Objects.requireNonNull(completeProducts.get(0).getAction().getGoal()).intValue())))
                 .andExpect(jsonPath("$[0].action.vzwID", is(completeProducts.get(0).getAction().getVzwID())))
                 .andExpect(jsonPath("$[1].id", is(completeProducts.get(1).getId())))
                 .andExpect(jsonPath("$[1].name", is(completeProducts.get(1).getName())))
@@ -218,7 +209,7 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$[1].action.id", is(completeProducts.get(1).getAction().getId())))
                 .andExpect(jsonPath("$[1].action.name", is(completeProducts.get(1).getAction().getName())))
                 .andExpect(jsonPath("$[1].action.description", is(completeProducts.get(1).getAction().getDescription())))
-                .andExpect(jsonPath("$[1].action.goal", is(completeProducts.get(1).getAction().getGoal().intValue())))
+                .andExpect(jsonPath("$[1].action.goal", is(Objects.requireNonNull(completeProducts.get(1).getAction().getGoal()).intValue())))
                 .andExpect(jsonPath("$[1].action.vzwID", is(completeProducts.get(1).getAction().getVzwID())))
                 .andExpect(jsonPath("$[3].id", is(completeProducts.get(3).getId())))
                 .andExpect(jsonPath("$[3].name", is(completeProducts.get(3).getName())))
@@ -226,9 +217,8 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$[3].action.id", is(completeProducts.get(3).getAction().getId())))
                 .andExpect(jsonPath("$[3].action.name", is(completeProducts.get(3).getAction().getName())))
                 .andExpect(jsonPath("$[3].action.description", is(completeProducts.get(3).getAction().getDescription())))
-                .andExpect(jsonPath("$[3].action.goal", is(completeProducts.get(3).getAction().getGoal().intValue())))
+                .andExpect(jsonPath("$[3].action.goal", is(Objects.requireNonNull(completeProducts.get(3).getAction().getGoal()).intValue())))
                 .andExpect(jsonPath("$[3].action.vzwID", is(completeProducts.get(3).getAction().getVzwID())));
-
     }
 
     @Test
@@ -248,10 +238,9 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$.cost", is(25.99)))
                 .andExpect(jsonPath("$.action.id", is(completeProduct.getAction().getId())))
                 .andExpect(jsonPath("$.action.name", is(completeProduct.getAction().getName())))
-                .andExpect(jsonPath("$.action.goal", is(completeProduct.getAction().getGoal().intValue())))
+                .andExpect(jsonPath("$.action.goal", is(Objects.requireNonNull(completeProduct.getAction().getGoal()).intValue())))
                 .andExpect(jsonPath("$.action.description", is(completeProduct.getAction().getDescription())))
                 .andExpect(jsonPath("$.action.vzwID", is(completeProduct.getAction().getVzwID())));
-
     }
 
     @Test
@@ -275,7 +264,7 @@ public class ProductControllerTests {
                 .andExpect(jsonPath("$.action.id", is(completeProduct.getAction().getId())))
                 .andExpect(jsonPath("$.action.name", is(completeProduct.getAction().getName())))
                 .andExpect(jsonPath("$.action.description", is(completeProduct.getAction().getDescription())))
-                .andExpect(jsonPath("$.action.goal", is(completeProduct.getAction().getGoal().intValue())))
+                .andExpect(jsonPath("$.action.goal", is(Objects.requireNonNull(completeProduct.getAction().getGoal()).intValue())))
                 .andExpect(jsonPath("$.action.vzwID", is(completeProduct.getAction().getVzwID())))
                 .andExpect(jsonPath("$.image", is(completeProduct.getImage())))
                 .andExpect(jsonPath("$.active", is(completeProduct.isActive())));

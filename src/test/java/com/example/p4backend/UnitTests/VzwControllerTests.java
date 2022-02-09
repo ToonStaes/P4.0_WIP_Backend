@@ -46,12 +46,12 @@ public class VzwControllerTests {
             .addModule(new JavaTimeModule())
             .build();
     // ----- ADDRESS -----
-    Address address7 = new Address("Kerstraat", "87", "Malle", "2390");
-    Address address8 = new Address("Markt", "22", "Kasterlee", "2460");
-    Address address9 = new Address("Sparrelaan", "17", "Malle", "2390");
-    Address address10 = new Address("Stationsstraat", "27", "Herselt", "2230");
+    final Address address7 = new Address("Kerstraat", "87", "Malle", "2390");
+    final Address address8 = new Address("Markt", "22", "Kasterlee", "2460");
+    final Address address9 = new Address("Sparrelaan", "17", "Malle", "2390");
+    final Address address10 = new Address("Stationsstraat", "27", "Herselt", "2230");
     // ----- VZW -----
-    Vzw vzw1 = new Vzw(
+    final Vzw vzw1 = new Vzw(
             "vzw1",
             "vzw1.kasterlee@mail.com",
             "BE12-3456-6798-1234",
@@ -60,7 +60,7 @@ public class VzwControllerTests {
             "https://http.cat/200.jpg",
             "password",
             "8");
-    Vzw vzw2 = new Vzw(
+    final Vzw vzw2 = new Vzw(
             "vzw2",
             "vzw2.malle@mail.com",
             "BE12-3456-6798-2564",
@@ -69,7 +69,7 @@ public class VzwControllerTests {
             "https://http.cat/201.jpg",
             "password",
             "7");
-    Vzw vzw3 = new Vzw(
+    final Vzw vzw3 = new Vzw(
             "vzw3",
             "vzw3.herselt@mail.com",
             "BE12-3459-9798-6547",
@@ -78,7 +78,7 @@ public class VzwControllerTests {
             "https://http.cat/202.jpg",
             "password",
             "10");
-    Vzw vzw4 = new Vzw(
+    final Vzw vzw4 = new Vzw(
             "vzw4",
             "vzw4.malle@mail.com",
             "BE12-3456-6798-6971",
