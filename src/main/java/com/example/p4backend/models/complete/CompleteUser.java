@@ -3,7 +3,9 @@ package com.example.p4backend.models.complete;
 import com.example.p4backend.models.Address;
 import com.example.p4backend.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Optional;
 
@@ -18,7 +20,7 @@ public class CompleteUser {
     private String password;
     private Address address;
 
-    public CompleteUser(User user, Optional<Address> address){
+    public CompleteUser(User user, Optional<Address> address) {
         this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();

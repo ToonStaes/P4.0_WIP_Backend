@@ -38,9 +38,7 @@ public class AddressControllerMockTests {
         AddressDTO addressDTO = new AddressDTO("Address Put", "153", "12a", "Kasterlee", "2460");
         given(addressRepository.findById("address999")).willReturn(Optional.empty());
 
-        Exception exception = assertThrows(ResponseStatusException.class, () -> {
-            addressController.updateAddress(addressDTO, "address999");
-        });
+        Exception exception = assertThrows(ResponseStatusException.class, () -> addressController.updateAddress(addressDTO, "address999"));
 
         String expectedMessage = "404 NOT_FOUND \"The Address with ID address999 doesn't exist\"";
         String actualMessage = exception.getMessage();

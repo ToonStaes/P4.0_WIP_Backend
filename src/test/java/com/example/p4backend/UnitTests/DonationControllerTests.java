@@ -1,10 +1,10 @@
 package com.example.p4backend.UnitTests;
 
-import com.example.p4backend.models.DTOs.DonationDTO;
 import com.example.p4backend.models.Donation;
 import com.example.p4backend.models.User;
 import com.example.p4backend.models.Vzw;
 import com.example.p4backend.models.complete.CompleteDonation;
+import com.example.p4backend.models.dto.DonationDTO;
 import com.example.p4backend.repositories.DonationRepository;
 import com.example.p4backend.repositories.UserRepository;
 import com.example.p4backend.repositories.VzwRepository;
@@ -21,7 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
@@ -33,7 +32,6 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,18 +40,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class DonationControllerTests {
-    private final ObjectMapper mapper = JsonMapper.builder()
-            .addModule(new ParameterNamesModule())
-            .addModule(new Jdk8Module())
-            .addModule(new JavaTimeModule())
-            .build();
     // ----- USER -----
-    User user1 = new User("Toon Staes", "r0784094@student.thomasmore.be", "password", "1");
-    User user2 = new User("Rutger Mols", "r0698466@student.thomasmore.be", "password", "4");
-    User user3 = new User("Axel Van Gestel", "r0784084@student.thomasmore.be", "password", "2");
-    User user4 = new User("Britt Ooms", "r0802207@student.thomasmore.be", "password", "3");
+    final User user1 = new User("Toon Staes", "r0784094@student.thomasmore.be", "password", "1");
+    final User user2 = new User("Rutger Mols", "r0698466@student.thomasmore.be", "password", "4");
+    final User user3 = new User("Axel Van Gestel", "r0784084@student.thomasmore.be", "password", "2");
+    final User user4 = new User("Britt Ooms", "r0802207@student.thomasmore.be", "password", "3");
     // ----- VZW -----
-    Vzw vzw1 = new Vzw(
+    final Vzw vzw1 = new Vzw(
             "vzw1",
             "vzw1.kasterlee@mail.com",
             "be1234566798",
@@ -62,7 +55,7 @@ public class DonationControllerTests {
             "https://http.cat/200.jpg",
             "password",
             "8");
-    Vzw vzw2 = new Vzw(
+    final Vzw vzw2 = new Vzw(
             "vzw2",
             "vzw2.malle@mail.com",
             "be1234566798",
@@ -71,7 +64,7 @@ public class DonationControllerTests {
             "https://http.cat/201.jpg",
             "password",
             "7");
-    Vzw vzw3 = new Vzw(
+    final Vzw vzw3 = new Vzw(
             "vzw3",
             "vzw3.herselt@mail.com",
             "be1234599798",
@@ -80,7 +73,7 @@ public class DonationControllerTests {
             "https://http.cat/202.jpg",
             "password",
             "10");
-    Vzw vzw4 = new Vzw(
+    final Vzw vzw4 = new Vzw(
             "vzw4",
             "vzw4.malle@mail.com",
             "be1234566798",
@@ -90,12 +83,16 @@ public class DonationControllerTests {
             "password",
             "9");
     // ----- DONATION -----
-    Donation donation1 = new Donation("user1", "vzw1", new Decimal128(5), "desc");
-    Donation donation2 = new Donation("user2", "vzw2", new Decimal128(15), "desc");
-    Donation donation3 = new Donation("user3", "vzw3", new Decimal128(10), "desc");
-    Donation donation4 = new Donation("user4", "vzw4", new Decimal128(3), "desc");
-    Donation donation5 = new Donation("user1", "vzw2", new Decimal128(7), "desc");
-
+    final Donation donation1 = new Donation("user1", "vzw1", new Decimal128(5), "desc");
+    final Donation donation2 = new Donation("user2", "vzw2", new Decimal128(15), "desc");
+    final Donation donation3 = new Donation("user3", "vzw3", new Decimal128(10), "desc");
+    final Donation donation4 = new Donation("user4", "vzw4", new Decimal128(3), "desc");
+    final Donation donation5 = new Donation("user1", "vzw2", new Decimal128(7), "desc");
+    private final ObjectMapper mapper = JsonMapper.builder()
+            .addModule(new ParameterNamesModule())
+            .addModule(new Jdk8Module())
+            .addModule(new JavaTimeModule())
+            .build();
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -294,7 +291,6 @@ public class DonationControllerTests {
         Donation donation = new Donation(donationDTO);
         Optional<Vzw> vzw = vzwRepository.findById(donation.getVzwId());
         CompleteDonation completeDonation = new CompleteDonation(donation, vzw);
-
 
 
         mockMvc.perform(post("/donation")

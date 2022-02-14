@@ -54,9 +54,7 @@ public class UserControllerMockTests {
         UserDTO userDTO = new UserDTO("User Put", "user.put@student.thomasmore.be", "1");
         given(userRepository.findById("user999")).willReturn(Optional.empty());
 
-        Exception exception = assertThrows(ResponseStatusException.class, () -> {
-            userController.updateUser(userDTO, "user999");
-        });
+        Exception exception = assertThrows(ResponseStatusException.class, () -> userController.updateUser(userDTO, "user999"));
 
         String expectedMessage = "404 NOT_FOUND \"The User with ID user999 doesn't exist\"";
         String actualMessage = exception.getMessage();

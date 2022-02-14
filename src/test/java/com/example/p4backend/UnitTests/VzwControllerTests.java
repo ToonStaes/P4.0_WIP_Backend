@@ -40,18 +40,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class VzwControllerTests {
-    private final ObjectMapper mapper = JsonMapper.builder()
-            .addModule(new ParameterNamesModule())
-            .addModule(new Jdk8Module())
-            .addModule(new JavaTimeModule())
-            .build();
     // ----- ADDRESS -----
-    Address address7 = new Address("Kerstraat", "87", "Malle", "2390");
-    Address address8 = new Address("Markt", "22", "Kasterlee", "2460");
-    Address address9 = new Address("Sparrelaan", "17", "Malle", "2390");
-    Address address10 = new Address("Stationsstraat", "27", "Herselt", "2230");
+    final Address address7 = new Address("Kerstraat", "87", "Malle", "2390");
+    final Address address8 = new Address("Markt", "22", "Kasterlee", "2460");
+    final Address address9 = new Address("Sparrelaan", "17", "Malle", "2390");
+    final Address address10 = new Address("Stationsstraat", "27", "Herselt", "2230");
     // ----- VZW -----
-    Vzw vzw1 = new Vzw(
+    final Vzw vzw1 = new Vzw(
             "vzw1",
             "vzw1.kasterlee@mail.com",
             "BE12-3456-6798-1234",
@@ -60,7 +55,7 @@ public class VzwControllerTests {
             "https://http.cat/200.jpg",
             "password",
             "8");
-    Vzw vzw2 = new Vzw(
+    final Vzw vzw2 = new Vzw(
             "vzw2",
             "vzw2.malle@mail.com",
             "BE12-3456-6798-2564",
@@ -69,7 +64,7 @@ public class VzwControllerTests {
             "https://http.cat/201.jpg",
             "password",
             "7");
-    Vzw vzw3 = new Vzw(
+    final Vzw vzw3 = new Vzw(
             "vzw3",
             "vzw3.herselt@mail.com",
             "BE12-3459-9798-6547",
@@ -78,7 +73,7 @@ public class VzwControllerTests {
             "https://http.cat/202.jpg",
             "password",
             "10");
-    Vzw vzw4 = new Vzw(
+    final Vzw vzw4 = new Vzw(
             "vzw4",
             "vzw4.malle@mail.com",
             "BE12-3456-6798-6971",
@@ -87,6 +82,11 @@ public class VzwControllerTests {
             "https://http.cat/203.jpg",
             "password",
             "9");
+    private final ObjectMapper mapper = JsonMapper.builder()
+            .addModule(new ParameterNamesModule())
+            .addModule(new Jdk8Module())
+            .addModule(new JavaTimeModule())
+            .build();
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -259,6 +259,18 @@ public class VzwControllerTests {
                 .andExpect(jsonPath("$.address.box").isEmpty())
                 .andExpect(jsonPath("$.address.city", is("Malle")))
                 .andExpect(jsonPath("$.address.postalCode", is("2390")));
+    }
+
+
+    // Gives one 404 back, searched on vzwId (vzw999)
+    @Test
+    void givenVzw_whenGetVzwByIdNotExist_thenReturn404() throws Exception {
+        given(vzwRepository.findById("vzw999")).willReturn(Optional.empty());
+
+        mockMvc.perform(get("/vzws/{id}", "vzw999"))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResponseStatusException))
+                .andExpect(result -> assertEquals("404 NOT_FOUND \"The vzw with ID vzw999 doesn't exist\"", Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
 
 

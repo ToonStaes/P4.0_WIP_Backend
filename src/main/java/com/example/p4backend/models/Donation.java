@@ -1,6 +1,6 @@
 package com.example.p4backend.models;
 
-import com.example.p4backend.models.DTOs.DonationDTO;
+import com.example.p4backend.models.dto.DonationDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
