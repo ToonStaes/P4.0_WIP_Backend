@@ -18,7 +18,7 @@ public class Vzw {
     @Id
     private String id;
     private String name;
-    @Indexed(unique=true)
+    @Indexed(unique = true)
     private String email;
     private String rekeningNR;
     private String bio;
@@ -51,7 +51,7 @@ public class Vzw {
         this.password = password;
         this.addressID = address.getId();
     }
-    
+
     public void UpdateVzwNoPassword(VzwDTO vzwDTO) {
         this.setName(vzwDTO.getName());
         this.setEmail(vzwDTO.getEmail());

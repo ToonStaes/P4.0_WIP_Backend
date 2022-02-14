@@ -22,7 +22,6 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.bson.types.Decimal128;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,7 +32,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -41,8 +43,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -231,7 +233,7 @@ public class PurchaseControllerTests {
 
     @Test
     @Disabled
-    // Test is disabled because even though I say that address & user controller should return a full address & user object including id it just doesn't and the id is null, breaking the test...
+        // Test is disabled because even though I say that address & user controller should return a full address & user object including id it just doesn't and the id is null, breaking the test...
     void whenPostPurchase_thenReturnPurchase() throws Exception {
         // user
         UserDTO userDTO = new UserDTO("User Name", "user.name@test.be", "address2");
@@ -242,7 +244,7 @@ public class PurchaseControllerTests {
         // product
         Product product = generateProduct();
         // Purchase
-        PurchaseDTO purchaseDTO = new PurchaseDTO(5, product.getId(),user.getName() , user.getEmail(), address.getStreet(), address.getHouseNumber(), address.getBox(), address.getCity(), address.getPostalCode());
+        PurchaseDTO purchaseDTO = new PurchaseDTO(5, product.getId(), user.getName(), user.getEmail(), address.getStreet(), address.getHouseNumber(), address.getBox(), address.getCity(), address.getPostalCode());
         Purchase purchase = generatePurchasePost(purchaseDTO, user);
         CompletePurchase completePurchase = new CompletePurchase(purchase, Optional.of(user), Optional.of(product));
 
@@ -258,8 +260,8 @@ public class PurchaseControllerTests {
         given(productRepository.findById("product1")).willReturn(Optional.of(product));
 
         mockMvc.perform(post("/purchases")
-                    .content(mapper.writeValueAsString(purchaseDTO))
-                    .contentType(MediaType.APPLICATION_JSON))
+                        .content(mapper.writeValueAsString(purchaseDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.amount", is(completePurchase.getAmount())))
