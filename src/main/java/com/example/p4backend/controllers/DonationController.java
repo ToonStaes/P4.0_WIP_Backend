@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @Getter
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "http://www.wip-shop.be, https://www.wip-shop.be", allowedHeaders = "*")
 public class DonationController {
     private final DonationRepository donationRepository;
     private final UserRepository userRepository;
