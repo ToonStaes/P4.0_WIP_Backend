@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "http://www.wip-shop.be, https://www.wip-shop.be", allowedHeaders = "*")
+@CrossOrigin(origins = "http://www.wip-shop.be", allowedHeaders = "*")
 @Getter
 @RestController
 public class ActionController {
