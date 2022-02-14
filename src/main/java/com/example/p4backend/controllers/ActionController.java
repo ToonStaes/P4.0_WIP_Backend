@@ -228,7 +228,7 @@ public class ActionController {
 
     // Get the filled CompleteAction for the given action
     private CompleteAction getCompleteAction(Action action) {
-        List<Product> products = getProductRepository().findProductsByActionId(action.getId());
+        List<Product> products = getProductRepository().findProductsByActionIdAndIsActiveTrue(action.getId());
         List<String> images = new ArrayList<>();
         for (Product product : products) {
             if (!product.getImage().isEmpty()) {
@@ -242,7 +242,7 @@ public class ActionController {
 
     // Get the filled CompleteActionWithProgress for the given action and progress
     private CompleteActionWithProgress getCompleteActionWithProgress(Action action, double progress) {
-        List<Product> products = getProductRepository().findProductsByActionId(action.getId());
+        List<Product> products = getProductRepository().findProductsByActionIdAndIsActiveTrue(action.getId());
         List<String> images = new ArrayList<>();
         for (Product product : products) {
             if (!product.getImage().isEmpty()) {
