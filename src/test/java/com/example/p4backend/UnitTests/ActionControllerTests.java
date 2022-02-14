@@ -1692,7 +1692,7 @@ public class ActionControllerTests {
         given(actionRepository.findById("action1")).willReturn(Optional.of(actionList.get(0)));
         given(vzwRepository.findById("vzw1")).willReturn(Optional.of(vzwList.get(0)));
         given(addressRepository.findById("8")).willReturn(Optional.of(addressList.get(1)));
-        given(productRepository.findProductsByActionId("action1")).willReturn(List.of(productList.get(0), productList.get(1), productList.get(2)));
+        given(productRepository.findProductsByActionIdAndIsActiveTrue("action1")).willReturn(List.of(productList.get(0), productList.get(1), productList.get(2)));
 
         mockMvc.perform(put("/action/{id}", "action1") // Command
                         .content(mapper.writeValueAsString(actionPut))
