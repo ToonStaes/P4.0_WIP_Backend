@@ -3,25 +3,28 @@ package com.example.p4backend.controllers;
 import com.example.p4backend.models.Address;
 import com.example.p4backend.models.dto.AddressDTO;
 import com.example.p4backend.repositories.AddressRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
+@Getter
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AddressController {
-    @Autowired
-    private AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
+
+    public AddressController(AddressRepository addressRepository) {
+        this.addressRepository = addressRepository;
+    }
 
     @PostConstruct
-    public void fillDB(){
-        if (addressRepository.count() == 0) {
+    public void fillDB() {
+        if (getAddressRepository().count() == 0) {
             Address address1 = new Address("Polderken", "7", "Kasterlee", "2460");
             address1.setId("1");
             Address address2 = new Address("Parklaan", "35", "Turnhout", "2300");
@@ -44,49 +47,37 @@ public class AddressController {
             Address address10 = new Address("Stationsstraat", "27", "Herselt", "2230");
             address10.setId("10");
 
-            addressRepository.save(address1);
-            addressRepository.save(address2);
-            addressRepository.save(address3);
-            addressRepository.save(address4);
-            addressRepository.save(address5);
-            addressRepository.save(address6);
-            addressRepository.save(address7);
-            addressRepository.save(address8);
-            addressRepository.save(address9);
-            addressRepository.save(address10);
+            getAddressRepository().saveAll(List.of(address1, address2, address3, address4, address5, address6, address7, address8, address9, address10));
         }
     }
 
     @GetMapping("/addresses")
-    public List<Address> getAll() { return addressRepository.findAll(); }
+    public List<Address> getAll() {
+        return getAddressRepository().findAll();
+    }
 
     @GetMapping("/addresses/{id}")
-    public Optional<Address> getAddressById(@PathVariable String id) { return addressRepository.findById(id); }
+    public Optional<Address> getAddressById(@PathVariable String id) {
+        return getAddressRepository().findById(id);
+    }
 
     // @PostMapping("/addresses")
     public Address addAddress(@RequestBody AddressDTO addressDTO) {
         Address persistentAddress = new Address(addressDTO);
-        addressRepository.save(persistentAddress);
+        getAddressRepository().save(persistentAddress);
         return persistentAddress;
     }
 
     // @PutMapping("/addresses/{id}")
     public Address updateAddress(@RequestBody AddressDTO updateAddress, @PathVariable String id) {
-        Optional<Address> tempAddress = addressRepository.findById(id);
+        Address address = getAddressRepository().findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The Address with ID " + id + " doesn't exist"));
 
-        if (tempAddress.isPresent()) {
-            Address address = Objects.requireNonNull(tempAddress.get());
-            address.setBox(updateAddress.getBox());
-            address.setCity(updateAddress.getCity());
-            address.setStreet(updateAddress.getStreet());
-            address.setHouseNumber(updateAddress.getHouseNumber());
-            address.setPostalCode(updateAddress.getPostalCode());
-            addressRepository.save(address);
-            return address;
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "The Address with ID " + id + " doesn't exist"
-            );
-        }
+        address.setBox(updateAddress.getBox());
+        address.setCity(updateAddress.getCity());
+        address.setStreet(updateAddress.getStreet());
+        address.setHouseNumber(updateAddress.getHouseNumber());
+        address.setPostalCode(updateAddress.getPostalCode());
+        getAddressRepository().save(address);
+        return address;
     }
 }

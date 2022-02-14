@@ -13,8 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // Disables default login page when SpringSecurity dependency is used
     @Override
-    protected void configure(HttpSecurity security) throws Exception
-    {
+    protected void configure(HttpSecurity security) throws Exception {
         security.csrf().disable().authorizeRequests().anyRequest().permitAll(); // Works for GET, POST, PUT, DELETE
     }
 

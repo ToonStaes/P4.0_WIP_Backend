@@ -1,6 +1,6 @@
 package com.example.p4backend.models;
 
-import com.example.p4backend.models.DTOs.ProductDTO;
+import com.example.p4backend.models.dto.ProductDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,7 +29,7 @@ public class Product {
         this.isActive = true;
     }
 
-    public Product(ProductDTO productDTO){
+    public Product(ProductDTO productDTO) {
         this.name = productDTO.getName();
         this.cost = productDTO.getCost();
         this.actionId = productDTO.getActionId();
