@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "http://www.wip-shop.be, https://www.wip-shop.be", allowedHeaders = "*")
 public class ProductController {
     @Autowired
     private ProductRepository productRepository;

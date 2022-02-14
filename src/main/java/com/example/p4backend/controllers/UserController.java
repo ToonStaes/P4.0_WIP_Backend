@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "http://www.wip-shop.be, https://www.wip-shop.be", allowedHeaders = "*")
 public class UserController {
 
     @Autowired

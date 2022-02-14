@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "http://www.wip-shop.be, https://www.wip-shop.be", allowedHeaders = "*")
 public class DonationController {
     @Autowired
     private DonationRepository donationRepository;
