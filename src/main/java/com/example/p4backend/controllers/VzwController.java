@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://www.wip-shop.be, https://www.wip-shop.be", allowedHeaders = "*")
+@CrossOrigin(origins = "http://www.wip-shop.be", allowedHeaders = "*")
 @Getter
 @RestController
 public class VzwController {

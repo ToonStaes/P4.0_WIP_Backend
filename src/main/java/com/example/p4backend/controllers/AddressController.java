@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Getter
 @RestController
-@CrossOrigin(origins = "http://www.wip-shop.be, https://www.wip-shop.be", allowedHeaders = "*")
+@CrossOrigin(origins = "http://www.wip-shop.be", allowedHeaders = "*")
 public class AddressController {
     private final AddressRepository addressRepository;
 
