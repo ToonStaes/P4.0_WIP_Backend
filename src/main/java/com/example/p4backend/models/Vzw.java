@@ -59,6 +59,6 @@ public class Vzw {
         this.setRekeningNR(vzwDTO.getRekeningNR());
         this.setBio(vzwDTO.getBio());
         this.setYoutubeLink(vzwDTO.getYoutubeLink());
-        this.setProfilePicture(vzwDTO.getProfilePicture());
+        this.setProfilePicture(vzwDTO.getProfilePicture().equals("") ? getProfilePicture() : vzwDTO.getProfilePicture()); // If no profile picture is present, use the existing one
     }
 }
