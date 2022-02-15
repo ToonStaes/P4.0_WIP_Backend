@@ -44,7 +44,9 @@ public class ActionController {
             Action action1 = new Action(
                     "Koekenverkoop",
                     new Decimal128(new BigDecimal("500.0")),
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed mi quis elit vulputate porttitor. Integer ex diam, maximus in mi ac, vulputate varius lacus. Ut aliquam eros ac est sagittis pellentesque. Suspendisse feugiat nibh nec lectus consectetur facilisis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vulputate nisi lacus, quis tincidunt diam pharetra ac. Ut dictum magna vel sem sollicitudin efficitur. Sed accumsan, lacus sit amet tempus commodo, metus quam faucibus tortor.",
+                    "Roze koeken, cupcakes of een gewone cake, dit alles kan je bestellen bij chiro Kasterlee.\n" +
+                            "Dit jaar verkopen we al deze lekkernijen om ons zomerkamp te sponsoren. Deze zelfgebakken dessertjes kan je nu aan een schappelijke prijs kopen en je zou er ons een groot plezier mee doen.\n" +
+                            "De kindjes en chiro danken u. ",
                     "vzw1",
                     new GregorianCalendar(2022, Calendar.FEBRUARY, 18).getTime());
 
@@ -60,7 +62,9 @@ public class ActionController {
             Action action2 = new Action(
                     "Taartenverkoop",
                     new Decimal128(new BigDecimal("200.0")),
-                    "Quis dictum dui odio sed odio. Sed sed mattis enim. Curabitur fringilla lorem at mauris tempor, sit amet tincidunt odio scelerisque. Morbi ac leo sed nisi hendrerit vulputate. Vivamus id blandit libero, sit amet aliquet diam. Morbi sit amet nibh a turpis ultricies accumsan quis eu massa. Suspendisse potenti. Integer dapibus, nibh quis sollicitudin vestibulum, urna nulla dignissim sem, eget semper nisl neque non nisi.",
+                    "Movements biedt dit jaar een lekkere appeltaarten aan ten voordelen van een buitenlands show. \n" +
+                            "Het team is geselecteerd voor een unieke ervaring in het buitenland waar alle grote dansploegen voor worden uitgenodigd.\n" +
+                            "We willen graag dat iedereen deel kan uitmaken van deze ervaring en verkopen daarom taarten om dit te sponsoren. Twijfel dus niet en koop een lekkere zelfgemaakte taart of 2.",
                     "vzw2",
                     new GregorianCalendar(2022, Calendar.MARCH, 18).getTime());
 
@@ -75,7 +79,8 @@ public class ActionController {
             Action action3 = new Action(
                     "Appelgebak verkoop",
                     new Decimal128(new BigDecimal("400.0")),
-                    "Sed ante elit, scelerisque in egestas facilisis, eleifend at eros. Morbi congue ornare orci, a pharetra urna. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent sed lorem sit amet enim ornare scelerisque. Nam sit amet eleifend est. Proin a sagittis lorem, at tincidunt metus.",
+                    "Vlaamse volksbeweging verkoopt dit jaar lekkere, zelfgemaakte appelgebakken. Deze taarten zijn ten voordelen van onze visie en doelen. Wij vinden dat we het bij het rechte eind hebben en willen hier ook graag promotie voor maken.\n" +
+                            "Ga jij akkoord met onze visie en wil je andere ook overtuigen. Twijfel dan niet en bestel onze lekkere taarten zodat wij onze visie verder kunnen promoten. ",
                     "vzw3",
                     new GregorianCalendar(2022, Calendar.APRIL, 28).getTime());
             GregorianCalendar action3StartCallender = new GregorianCalendar();
@@ -90,7 +95,7 @@ public class ActionController {
             Action action4 = new Action(
                     "Inzamelactie stoet",
                     new Decimal128(new BigDecimal("450.0")),
-                    "Duis at posuere felis. Etiam pellentesque euismod purus. Fusce turpis lorem, rhoncus sed nulla sagittis, finibus venenatis dui. Ut ut scelerisque nulla. Quisque eu orci pharetra, dictum turpis vel, suscipit sem. Vivamus quis rutrum est. Phasellus ut magna vitae tellus pharetra eleifend et quis nulla. Integer eu erat erat. Vivamus non sapien augue. Morbi consequat ante ac nibh feugiat fringilla.",
+                    "Onze kleine bloemenstoet wil graag een inzamelactie doen ten voordelen van onze stoet. Dit jaar niet aan de hand van een product maar van een vrijwillige donatie die ons enorm zou helpen.",
                     "vzw4",
                     new GregorianCalendar(2022, Calendar.FEBRUARY, 28).getTime());
             GregorianCalendar action4StartCallender = new GregorianCalendar();
@@ -105,7 +110,8 @@ public class ActionController {
             Action action5 = new Action(
                     "Inzamelactie renovatie lokaal",
                     new Decimal128(new BigDecimal("500.0")),
-                    "Mauris vitae risus ut nulla vestibulum scelerisque at eu nulla.\n" + "\n" + "Sed tincidunt massa sed mattis porttitor. Fusce at euismod dui. Aliquam sed lorem accumsan, porta orci nec, efficitur leo. Curabitur iaculis lorem tincidunt risus vestibulum, eget posuere urna vehicula. Morbi et felis posuere, blandit massa quis, sagittis nisl. Fusce eu metus nunc. Phasellus id dui sit amet augue tincidunt gravida in in orci.",
+                    "Chiro Kasterlee heeft met het slechte weer enkele problemen ondervonden met het chirolokaal. Om onze kindjes zondagnamiddag op te kunnen vangen is het van belang om onze lokalen dus te renoveren zodat deze helemaal terug in orde zijn.\n" +
+                            "De veiligheid staat natuurlijk centraal waardoor we een bedrag van €500 willen inzamelen om alles te renoveren. Alvast bedankt!",
                     "vzw1",
                     new GregorianCalendar(2022, Calendar.FEBRUARY, 1).getTime());
             GregorianCalendar action5StartCallender = new GregorianCalendar();
