@@ -42,9 +42,9 @@ public class ActionController {
         if (getActionRepository().count() == 0) {
             // Action 1
             Action action1 = new Action(
-                    "action1",
+                    "Koekenverkoop",
                     new Decimal128(new BigDecimal("500.0")),
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed mi quis elit vulputate porttitor. Integer ex diam, maximus in mi ac, vulputate varius lacus. Ut aliquam eros ac est sagittis pellentesque. Suspendisse feugiat nibh nec lectus consectetur facilisis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vulputate nisi lacus, quis tincidunt diam pharetra ac. Ut dictum magna vel sem sollicitudin efficitur. Sed accumsan, lacus sit amet tempus commodo, metus quam faucibus tortor,",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed mi quis elit vulputate porttitor. Integer ex diam, maximus in mi ac, vulputate varius lacus. Ut aliquam eros ac est sagittis pellentesque. Suspendisse feugiat nibh nec lectus consectetur facilisis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed vulputate nisi lacus, quis tincidunt diam pharetra ac. Ut dictum magna vel sem sollicitudin efficitur. Sed accumsan, lacus sit amet tempus commodo, metus quam faucibus tortor.",
                     "vzw1",
                     new GregorianCalendar(2022, Calendar.FEBRUARY, 18).getTime());
 
@@ -58,9 +58,9 @@ public class ActionController {
 
             // Action 2
             Action action2 = new Action(
-                    "action2",
+                    "Taartenverkoop",
                     new Decimal128(new BigDecimal("200.0")),
-                    "quis dictum dui odio sed odio. Sed sed mattis enim. Curabitur fringilla lorem at mauris tempor, sit amet tincidunt odio scelerisque. Morbi ac leo sed nisi hendrerit vulputate. Vivamus id blandit libero, sit amet aliquet diam. Morbi sit amet nibh a turpis ultricies accumsan quis eu massa. Suspendisse potenti. Integer dapibus, nibh quis sollicitudin vestibulum, urna nulla dignissim sem, eget semper nisl neque non nisi.",
+                    "Quis dictum dui odio sed odio. Sed sed mattis enim. Curabitur fringilla lorem at mauris tempor, sit amet tincidunt odio scelerisque. Morbi ac leo sed nisi hendrerit vulputate. Vivamus id blandit libero, sit amet aliquet diam. Morbi sit amet nibh a turpis ultricies accumsan quis eu massa. Suspendisse potenti. Integer dapibus, nibh quis sollicitudin vestibulum, urna nulla dignissim sem, eget semper nisl neque non nisi.",
                     "vzw2",
                     new GregorianCalendar(2022, Calendar.MARCH, 18).getTime());
 
@@ -73,7 +73,7 @@ public class ActionController {
             action2.setEndDate(action2EndCallender.getTime());
             // Action 3
             Action action3 = new Action(
-                    "action3",
+                    "Appelgebak verkoop",
                     new Decimal128(new BigDecimal("400.0")),
                     "Sed ante elit, scelerisque in egestas facilisis, eleifend at eros. Morbi congue ornare orci, a pharetra urna. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent sed lorem sit amet enim ornare scelerisque. Nam sit amet eleifend est. Proin a sagittis lorem, at tincidunt metus.",
                     "vzw3",
@@ -88,7 +88,7 @@ public class ActionController {
 
             // Action 4
             Action action4 = new Action(
-                    "action4",
+                    "Inzamelactie stoet",
                     new Decimal128(new BigDecimal("450.0")),
                     "Duis at posuere felis. Etiam pellentesque euismod purus. Fusce turpis lorem, rhoncus sed nulla sagittis, finibus venenatis dui. Ut ut scelerisque nulla. Quisque eu orci pharetra, dictum turpis vel, suscipit sem. Vivamus quis rutrum est. Phasellus ut magna vitae tellus pharetra eleifend et quis nulla. Integer eu erat erat. Vivamus non sapien augue. Morbi consequat ante ac nibh feugiat fringilla.",
                     "vzw4",
@@ -103,7 +103,7 @@ public class ActionController {
 
             // Action 5
             Action action5 = new Action(
-                    "action5",
+                    "Inzamelactie renovatie lokaal",
                     new Decimal128(new BigDecimal("500.0")),
                     "Mauris vitae risus ut nulla vestibulum scelerisque at eu nulla.\n" + "\n" + "Sed tincidunt massa sed mattis porttitor. Fusce at euismod dui. Aliquam sed lorem accumsan, porta orci nec, efficitur leo. Curabitur iaculis lorem tincidunt risus vestibulum, eget posuere urna vehicula. Morbi et felis posuere, blandit massa quis, sagittis nisl. Fusce eu metus nunc. Phasellus id dui sit amet augue tincidunt gravida in in orci.",
                     "vzw1",
