@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @Getter
 @RestController
-@CrossOrigin(origins = "http://www.wip-shop.be", allowedHeaders = "*")
+@CrossOrigin(origins = {"http://www.wip-shop.be","http://wip-shop.be"}, allowedHeaders = "*")
 public class ProductController {
     private final ProductRepository productRepository;
     private final ActionRepository actionRepository;
