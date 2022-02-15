@@ -50,7 +50,7 @@ public class VzwController {
                             "wij de kinderen een geweldig jaar kunnen bezorgen. Wij zijn een jeugdbeweging die vooral actief zijn in Vlaanderen. \n" +
                             "Elke zondagnamiddag komen wij samen om allerlei activiteiten te doen met de kindjes, dit kan gaan van bekende spelletjes zoals tikkertje en verstoppertje tot het bakken van taarten of het bouwen van kampen in het bos.\n" +
                             "Wilt u ons graag sponsoren kan je zeker kijken naar onze lopende activiteiten of een centje doneren. Als je het mij vraagt, CHIRO!",
-                    "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
+                    "https://www.youtube.com/watch?v=imS-Fb9PPPA",
                     "https://upload.wikimedia.org/wikipedia/commons/6/6f/Logo_chiro.jpg",
                     "$2a$10$GJAYbleVgyB0gXfnXMvVYuAXEL6tyUrmnA0jY65oSPb6.NwmYWu3K", // password
                     "8");
@@ -64,7 +64,7 @@ public class VzwController {
                             "Met een gemotiveerd, professioneel team, ieder gespecialiseerd in een eigen dansstijl, kan het dan ook niet anders dan dat de naam “Movements” overal opduikt.\n" +
                             "Elke dinsdag, donderdag en zaterdag kan je ons terugvinden in onze dansstudio waar we ons 100% geven en nieuwe moves aanleren. \n" +
                             "Wilt u ons graag sponsoren kan je zeker kijken naar onze lopende activiteiten of een centje doneren. Het leven is een dansfeest!",
-                    "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
+                    "https://www.youtube.com/watch?v=imS-Fb9PPPA",
                     "https://upload.wikimedia.org/wikipedia/commons/2/2f/Movements_logo_large.png",
                     "$2a$10$sZC3j1tNmN.gM0t8Ic50KudiaCBINjncw3d.nlzo5RwZzlKaPRuzi", // password
                     "7");
@@ -78,7 +78,7 @@ public class VzwController {
                             "Als niet-partijpolitieke, pluralistische vereniging wil ze daarom via socio-culturele weg de brede publieke opinie bij dat streven betrekken en aanzetten tot actieve inzet in het democratische besluitvormingsproces.\n" +
                             "Ons doel: een geweldloze wijze wantoestanden aan de kaak stellen, alternatieven naar voren schuiven en als drukkingsgroep de politiek beïnvloeden.\n" +
                             "Steun de VVB en koop onze producten of doneer een centje. ",
-                    "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
+                    "https://www.youtube.com/watch?v=imS-Fb9PPPA",
                     "https://upload.wikimedia.org/wikipedia/commons/3/3e/VVB-logo.png",
                     "$2a$10$GMQj3igq4pNpB1IlaKArSu5LWT90R/32AFgiVw6d7L8j49LAVN/fq", // password
                     "10");
@@ -91,7 +91,7 @@ public class VzwController {
                     "Wij zijn een vriendenkring. Dit wil zeggen dat wij een groep vrienden zijn die vrijwillig samenkomen om (onder andere) onze stoet te organiseren. \n" +
                             "Onze leden zijn mensen van in en rond Wommelgem die zich elke keer inzetten tijdens de bloemenstoet om deze tot een goed einde te brengen en er voor zorgen dat dit een zorgeloos uitstapje wordt voor iedere aanwezige.\n" +
                             "Wilt u ons graag sponsoren kan je zeker kijken naar onze lopende activiteiten of een centje doneren.",
-                    "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
+                    "https://www.youtube.com/watch?v=imS-Fb9PPPA",
                     "https://upload.wikimedia.org/wikipedia/commons/d/d7/Logo_Kleine_Bloemenstoet_Wommelgem.jpg",
                     "$2a$10$NgLOCjJ3.SxLIxfJrgo6zeBQ1XrhWuhD9/wVJ6TSNqV7Sphf7Vh4.", // password
                     "9");
