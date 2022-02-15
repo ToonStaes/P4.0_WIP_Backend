@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Getter
 @RestController
-@CrossOrigin(origins = "http://www.wip-shop.be", allowedHeaders = "*")
+@CrossOrigin(origins = {"http://www.wip-shop.be","http://wip-shop.be"} , allowedHeaders = "*")
 public class UserController {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
